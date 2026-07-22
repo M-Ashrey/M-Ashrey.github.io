@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohamed Ashrey — developer tools for people who build with agents</title>
+<meta name="description" content="Dependency-light open-source tools for the MCP / AI-agent ecosystem.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d1117'/%3E%3Ctext x='50' y='72' font-size='60' text-anchor='middle' fill='%2358a6ff'%3E%2B%3C/text%3E%3C/svg%3E">
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;
+    --mono:"SFMono-Regular",ui-monospace,Consolas,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh;display:flex;align-items:center}
+  .wrap{max-width:720px;margin:0 auto;padding:48px 24px}
+  h1{font-size:clamp(28px,5vw,44px);letter-spacing:-.02em;font-weight:800}
+  h1 .hl{background:linear-gradient(120deg,#58a6ff,#bc8cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  p.sub{color:var(--muted);margin-top:16px;font-size:18px;max-width:560px}
+  .tools{display:grid;gap:14px;margin-top:34px}
+  a.tool{display:block;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px 20px;text-decoration:none;transition:.15s}
+  a.tool:hover{border-color:var(--accent);transform:translateY(-2px)}
+  a.tool h3{color:var(--accent);font-family:var(--mono);font-size:15px}
+  a.tool p{color:var(--muted);font-size:14px;margin-top:5px}
+  footer{margin-top:34px;color:var(--muted);font-size:14px}
+  footer a{color:var(--muted)}footer a:hover{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Dependency-light tools for people who <span class="hl">build with agents</span>.</h1>
+  <p class="sub">I'm Mohamed Ashrey. I build small, fast, open-source tools for the MCP and AI-agent ecosystem.</p>
+  <div class="tools">
+    <a class="tool" href="https://m-ashrey.github.io/mcp-doctor/"><h3>mcp-doctor →</h3><p>Health-check, lint &amp; security-audit any MCP server from the CLI. Zero deps.</p></a>
+    <a class="tool" href="https://github.com/M-Ashrey/memory-mcp"><h3>memory-mcp →</h3><p>Persistent file-based memory for your agent, over MCP.</p></a>
+    <a class="tool" href="https://github.com/M-Ashrey/promptlint"><h3>promptlint →</h3><p>A linter for prompt &amp; agent-instruction files. Catch weak prompts before they ship.</p></a>
+    <a class="tool" href="https://github.com/M-Ashrey/claude-mcp-starter-kit"><h3>claude-mcp-starter-kit →</h3><p>Turn Claude into an autonomous operator. Configs, prompts, memory.</p></a>
+  </div>
+  <footer><a href="https://github.com/M-Ashrey">GitHub</a> · <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a></footer>
+</div>
+</body>
+</html>

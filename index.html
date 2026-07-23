@@ -1,40 +1,482 @@
 <!DOCTYPE html>
+<!--
+  DIRECTION CONTRACT — "THE DATASHEET"
+  THESIS: A developer whose tools exist to verify things (health-checks, linters, passing tests, green CI)
+    presents himself as a component datasheet. Refuses the near-black + neon-accent + gradient-text dev
+    landing the whole category ships (and that this site previously shipped).
+  OWN-WORLD: Warm paper ground (#f4f2ec), warm ink (#17150f), true hairline rules, tabular monospace spec
+    grids with tracked-caps field labels. One muted ledger-green (#2c6b4a) reserved for PASS marks and the
+    single primary action. Neutral grotesque (Helvetica/Arial) for prose; monospace only where there is
+    actual data or measurement. Flat print, no shadows-as-decoration.
+  STORY: A hiring engineer/founder lands, reads the document header, sees four real components each with hard
+    specs and a PASS stamp, understands this person ships verifiable systems, and orders a build.
+  FIRST VIEWPORT: Datasheet masthead (name as part title, doc/rev/date block right), a one-line abstract,
+    and an at-a-glance spec strip with a green STATUS: AVAILABLE mark. Primary action sits in the spec strip.
+  FORM: Component datasheet / technical paper. Chosen over the category rut (dark neon dev landing).
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohamed Ashrey — developer tools for people who build with agents</title>
-<meta name="description" content="Dependency-light open-source tools for the MCP / AI-agent ecosystem.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d1117'/%3E%3Ctext x='50' y='72' font-size='60' text-anchor='middle' fill='%2358a6ff'%3E%2B%3C/text%3E%3C/svg%3E">
+<title>Mohamed Ashrey — MCP servers & agent automations that actually run</title>
+<meta name="description" content="Developer datasheet for Mohamed Ashrey. I build Model Context Protocol servers, AI-agent automations, and developer tooling that ship in public with tests and CI. Proof, not slides.">
+<meta name="author" content="Mohamed Ashrey">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mohamed Ashrey — developer datasheet">
+<meta property="og:description" content="MCP servers, agent automations, and developer tooling that actually run. Shipped in public with tests and CI.">
+<meta property="og:url" content="https://m-ashrey.github.io/">
+<meta name="theme-color" content="#f4f2ec">
+<link rel="canonical" href="https://m-ashrey.github.io/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f4f2ec'/%3E%3Crect x='6' y='6' width='88' height='88' fill='none' stroke='%2317150f' stroke-width='4'/%3E%3Ctext x='50' y='66' font-size='52' font-family='Helvetica,Arial,sans-serif' font-weight='700' text-anchor='middle' fill='%2317150f'%3EMA%3C/text%3E%3C/svg%3E">
 <style>
-  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;
-    --mono:"SFMono-Regular",ui-monospace,Consolas,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  :root{
+    --paper:#f4f2ec;
+    --paper-2:#efece4;
+    --ink:#17150f;
+    --ink-2:#54514a;
+    --rule:#d5d0c4;
+    --rule-strong:#17150f;
+    --pass:#2c6b4a;
+    --pass-ink:#1f5138;
+    --pass-fill:#e4ede4;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,"Liberation Mono",monospace;
+    --page:1120px;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;min-height:100vh;display:flex;align-items:center}
-  .wrap{max-width:720px;margin:0 auto;padding:48px 24px}
-  h1{font-size:clamp(28px,5vw,44px);letter-spacing:-.02em;font-weight:800}
-  h1 .hl{background:linear-gradient(120deg,#58a6ff,#bc8cff);-webkit-background-clip:text;background-clip:text;color:transparent}
-  p.sub{color:var(--muted);margin-top:16px;font-size:18px;max-width:560px}
-  .tools{display:grid;gap:14px;margin-top:34px}
-  a.tool{display:block;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px 20px;text-decoration:none;transition:.15s}
-  a.tool:hover{border-color:var(--accent);transform:translateY(-2px)}
-  a.tool h3{color:var(--accent);font-family:var(--mono);font-size:15px}
-  a.tool p{color:var(--muted);font-size:14px;margin-top:5px}
-  footer{margin-top:34px;color:var(--muted);font-size:14px}
-  footer a{color:var(--muted)}footer a:hover{color:var(--text)}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--paper);color:var(--ink);font-family:var(--sans);
+    line-height:1.55;font-size:17px;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:repeating-linear-gradient(to bottom, transparent 0 47px, rgba(23,21,15,.028) 47px 48px);}
+  .page{position:relative;z-index:1;max-width:var(--page);margin:0 auto;
+    padding:0 clamp(18px,5vw,56px);
+    border-left:1px solid var(--rule);border-right:1px solid var(--rule);
+    background:var(--paper);min-height:100vh;}
+  a{color:var(--ink);text-decoration:none}
+  ::selection{background:var(--pass);color:#fff}
+
+  .field{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+  .mono{font-family:var(--mono)}
+  h2.section-title{font-size:clamp(13px,1.6vw,15px);font-family:var(--mono);letter-spacing:.16em;
+    text-transform:uppercase;font-weight:700;color:var(--ink)}
+
+  /* MASTHEAD */
+  header.mast{padding:26px 0 0}
+  .mast-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;
+    padding-bottom:16px;border-bottom:2px solid var(--rule-strong)}
+  .mark{display:flex;align-items:center;gap:12px}
+  .mark .glyph{width:38px;height:38px;border:2px solid var(--ink);display:grid;place-items:center;
+    font-weight:700;font-size:15px;letter-spacing:.02em;flex:none}
+  .mark .who{font-family:var(--mono);font-size:12px;letter-spacing:.06em;line-height:1.35}
+  .mark .who b{display:block;font-weight:700;letter-spacing:.02em;font-size:12px;text-transform:uppercase}
+  .doc-meta{text-align:right;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--ink-2);
+    letter-spacing:.04em;white-space:nowrap}
+  .doc-meta b{color:var(--ink)}
+
+  .hero{display:grid;grid-template-columns:1fr;gap:0;padding:40px 0 0}
+  .hero .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:18px}
+  .hero h1{font-size:clamp(34px,6.4vw,68px);line-height:1.02;letter-spacing:-.022em;font-weight:800;max-width:16ch}
+  .hero .abstract{margin-top:22px;font-size:clamp(18px,2.1vw,21px);line-height:1.5;max-width:60ch;color:var(--ink)}
+  .hero .abstract b{font-weight:700}
+
+  .specstrip{margin-top:34px;border:1px solid var(--rule-strong);display:grid;grid-template-columns:repeat(4,1fr)}
+  .specstrip .cell{padding:14px 16px;border-right:1px solid var(--rule)}
+  .specstrip .cell:last-child{border-right:0}
+  .specstrip .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+  .specstrip .v{margin-top:6px;font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);line-height:1.35}
+  .specstrip .cta-cell{background:var(--pass);border-right:0}
+  .specstrip .cta-cell a{display:flex;flex-direction:column;height:100%;justify-content:center;color:#fff}
+  .specstrip .cta-cell .k{color:rgba(255,255,255,.8)}
+  .specstrip .cta-cell .v{color:#fff;display:flex;align-items:center;gap:8px}
+  .specstrip .cta-cell .v .arw{transition:transform .18s ease}
+  .specstrip .cta-cell:hover .v .arw{transform:translateX(4px)}
+  .status-dot{display:inline-block;width:9px;height:9px;background:var(--pass);border-radius:50%;
+    margin-right:7px;vertical-align:middle;box-shadow:0 0 0 3px var(--pass-fill)}
+  .v.available{color:var(--pass-ink)}
+
+  section{padding:56px 0;border-top:1px solid var(--rule)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:30px}
+  .sec-head .no{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.1em}
+  .sec-head .rule-fill{flex:1;height:1px;background:var(--rule);align-self:center}
+
+  .triad{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:0;border:1px solid var(--rule-strong)}
+  .triad .col{padding:22px 22px 26px;border-right:1px solid var(--rule)}
+  .triad .col:last-child{border-right:0}
+  .triad h3{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:14px;font-weight:600}
+  .triad p{font-size:15.5px;line-height:1.55}
+  .triad ul{list-style:none;font-size:15px;line-height:1.5}
+  .triad ul li{padding-left:20px;position:relative;margin-bottom:11px}
+  .triad ul li::before{content:"\2014";position:absolute;left:0;color:var(--ink-2);font-family:var(--mono)}
+  .triad ul.checks li::before{content:"PASS";left:0;top:1px;font-family:var(--mono);font-size:9.5px;
+    letter-spacing:.06em;color:var(--pass-ink);font-weight:700;padding-left:0}
+  .triad ul.checks li{padding-left:44px}
+
+  .components{display:grid;gap:0;border:1px solid var(--rule-strong)}
+  .comp{display:grid;grid-template-columns:1fr;border-bottom:1px solid var(--rule)}
+  .comp:last-child{border-bottom:0}
+  .comp-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0}
+  .comp-left{padding:24px 24px 22px;border-right:1px solid var(--rule)}
+  .comp-id{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+  .comp-partno{font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.08em}
+  .badge-pass{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--pass-ink);
+    border:1px solid var(--pass);padding:3px 8px;background:var(--pass-fill);border-radius:2px;
+    display:inline-flex;align-items:center;gap:6px}
+  .badge-pass::before{content:"";width:6px;height:6px;background:var(--pass);border-radius:1px}
+  .comp h3.name{font-size:23px;font-weight:800;letter-spacing:-.01em;font-family:var(--mono)}
+  .comp .role{margin-top:9px;font-size:16px;line-height:1.5;color:var(--ink);max-width:46ch}
+  .comp .src{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);
+    font-size:13px;font-weight:600;border-bottom:1.5px solid var(--ink);padding-bottom:2px}
+  .comp .src .arw{transition:transform .18s ease}
+  .comp .src:hover .arw{transform:translateX(4px)}
+
+  .spec-tab{display:grid;grid-template-columns:auto 1fr;align-content:start}
+  .spec-tab .sk,.spec-tab .sv{padding:10px 16px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12.5px}
+  .spec-tab .sk{color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase;font-size:10.5px;
+    border-right:1px solid var(--rule);background:var(--paper-2);white-space:nowrap}
+  .spec-tab .sv{color:var(--ink);font-weight:600}
+  .spec-tab .row:last-child .sk,.spec-tab .row:last-child .sv{border-bottom:0}
+  .spec-tab .sv.ok{color:var(--pass-ink)}
+
+  .ordering{border:1px solid var(--rule-strong)}
+  .ord-row{display:grid;grid-template-columns:150px 1fr 150px;gap:0;border-bottom:1px solid var(--rule)}
+  .ord-row:last-child{border-bottom:0}
+  .ord-row.head{background:var(--ink);color:var(--paper)}
+  .ord-row.head .oc{color:var(--paper)}
+  .oc{padding:16px 20px;border-right:1px solid var(--rule);font-size:15.5px}
+  .ord-row.head .oc{border-right-color:#3a372f}
+  .oc:last-child{border-right:0}
+  .oc.tier{font-family:var(--mono);font-weight:700;letter-spacing:.04em;font-size:14px}
+  .oc.price{font-family:var(--mono);font-weight:700;text-align:right;white-space:nowrap}
+  .ord-row.head .oc{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+
+  .lab{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+    border:1px solid var(--rule-strong);padding:24px}
+  .lab h3{font-size:20px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+  .lab p{color:var(--ink-2);font-size:15.5px;max-width:52ch}
+  .lab .watch{font-family:var(--mono);font-size:13px;font-weight:700;border:1px solid var(--ink);
+    padding:12px 20px;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;transition:.16s}
+  .lab .watch:hover{background:var(--ink);color:var(--paper)}
+  .lab .watch::before{content:"\25B6";font-size:10px}
+
+  .contact{padding:60px 0}
+  .contact h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.02em;font-weight:800;max-width:20ch;line-height:1.08}
+  .contact p{margin-top:16px;color:var(--ink-2);font-size:18px;max-width:56ch}
+  .contact .actions{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px}
+  .btn{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.02em;padding:15px 26px;
+    display:inline-flex;align-items:center;gap:10px;border:1px solid var(--ink);transition:.16s}
+  .btn.primary{background:var(--pass);border-color:var(--pass);color:#fff}
+  .btn.primary:hover{background:var(--pass-ink);border-color:var(--pass-ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .arw{transition:transform .18s ease}
+  .btn:hover .arw{transform:translateX(4px)}
+
+  footer.docctl{border-top:2px solid var(--rule-strong);padding:22px 0 40px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink-2)}
+  footer.docctl a{color:var(--ink-2);border-bottom:1px solid var(--rule)}
+  footer.docctl a:hover{color:var(--ink);border-color:var(--ink)}
+  footer.docctl .r{display:flex;gap:18px;flex-wrap:wrap}
+
+  @media(max-width:820px){
+    .specstrip{grid-template-columns:1fr 1fr}
+    .specstrip .cell:nth-child(2){border-right:0}
+    .triad{grid-template-columns:1fr}
+    .triad .col{border-right:0;border-bottom:1px solid var(--rule)}
+    .triad .col:last-child{border-bottom:0}
+  }
+  @media(max-width:760px){
+    .comp-main{grid-template-columns:1fr}
+    .comp-left{border-right:0;border-bottom:1px solid var(--rule)}
+  }
+  @media(max-width:640px){
+    .ord-row{grid-template-columns:1fr}
+    .oc{border-right:0;border-bottom:1px solid var(--rule);padding:12px 18px}
+    .oc.price{text-align:left}
+    .ord-row .oc:last-child{border-bottom:0}
+    .ord-row.head{display:none}
+    .lab{grid-template-columns:1fr}
+  }
+  @media(max-width:560px){
+    body{font-size:16px}
+    .mast-top{flex-direction:column}
+    .doc-meta{text-align:left}
+    .specstrip{grid-template-columns:1fr}
+    .specstrip .cell{border-right:0;border-bottom:1px solid var(--rule)}
+    .specstrip .cta-cell{border-bottom:0}
+  }
+
+  @media(prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(10px);animation:print .7s cubic-bezier(.2,.7,.2,1) forwards}
+    .hero .kicker{animation-delay:.02s}
+    .hero h1{animation-delay:.08s}
+    .hero .abstract{animation-delay:.16s}
+    .specstrip{animation-delay:.24s}
+    .badge-pass{opacity:0;animation:stamp .5s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:.5s}
+  }
+  @keyframes print{to{opacity:1;transform:none}}
+  @keyframes stamp{0%{opacity:0;transform:scale(1.25) rotate(-3deg)}60%{opacity:1}100%{opacity:1;transform:none}}
+  a:focus-visible,.btn:focus-visible{outline:2px solid var(--pass);outline-offset:3px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>Dependency-light tools for people who <span class="hl">build with agents</span>.</h1>
-  <p class="sub">I'm Mohamed Ashrey. I build small, fast, open-source tools for the MCP and AI-agent ecosystem.</p>
-  <div class="tools">
-    <a class="tool" href="https://m-ashrey.github.io/mcp-doctor/"><h3>mcp-doctor →</h3><p>Health-check, lint &amp; security-audit any MCP server from the CLI. Zero deps.</p></a>
-    <a class="tool" href="https://github.com/M-Ashrey/memory-mcp"><h3>memory-mcp →</h3><p>Persistent file-based memory for your agent, over MCP.</p></a>
-    <a class="tool" href="https://github.com/M-Ashrey/promptlint"><h3>promptlint →</h3><p>A linter for prompt &amp; agent-instruction files. Catch weak prompts before they ship.</p></a>
-    <a class="tool" href="https://github.com/M-Ashrey/claude-mcp-starter-kit"><h3>claude-mcp-starter-kit →</h3><p>Turn Claude into an autonomous operator. Configs, prompts, memory.</p></a>
-  </div>
-  <footer><a href="https://github.com/M-Ashrey">GitHub</a> · <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a></footer>
+<div class="page">
+
+  <header class="mast">
+    <div class="mast-top">
+      <div class="mark">
+        <div class="glyph" aria-hidden="true">MA</div>
+        <div class="who"><b>Mohamed Ashrey</b>Developer &middot; AI-agent tooling &amp; MCP</div>
+      </div>
+      <div class="doc-meta">
+        DOC. <b>MA&#8209;001</b><br>
+        REV <b>2026.07</b><br>
+        CLASS <b>PUBLIC</b>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="kicker reveal">Datasheet &mdash; Developer Profile</div>
+      <h1 class="reveal">Systems for the agent era that actually run.</h1>
+      <p class="abstract reveal">
+        I build <b>Model Context Protocol servers</b>, AI-agent automations, and developer
+        tooling &mdash; shipped in public with tests and CI. Not demos, not slides: working code you can
+        clone, read, and run today.
+      </p>
+
+      <div class="specstrip reveal">
+        <div class="cell">
+          <div class="k">Focus</div>
+          <div class="v">MCP &middot; agent automation</div>
+        </div>
+        <div class="cell">
+          <div class="k">Primary stack</div>
+          <div class="v">Python &middot; zero-dep CLIs</div>
+        </div>
+        <div class="cell">
+          <div class="k">Status</div>
+          <div class="v available"><span class="status-dot" aria-hidden="true"></span>Available for work</div>
+        </div>
+        <div class="cell cta-cell">
+          <a href="#ordering">
+            <div class="k">Action</div>
+            <div class="v">Start a build <span class="arw" aria-hidden="true">&rarr;</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="overview" aria-labelledby="overview-h">
+    <div class="sec-head">
+      <span class="no">1.0</span>
+      <h2 class="section-title" id="overview-h">General description</h2>
+      <span class="rule-fill" aria-hidden="true"></span>
+    </div>
+    <div class="triad">
+      <div class="col">
+        <h3>Description</h3>
+        <p>I connect large language models to the real world and make the result dependable.
+        That means MCP servers that give a model new capabilities &mdash; memory, data access, custom
+        tools &mdash; and automations that let an agent do repetitive work end to end. Everything ships
+        with tests, CI, and a README you can actually follow.</p>
+      </div>
+      <div class="col">
+        <h3>Capabilities</h3>
+        <ul>
+          <li>MCP servers (memory, data, custom tooling)</li>
+          <li>Agent automations over your APIs</li>
+          <li>Developer tooling for the agent era</li>
+          <li>Prompt &amp; agent-instruction hardening</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Guarantees</h3>
+        <ul class="checks">
+          <li>Tests &amp; CI on every build</li>
+          <li>Dependency-light by default</li>
+          <li>Open source, readable code</li>
+          <li>Shipped in public &mdash; verifiable</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" aria-labelledby="work-h">
+    <div class="sec-head">
+      <span class="no">2.0</span>
+      <h2 class="section-title" id="work-h">Selected components</h2>
+      <span class="rule-fill" aria-hidden="true"></span>
+    </div>
+
+    <div class="components">
+
+      <article class="comp">
+        <div class="comp-main">
+          <div class="comp-left">
+            <div class="comp-id">
+              <span class="comp-partno">P/N MCPD-01 &middot; FLAGSHIP</span>
+              <span class="badge-pass">PASS</span>
+            </div>
+            <h3 class="name">mcp-doctor</h3>
+            <p class="role">Health-check, lint, and security-audit any MCP server from the command
+            line. Point it at a server and it tells you what&rsquo;s broken, unsafe, or non-compliant &mdash; zero dependencies.</p>
+            <a class="src" href="https://m-ashrey.github.io/mcp-doctor/">Open landing &amp; source <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="spec-tab" role="table" aria-label="mcp-doctor specifications">
+            <div class="row" role="row"><span class="sk" role="cell">Type</span><span class="sv" role="cell">CLI tool</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Language</span><span class="sv" role="cell">Python</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Dependencies</span><span class="sv ok" role="cell">0 &mdash; stdlib only</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Function</span><span class="sv" role="cell">lint &middot; audit &middot; health</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">License</span><span class="sv" role="cell">MIT &middot; open source</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="comp">
+        <div class="comp-main">
+          <div class="comp-left">
+            <div class="comp-id">
+              <span class="comp-partno">P/N MEM-02</span>
+              <span class="badge-pass">PASS</span>
+            </div>
+            <h3 class="name">memory-mcp</h3>
+            <p class="role">Persistent memory for AI agents over MCP. Gives a model durable,
+            searchable recall across sessions &mdash; filesystem-backed, atomic JSON storage, weighted
+            keyword search.</p>
+            <a class="src" href="https://github.com/M-Ashrey/memory-mcp">View source <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="spec-tab" role="table" aria-label="memory-mcp specifications">
+            <div class="row" role="row"><span class="sk" role="cell">Type</span><span class="sv" role="cell">MCP server</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Language</span><span class="sv" role="cell">Python</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Storage</span><span class="sv" role="cell">atomic JSON, file-based</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Tests</span><span class="sv ok" role="cell">25 passing &middot; CI</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">License</span><span class="sv" role="cell">MIT &middot; open source</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="comp">
+        <div class="comp-main">
+          <div class="comp-left">
+            <div class="comp-id">
+              <span class="comp-partno">P/N PLINT-03</span>
+              <span class="badge-pass">PASS</span>
+            </div>
+            <h3 class="name">promptlint</h3>
+            <p class="role">A fast, dependency-free linter for prompt and agent-instruction files &mdash;
+            CLAUDE.md, AGENTS.md, system prompts. Catches token-budget overruns, hedging language,
+            leftover placeholders, and structural issues before they ship.</p>
+            <a class="src" href="https://github.com/M-Ashrey/promptlint">View source <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="spec-tab" role="table" aria-label="promptlint specifications">
+            <div class="row" role="row"><span class="sk" role="cell">Type</span><span class="sv" role="cell">CLI linter</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Language</span><span class="sv" role="cell">Python</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Dependencies</span><span class="sv ok" role="cell">0 &mdash; stdlib only</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Targets</span><span class="sv" role="cell">CLAUDE.md &middot; AGENTS.md</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">License</span><span class="sv" role="cell">MIT &middot; open source</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="comp">
+        <div class="comp-main">
+          <div class="comp-left">
+            <div class="comp-id">
+              <span class="comp-partno">P/N KIT-04</span>
+              <span class="badge-pass">PASS</span>
+            </div>
+            <h3 class="name">claude-mcp-starter-kit</h3>
+            <p class="role">Turn Claude into an autonomous operator. MCP configs, battle-tested
+            prompts, and a persistent memory system &mdash; everything needed to get an agent running
+            fast. Built by an autonomous Claude agent.</p>
+            <a class="src" href="https://github.com/M-Ashrey/claude-mcp-starter-kit">View source <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="spec-tab" role="table" aria-label="claude-mcp-starter-kit specifications">
+            <div class="row" role="row"><span class="sk" role="cell">Type</span><span class="sv" role="cell">Starter kit</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Contents</span><span class="sv" role="cell">configs &middot; prompts &middot; memory</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Host</span><span class="sv" role="cell">Claude + MCP</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">Setup</span><span class="sv ok" role="cell">clone &amp; run</span></div>
+            <div class="row" role="row"><span class="sk" role="cell">License</span><span class="sv" role="cell">MIT &middot; open source</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="ordering" aria-labelledby="ordering-h">
+    <div class="sec-head">
+      <span class="no">3.0</span>
+      <h2 class="section-title" id="ordering-h">Ordering information</h2>
+      <span class="rule-fill" aria-hidden="true"></span>
+    </div>
+    <div class="ordering">
+      <div class="ord-row head">
+        <div class="oc">Tier</div>
+        <div class="oc">Scope</div>
+        <div class="oc price">Range</div>
+      </div>
+      <div class="ord-row">
+        <div class="oc tier">Quick fix</div>
+        <div class="oc">Debug an MCP server config, fix a broken automation workflow, or write an agent system prompt that behaves.</div>
+        <div class="oc price">$10 &ndash; 50</div>
+      </div>
+      <div class="ord-row">
+        <div class="oc tier">Integration</div>
+        <div class="oc">Connect your LLM to your tools via MCP; automate a real workflow with an AI agent wired to your APIs.</div>
+        <div class="oc price">$150 &ndash; 750</div>
+      </div>
+      <div class="ord-row">
+        <div class="oc tier">Build</div>
+        <div class="oc">Custom MCP servers, data &amp; automation pipelines, and agent workflows built around your business.</div>
+        <div class="oc price">$1k+</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lab" aria-labelledby="lab-h">
+    <div class="sec-head">
+      <span class="no">4.0</span>
+      <h2 class="section-title" id="lab-h">Reference material</h2>
+      <span class="rule-fill" aria-hidden="true"></span>
+    </div>
+    <div class="lab">
+      <div>
+        <h3>The Agent Lab &mdash; on YouTube</h3>
+        <p>Plain-English breakdowns of how AI agents and MCP actually work. If you want to
+        understand the thing before you buy the build, start here.</p>
+      </div>
+      <a class="watch" href="https://www.youtube.com/watch?v=6uDeVdurxxY">What is MCP?</a>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h">Tell me the outcome you want. I&rsquo;ll tell you if I can build it.</h2>
+    <p>Open an issue on any repo, or reach me on dev.to. No forms, no discovery calls that go
+    nowhere &mdash; just describe the result and I&rsquo;ll be straight with you about scope.</p>
+    <div class="actions">
+      <a class="btn primary" href="https://dev.to/m_ashrey122">Reach me on dev.to <span class="arw" aria-hidden="true">&rarr;</span></a>
+      <a class="btn ghost" href="https://github.com/M-Ashrey">Open an issue on GitHub</a>
+      <a class="btn ghost" href="https://github.com/sponsors/M-Ashrey">Sponsor</a>
+    </div>
+  </section>
+
+  <footer class="docctl">
+    <div>&copy; 2026 MOHAMED ASHREY &middot; BUILT &amp; SHIPPED IN PUBLIC</div>
+    <div class="r">
+      <a href="https://github.com/M-Ashrey">GitHub</a>
+      <a href="https://dev.to/m_ashrey122">dev.to</a>
+      <a href="https://www.youtube.com/watch?v=6uDeVdurxxY">The Agent Lab</a>
+      <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a>
+    </div>
+  </footer>
+
 </div>
 </body>
 </html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP Goes Stateless on July 28: What Every Builder Needs to Know — M-Ashrey</title>
+<meta name="description" content="The biggest MCP spec update since launch ships Tuesday. Sessions disappear, the init handshake is gone, and sampling/roots/logging start a 12-month countdown to removal. Here's the concrete migration checklist.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP Goes Stateless on July 28: What Every Builder Needs to Know">
+<meta property="og:description" content="The biggest MCP spec update since launch ships Tuesday. Sessions disappear, the init handshake is gone, and sampling/roots/logging start a 12-month countdown to removal. Here's the concrete migration checklist.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="article:published_time" content="2026-07-25">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP Goes Stateless on July 28: What Every Builder Needs to Know">
+<meta name="twitter:description" content="The biggest MCP spec update since launch ships Tuesday. Sessions disappear, the init handshake is gone, and sampling/roots/logging start a 12-month countdown to removal. Here's the concrete migration checklist.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "MCP Goes Stateless on July 28: What Every Builder Needs to Know",
+  "description": "The biggest MCP spec update since launch ships Tuesday. Sessions disappear, the init handshake is gone, and sampling/roots/logging start a 12-month countdown to removal. Here's the concrete migration checklist.",
+  "datePublished": "2026-07-25",
+  "dateModified": "2026-07-25",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"
+  }
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(1200px 680px at 88% -12%, rgba(243,182,76,.10), transparent 58%),
+    radial-gradient(1000px 560px at -8% 2%, rgba(126,166,255,.08), transparent 55%),
+    var(--bg);
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 28px}
+a{color:var(--ink);text-decoration:none}
+::selection{background:rgba(243,182,76,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
+
+.rvl{opacity:1}
+.js .rvl{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.js .rvl.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.js .rvl{opacity:1;transform:none;transition:none}}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.bar .mark i{font-style:normal;color:var(--accent)}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+.hero{padding:56px 0 44px}
+.hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5.6vw,56px);line-height:1.04;letter-spacing:-.02em;margin:18px 0 0}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lede{margin-top:20px;color:var(--muted);font-size:clamp(16px,1.8vw,19px);max-width:62ch;line-height:1.6}
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+.postsSection{padding:8px 0 64px}
+ul.posts{list-style:none;border-top:1px solid var(--line)}
+li.post{border-bottom:1px solid var(--line)}
+li.post a{display:block;padding:26px 4px;transition:padding-left .18s ease,background .18s ease}
+li.post a:hover{padding-left:14px;background:linear-gradient(90deg,rgba(243,182,76,.06),transparent)}
+li.post .post-date{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--faint);text-transform:uppercase}
+li.post .post-title{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.6vw,25px);letter-spacing:-.01em;color:var(--ink);margin-top:10px;line-height:1.28}
+li.post a:hover .post-title{color:var(--accent)}
+li.post .post-dek{display:block;color:var(--muted);font-size:14.5px;margin-top:8px;line-height:1.55;max-width:60ch}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:22ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul, article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+    </nav>
+  </div>
+
+  <header class="artHead rvl">
+    <a class="back" href="/blog/">← All posts</a>
+    <span class="eyebrow" style="margin-top:18px">MCP · Agents · Infrastructure</span>
+    <h1>MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</h1>
+    <div class="byline">
+      <span>Mohamed Ashrey</span><span class="dot"></span><span>July 25, 2026</span><span class="dot"></span><span>6 min read</span>
+    </div>
+    <p class="dek">The biggest MCP spec update since launch ships Tuesday. Sessions disappear, the init handshake is gone, and sampling, roots, and logging start a 12-month countdown to removal. Here's what to do before the spec lands.</p>
+  </header>
+
+  <article class="prose rvl">
+
+<p class="lede">The Model Context Protocol's <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank" rel="noopener">2026-07-28 specification</a> publishes in three days, and it is the largest revision the protocol has seen since its original release. The release candidate has been public since May 21, but the discussion around it — on Hacker News, in MCP server repos, across every AI-adjacent corner of the internet this week — has noticeably accelerated as the deadline approaches. If you operate an MCP server, embed one in an agent, or proxy MCP traffic through a gateway, something in this update will hit you. The window to plan ahead is closing.</p>
+
+<h2>What "stateless" actually means here</h2>
+
+<p>Prior to this spec, every MCP connection began with a handshake: the client sent an <code>initialize</code> request, the server responded with its capabilities and agreed on a protocol version, and subsequent requests were tied to that session via an <code>Mcp-Session-Id</code> header. This made sessions first-class citizens of the protocol — and it made infrastructure annoying. A server cluster needed sticky sessions or a shared session store so that any request could land on the instance that still held the client's context.</p>
+
+<p>The 2026-07-28 spec eliminates all of that at the protocol layer. <strong>SEP-2567 removes the <code>Mcp-Session-Id</code> header entirely.</strong> There is no more session. Every request is now self-contained: client metadata, capabilities, and protocol version travel in the <code>_meta</code> field on every request, not in a handshake that the server has to remember. At the infrastructure level, this means a remote MCP server can now run behind a plain round-robin load balancer and route traffic by the new <code>Mcp-Method</code> header without deep packet inspection or affinity rules.</p>
+
+<p>The practical cost savings are real. Anyone who currently runs MCP servers on a managed container platform and pays for a Redis or Memcached session store to make the stateful protocol work at scale can remove that dependency. Horizontal scaling becomes straightforward rather than load-balancer-dependent.</p>
+
+<h2>What actually breaks</h2>
+
+<p>Two things break immediately on July 28 — not deprecated, not "please migrate eventually," but removed:</p>
+
+<ul>
+  <li><strong>The <code>initialize</code> / <code>initialized</code> handshake is gone (SEP-2575).</strong> The protocol version no longer flows through a startup exchange. It lives in <code>_meta</code> on every request. If you call <code>initialize</code> on a server that has updated its SDK, you will get an error. The replacement for capability discovery is <code>server/discover</code>. Client libraries will need to be updated; if you are managing your own MCP client code rather than relying on the official TypeScript or Python SDKs, this is a manual migration.</li>
+  <li><strong><code>tasks/list</code> is removed outright.</strong> The Tasks feature, which manages long-running operations, has been rebuilt around task handles rather than session-bound objects. <code>tasks/list</code> no longer exists in the spec. If you poll for task status through that endpoint, you need a new approach before Tuesday.</li>
+</ul>
+
+<p>Beyond those two, the spec mandates two new HTTP headers that were optional or absent before. Infrastructure that proxies MCP traffic and pattern-matches on headers needs to account for these. Several GitHub issues in popular MCP gateway projects this week are tracking exactly this migration.</p>
+
+<h2>What's deprecated but not gone yet</h2>
+
+<p><strong>SEP-2577 formally deprecates Sampling, Roots, and Logging</strong> with a twelve-month removal window. Deprecated in the MCP spec means the features remain fully functional and spec-compliant until mid-2027 — but new implementations should not build on them, and existing ones should plan to move off.</p>
+
+<p>Of the three, Sampling is probably the most widely used. It is the mechanism by which an MCP server can request that the client's LLM generate text — useful for server-side prompt chaining and agentic loops that live on the server rather than in the client. Its deprecation signals that the MCP team wants these patterns handled elsewhere, likely through the new Tasks extension, which is built for long-running, structured work rather than ad-hoc model calls. If Sampling is part of your server's core flow, start planning the migration now rather than at month ten of the twelve-month window.</p>
+
+<h2>What's being added</h2>
+
+<p>The removals and deprecations get the most attention, but the spec also ships new surface area worth knowing about:</p>
+
+<ul>
+  <li><strong>MCP Apps</strong> is an extension for server-rendered UIs — the ability for an MCP server to push a structured interface to the client rather than just returning text or data. Early use cases center on rich tool result displays and interactive configuration flows without requiring a separate frontend.</li>
+  <li><strong>The Tasks extension</strong> replaces the old Tasks-as-session-object model with a handle-based system. A server initiates a long-running operation and returns a handle; the client can poll or subscribe to that handle independently of any session. This is a cleaner primitive for agent workflows that span multiple turns or require human-in-the-loop checkpoints.</li>
+  <li><strong>Enterprise-Managed Authorization (EMA)</strong> was promoted from experimental to stable earlier in July. It formalizes MCP servers as OAuth 2.1 resource servers and lets organizations route authorization through their existing identity provider rather than handling it ad-hoc. For anyone building MCP integrations for enterprise clients, EMA stable is the authorization story you should build to now.</li>
+</ul>
+
+<h2>SDK timing</h2>
+
+<p>The official TypeScript and Python SDKs maintained by the MCP team are expected to ship 2026-07-28 support within the ten-week window that opened when the RC locked on May 21 — meaning by late July or early August. If you depend on the official SDKs and don't customize the protocol layer, the migration may be as simple as updating your package version and verifying that nothing in your server code assumed session persistence. If you rolled your own client or wrapper, the initialize handshake removal and the new <code>_meta</code> transport are where you will spend the most time.</p>
+
+<p>Third-party SDKs and gateway wrappers — of which there are now dozens — are tracking the spec at different speeds. The safest assumption is that something in your dependency tree has not updated yet, and you should test against a server that has actually implemented the RC before assuming compatibility.</p>
+
+<h2>The concrete checklist before Tuesday</h2>
+
+<p>If you run an MCP server in production, these are the things worth doing right now rather than after the spec lands:</p>
+
+<ul>
+  <li>Grep your server code for <code>Mcp-Session-Id</code> and any session-store initialization. Remove or stub it — those code paths will be dead on updated clients.</li>
+  <li>Replace any <code>initialize</code> call in client code with <code>server/discover</code>. If your client library does this automatically, verify the version you're running.</li>
+  <li>If you call <code>tasks/list</code> anywhere, find the handle-based replacement in the RC and migrate it. This one is a hard removal, not a deprecation.</li>
+  <li>Audit any use of Sampling. It works for another year, but if it is core to your product, a migration plan now is cheaper than a rushed one at month eleven.</li>
+  <li>If you run MCP servers for enterprise customers, read the EMA stable spec. Your customers' IT teams are about to start asking whether your integration supports it.</li>
+</ul>
+
+<p>The 2026-07-28 update makes MCP substantially simpler to operate at scale. But "simpler to operate" comes with a version boundary, and the spec is landing whether or not any individual server is ready. Three days is enough time to at least know which category you're in.</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank" rel="noopener">The 2026-07-28 MCP Specification Release Candidate</a> — Model Context Protocol Blog</li>
+        <li><a href="https://www.theregister.com/devops/2026/07/23/model-context-protocol-prepares-to-break-with-its-stateful-past/5276722" target="_blank" rel="noopener">Model Context Protocol prepares to break with its stateful past</a> — The Register, Jul 23, 2026</li>
+        <li><a href="https://techcrunch.com/2026/07/20/ais-most-important-protocol-is-getting-a-little-bit-easier-to-use/" target="_blank" rel="noopener">AI's most important protocol is getting a little bit easier to use</a> — TechCrunch, Jul 20, 2026</li>
+        <li><a href="https://www.infoq.com/news/2026/07/mcp-ema-enterprise-auth/" target="_blank" rel="noopener">AI Model Context Protocol Adds Centralised Auth for Enterprise</a> — InfoQ, Jul 2026</li>
+        <li><a href="https://workos.com/blog/mcp-2026-spec-agent-authentication" target="_blank" rel="noopener">The biggest MCP spec update ships July 28: What changes for AI agent authentication</a> — WorkOS</li>
+        <li><a href="https://stacktr.ee/blog/mcp-2026-spec-changes" target="_blank" rel="noopener">MCP 2026-07-28 spec: what changed, what breaks</a> — Stacktree</li>
+      </ol>
+    </div>
+
+    <div class="ctaBlock">
+      <span class="lab">If you're building on MCP</span>
+      <h3>Three ways to act on this</h3>
+      <div class="ctaRow">
+        <div class="ctaItem">
+          <div class="k">Audit your MCP servers before the spec lands</div>
+          <p>Run the free hosted scanner to catch spec compliance issues, or use the open-source starter kit to validate in your own CI pipeline.</p>
+          <a class="go" href="https://mcp-doctor-cloud.onrender.com" target="_blank" rel="noopener">Free MCP scanner → mcp-doctor-cloud.onrender.com</a><br>
+          <a class="go" href="https://github.com/M-Ashrey/claude-mcp-starter-kit" target="_blank" rel="noopener">Free starter kit → github.com/M-Ashrey/claude-mcp-starter-kit</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Need help migrating or building new integrations</div>
+          <p>I build AI-agent automations and MCP integrations — production systems, not demos. Happy to help you navigate the spec update or build something new on it.</p>
+          <a class="go" href="https://m-ashrey.github.io/ai/">See how I can help → m-ashrey.github.io/ai</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Run a business site and want to see where you stand with AI</div>
+          <p>Free, automated AI-readiness scan — no call required.</p>
+          <a class="go" href="https://ai-readiness-scorecard-theta.vercel.app" target="_blank" rel="noopener">Free scan → ai-readiness-scorecard-theta.vercel.app</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="backBottom"><a href="/blog/">← All posts</a></div>
+  </article>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    root.classList.add('js');
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){reveal(x.target);io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    var reveal=function(e){e.classList.add('in');};
+    els.forEach(function(e){io.observe(e);});
+    setTimeout(function(){els.forEach(reveal);},1600);
+  })();
+</script>
+</body>
+</html>

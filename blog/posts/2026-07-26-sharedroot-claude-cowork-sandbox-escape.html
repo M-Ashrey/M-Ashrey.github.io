@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SharedRoot: What a Claude Cowork Sandbox Escape Teaches Us About AI Agent Security — M-Ashrey</title>
+<meta name="description" content="Accomplish AI demonstrated a VM escape that lets an untrusted Cowork session read your SSH keys and cloud credentials from the host Mac. The CVE is just the entry point — the structural lesson is more unsettling.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-26-sharedroot-claude-cowork-sandbox-escape.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SharedRoot: What a Claude Cowork Sandbox Escape Teaches Us About AI Agent Security">
+<meta property="og:description" content="Accomplish AI demonstrated a VM escape that lets an untrusted Cowork session read your SSH keys and cloud credentials from the host Mac. The CVE is just the entry point — the structural lesson is more unsettling.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-26-sharedroot-claude-cowork-sandbox-escape.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="article:published_time" content="2026-07-26">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SharedRoot: What a Claude Cowork Sandbox Escape Teaches Us About AI Agent Security">
+<meta name="twitter:description" content="Accomplish AI demonstrated a VM escape that lets an untrusted Cowork session read your SSH keys and cloud credentials from the host Mac. The CVE is just the entry point — the structural lesson is more unsettling.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "SharedRoot: What a Claude Cowork Sandbox Escape Teaches Us About AI Agent Security",
+  "description": "Accomplish AI demonstrated a VM escape that lets an untrusted Cowork session read your SSH keys and cloud credentials from the host Mac. The CVE is just the entry point — the structural lesson is more unsettling.",
+  "datePublished": "2026-07-26",
+  "dateModified": "2026-07-26",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-26-sharedroot-claude-cowork-sandbox-escape.html"
+  }
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(1200px 680px at 88% -12%, rgba(243,182,76,.10), transparent 58%),
+    radial-gradient(1000px 560px at -8% 2%, rgba(126,166,255,.08), transparent 55%),
+    var(--bg);
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 28px}
+a{color:var(--ink);text-decoration:none}
+::selection{background:rgba(243,182,76,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
+
+.rvl{opacity:1}
+.js .rvl{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.js .rvl.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.js .rvl{opacity:1;transform:none;transition:none}}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.bar .mark i{font-style:normal;color:var(--accent)}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:24ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul,article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+    </nav>
+  </div>
+
+  <header class="artHead rvl">
+    <a class="back" href="/blog/">← All posts</a>
+    <span class="eyebrow" style="margin-top:18px">Security · Claude · Agent Infrastructure</span>
+    <h1>SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</h1>
+    <div class="byline">
+      <span>Mohamed Ashrey</span><span class="dot"></span><span>July 26, 2026</span><span class="dot"></span><span>6 min read</span>
+    </div>
+    <p class="dek">Accomplish AI demonstrated a VM escape that lets untrusted content inside a Claude Cowork session read SSH keys and cloud credentials from the host Mac. The CVE is just the entry point — the structural argument is more unsettling.</p>
+  </header>
+
+  <article class="prose rvl">
+
+<p class="lede">Security researchers at <a href="https://www.accomplish.ai/blog/sharedroot-escaping-claude-cowork-sandbox/" target="_blank" rel="noopener">Accomplish AI published SharedRoot</a> this week — a demonstrated escape from Claude Cowork's local Linux VM that lets content inside a session reach across into the host macOS filesystem, reading SSH private keys, cloud credentials, and anything else the user's account can access. The disclosure is getting attention on Hacker News today, and it deserves a careful read — not because the CVE is novel, but because the structural argument underneath it applies to every AI agent product that isolates untrusted code in a kernel-level sandbox.</p>
+
+<h2>What SharedRoot actually is</h2>
+
+<p>Claude Cowork's local mode runs inside a Linux virtual machine on your Mac. The idea is that whatever the AI agent does — reading files, running code, making network requests — stays contained inside that VM. The shared folder between guest and host is the intentional surface; everything else is supposed to be off-limits.</p>
+
+<p>SharedRoot breaks that containment. The attack chains a publicly known Linux kernel vulnerability — <strong>CVE-2026-46331</strong>, a flaw in the <code>act_pedit</code> traffic control subsystem — with four specific design choices Accomplish AI identified in how Cowork integrates its sandbox with the host filesystem. By loading the <code>act_pedit</code> kernel subsystem into an unprivileged user namespace, an attacker can exploit the CVE to obtain guest root. From guest root, the technique targets a root-owned binary and corrupts its in-memory page cache — without touching the on-disk version — so that when <code>coworkd</code>, the root daemon, eventually re-executes that binary, it inherits the malicious modifications. At that point the guest has host-level reach.</p>
+
+<p>The researchers note this isn't the product of a single, clean kernel bug. The vulnerability stems from <strong>four layered design choices</strong> about how the sandbox integrates the kernel, user namespaces, and the shared host filesystem. Any one of the four, addressed in isolation, would not close the attack surface by itself. That design-level framing is where the disclosure gets interesting.</p>
+
+<h2>Anthropic's response and the current status</h2>
+
+<p>Accomplish AI reported the findings to Anthropic. Anthropic closed the report as "informative" — meaning they acknowledged it but did not commit to a direct fix addressing the underlying design. Instead, the latest Cowork release now defaults to <strong>cloud execution</strong> rather than local VM execution. Because the SharedRoot exploit requires attacker code to run inside the local guest VM, cloud execution sidesteps the local escape path entirely: your session runs in Anthropic's infrastructure, not a VM on your machine.</p>
+
+<p>The practical upshot for users on the latest version: if you have not explicitly switched back to local execution mode, you are running in cloud mode and are not exposed to SharedRoot as described. If you are running an older version of Cowork, or have opted into local mode deliberately, update or switch modes now.</p>
+
+<p>Accomplish AI estimates that approximately 500,000 macOS users were running local Cowork sessions before this became public. The shift to cloud-default is a pragmatic mitigation, but it is worth understanding what it actually means: Anthropic did not fix the underlying design; they changed the product's default posture to route around it.</p>
+
+<h2>The structural argument that outlasts this CVE</h2>
+
+<p>Or Hiltch, the researcher who led the disclosure, made a point in his announcement that I think deserves more attention than the CVE number itself: <em>"Sandboxes are structurally one N-day behind, all the time."</em></p>
+
+<p>Here is what that means in practice. A VM-based AI agent sandbox isolates untrusted code inside a guest Linux kernel. That guest kernel has a patch lag — it will always be some number of days behind the latest security releases, because Cowork (or any similar product) needs to validate each kernel update before shipping it. AI-assisted kernel bug-finding is accelerating. Researchers and, increasingly, automated tools can identify exploitable kernel conditions faster than the patch cycle of any embedded guest OS can keep up. The sandbox is never running today's kernel; it is running last week's or last month's. The window of exposure is structural, not incidental.</p>
+
+<p>This is not unique to Cowork. Every AI agent product that runs untrusted code or untrusted content inside a VM — and there are many — faces the same property. The guest kernel they ship will always lag the current patch state. As long as adversaries can find and exploit N-days faster than vendors can ship patched guests, the sandbox boundary is porous by construction.</p>
+
+<p>The implication is not that VM sandboxes are useless — they raise the bar significantly and stop the vast majority of threats. The implication is that treating the sandbox as a trust boundary you can fully rely on is incorrect. Defense in depth has to apply inside the agent's reach, not just at the VM perimeter.</p>
+
+<h2>What this means if you build or deploy AI agents</h2>
+
+<p>SharedRoot is a Cowork-specific disclosure, but the lessons apply to any production agent deployment that uses a sandboxed execution environment:</p>
+
+<ul>
+  <li><strong>Do not put credentials inside the agent's reach that you do not want the agent to be able to exfiltrate.</strong> SSH keys, cloud credentials, and API tokens that live in <code>~/.ssh</code> or standard config paths are reachable if the sandbox breaks. Treat the agent's execution environment the way you would treat a shared machine: secret-manage aggressively, revoke quickly, and scope permissions to the minimum the task actually requires.</li>
+  <li><strong>Audit what is in the shared folder.</strong> The intentional shared surface between host and guest is where most users focus, but SharedRoot demonstrates that the unintentional surface (things accessible after a guest-root escape) can be far larger. Know what your agent's worst-case host reach looks like, not just its intended reach.</li>
+  <li><strong>Prefer cloud execution for sensitive workloads, with full awareness of what that trades.</strong> Cloud execution removes the local escape surface but moves your session data into the vendor's infrastructure. Neither option is obviously correct for all users; the choice depends on your threat model. The important thing is making that choice deliberately rather than by default.</li>
+  <li><strong>Watch the kernel version your sandbox ships.</strong> For products that let you inspect the guest kernel version, check it against the CVE database periodically. The lag between a public CVE and a patched guest kernel in your AI tool is your exposure window.</li>
+</ul>
+
+<h2>The bigger picture</h2>
+
+<p>SharedRoot is, in a narrow sense, a story about one CVE in one product. But the disclosure's timing is not accidental: Accomplish AI made the point explicitly that they are finding these vulnerabilities faster because AI-assisted bug-finding tooling has gotten dramatically more capable. The same technology that makes AI agents powerful accelerates the pace at which adversaries — and researchers — can identify kernel-level exploits.</p>
+
+<p>As agent products move from novelty to production infrastructure — processing sensitive documents, running code against real databases, managing cloud resources — the security bar for the sandboxes they rely on needs to move with them. A product that was acceptable for demos in 2025 may be inadequate for the workloads it is handling in 2026. SharedRoot is an early, well-documented illustration of that gap. It will not be the last.</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://www.accomplish.ai/blog/sharedroot-escaping-claude-cowork-sandbox/" target="_blank" rel="noopener">SharedRoot: Escaping the Claude Cowork Sandbox</a> — Accomplish AI Blog</li>
+        <li><a href="https://thehackernews.com/2026/07/claude-cowork-flaw-could-let-ai-agent.html" target="_blank" rel="noopener">Claude Cowork Flaw Could Let AI Agent Escape Its VM and Access Mac Files</a> — The Hacker News</li>
+        <li><a href="https://cybersecuritynews.com/claude-cowork-sandbox-escape-flaw/" target="_blank" rel="noopener">Claude Cowork Sandbox Escape Flaw Lets AI Agent Read SSH Keys and Cloud Credentials From Host</a> — CyberSecurityNews</li>
+        <li><a href="https://aiweekly.co/alerts/accomplish-ai-finds-sharedroot-escape-in-claude-cowork-on-mac" target="_blank" rel="noopener">Accomplish AI finds SharedRoot escape in Claude Cowork on Mac</a> — AI Weekly</li>
+        <li><a href="https://x.com/_orcaman/status/2080276888845447523" target="_blank" rel="noopener">Or Hiltch on X — SharedRoot announcement thread</a></li>
+      </ol>
+    </div>
+
+    <div class="ctaBlock">
+      <span class="lab">If you're building or running AI agents</span>
+      <h3>Three ways to act on this</h3>
+      <div class="ctaRow">
+        <div class="ctaItem">
+          <div class="k">Audit your MCP servers and agent toolchain</div>
+          <p>SharedRoot is a sandbox story, but your MCP servers are another surface. Run the free scanner to spot spec-compliance and configuration issues before they become problems.</p>
+          <a class="go" href="https://mcp-doctor-cloud.onrender.com" target="_blank" rel="noopener">Free MCP scanner → mcp-doctor-cloud.onrender.com</a><br>
+          <a class="go" href="https://github.com/M-Ashrey/claude-mcp-starter-kit" target="_blank" rel="noopener">Free starter kit → github.com/M-Ashrey/claude-mcp-starter-kit</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Building production agent systems and want a second set of eyes</div>
+          <p>I build AI-agent automations and MCP integrations — production systems with real security considerations, not demos.</p>
+          <a class="go" href="https://m-ashrey.github.io/ai/">See how I can help → m-ashrey.github.io/ai</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Run a business site and curious where you stand with AI</div>
+          <p>Free, automated AI-readiness scan — no call required.</p>
+          <a class="go" href="https://ai-readiness-scorecard-theta.vercel.app" target="_blank" rel="noopener">Free scan → ai-readiness-scorecard-theta.vercel.app</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="backBottom"><a href="/blog/">← All posts</a></div>
+  </article>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    root.classList.add('js');
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var reveal=function(e){e.classList.add('in');};
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){reveal(x.target);io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    els.forEach(function(e){io.observe(e);});
+    setTimeout(function(){els.forEach(reveal);},1600);
+  })();
+</script>
+</body>
+</html>

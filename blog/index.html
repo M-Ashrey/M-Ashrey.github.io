@@ -3,35 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
 <title>The Blog — M-Ashrey</title>
-<meta name="description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building on this stack.">
+<meta name="description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
 <meta name="author" content="Mohamed Ashrey">
 <link rel="canonical" href="https://m-ashrey.github.io/blog/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap"></noscript>
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Blog — M-Ashrey">
-<meta property="og:description" content="Notes on Claude, MCP, and AI agents — current, cited, no-hype analysis for developers building on this stack.">
+<meta property="og:description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
 <meta property="og:url" content="https://m-ashrey.github.io/blog/">
 <meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/blog-index.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab — notes on AI agents, MCP & automation">
 <meta name="theme-color" content="#0c0d10">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Blog — M-Ashrey">
-<meta name="twitter:description" content="Notes on Claude, MCP, and AI agents — current, cited, no-hype analysis for developers building on this stack.">
+<meta name="twitter:description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/blog-index.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "The Blog — M-Ashrey",
+  "description": "Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.",
+  "url": "https://m-ashrey.github.io/blog/",
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/"
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "SharedRoot: what a Cowork sandbox escape teaches us about AI agent security",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html",
+      "datePublished": "2026-07-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "MCP goes stateless on July 28. Here's what breaks and what gets cheaper.",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html",
+      "datePublished": "2026-07-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Claude Opus 5 just shipped. Here's what actually matters if you're building agents.",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html",
+      "datePublished": "2026-07-24"
+    }
+  ]
+}
+</script>
 <style>
 :root{
   --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
   --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
   --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
-  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
   --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
   --measure:68ch;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
 html{-webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
 body{
@@ -142,6 +184,7 @@ article.prose li strong{color:var(--accent)}
     </nav>
   </div>
 
+  <main>
   <header class="hero rvl">
     <div class="eyebrow">Claude · MCP · AI agents</div>
     <h1>Notes from <em>building</em> on this stack.</h1>
@@ -151,12 +194,13 @@ article.prose li strong{color:var(--accent)}
   <section class="postsSection rvl">
     <ul class="posts">
 <!-- POSTS:START -->
-<li class="post"><a href="/blog/posts/2026-07-26-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 26, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">A VM escape in Claude Cowork reaches SSH keys and cloud credentials on the host. The CVE is just the entry point — the structural argument applies to every sandboxed agent.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 25, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">A VM escape in Claude Cowork reaches SSH keys and cloud credentials on the host. The CVE is just the entry point — the structural argument applies to every sandboxed agent.</span></a></li>
 <li class="post"><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"><span class="post-date">July 25, 2026</span><span class="post-title">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</span><span class="post-dek">The biggest spec update since launch drops Tuesday — sessions gone, init handshake removed, and three features start a 12-month deprecation clock.</span></a></li>
 <li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Three quiet API changes matter more than the benchmark charts — and this week's MCP security research sharpens the takeaway.</span></a></li>
 <!-- POSTS:END -->
     </ul>
   </section>
+  </main>
 
   <footer class="site">
     <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>

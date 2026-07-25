@@ -3,32 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude Opus 5: What Actually Matters for Agent Builders — M-Ashrey</title>
-<meta name="description" content="Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes, plus a week of MCP security research that sharpens the takeaway.">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Claude Opus 5: What Actually Matters for Agent Builders</title>
+<meta name="description" content="Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes and a week of MCP security research worth knowing.">
 <meta name="author" content="Mohamed Ashrey">
 <link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;600&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;600&display=swap"></noscript>
 <meta property="og:type" content="article">
 <meta property="og:title" content="Claude Opus 5: What Actually Matters for Agent Builders">
-<meta property="og:description" content="Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes, plus a week of MCP security research that sharpens the takeaway.">
+<meta property="og:description" content="Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes and a week of MCP security research worth knowing.">
 <meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html">
 <meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/2026-07-24-claude-opus-5-what-matters-for-agent-builders.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Claude Opus 5 just shipped. Here's what actually matters if you're building agents.">
 <meta property="article:published_time" content="2026-07-24">
 <meta property="article:author" content="Mohamed Ashrey">
 <meta name="theme-color" content="#0c0d10">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Claude Opus 5: What Actually Matters for Agent Builders">
-<meta name="twitter:description" content="Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes, plus a week of MCP security research that sharpens the takeaway.">
+<meta name="twitter:description" content="Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes and a week of MCP security research worth knowing.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-07-24-claude-opus-5-what-matters-for-agent-builders.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "Claude Opus 5 just shipped. Here's what actually matters if you're building agents.",
-  "description": "Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes, plus a week of MCP security research that sharpens the takeaway.",
+  "description": "Claude Opus 5 shipped today. The real story for developers isn't the benchmarks — it's three API changes and a week of MCP security research worth knowing.",
   "datePublished": "2026-07-24",
   "dateModified": "2026-07-24",
   "author": {
@@ -41,10 +48,22 @@
     "@type": "Person",
     "name": "Mohamed Ashrey"
   },
+  "image": "https://m-ashrey.github.io/assets/og/2026-07-24-claude-opus-5-what-matters-for-agent-builders.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://m-ashrey.github.io/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://m-ashrey.github.io/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://m-ashrey.github.io/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "Claude Opus 5 just shipped. Here's what actually matters if you're building agents.", "item": "https://m-ashrey.github.io/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"}
+  ]
 }
 </script>
 <style>
@@ -52,12 +71,13 @@
   --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
   --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
   --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
-  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
   --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
   --measure:68ch;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
 html{-webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
 body{
@@ -136,6 +156,13 @@ article.prose li strong{color:var(--accent)}
 .sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
 .sources a:hover{color:var(--accent);border-color:var(--accent)}
 
+.related{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.related .lab{margin-bottom:12px;display:block}
+.related ul{list-style:none;padding:0;margin:0}
+.related li{margin-bottom:10px;font-size:14.5px}
+.related a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+.related a:hover{border-color:var(--accent)}
+
 /* CTA block */
 .ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
 .ctaBlock .lab{margin-bottom:10px;display:block}
@@ -168,6 +195,7 @@ article.prose li strong{color:var(--accent)}
     </nav>
   </div>
 
+  <main>
   <header class="artHead rvl">
     <a class="back" href="/blog/">← All posts</a>
     <span class="eyebrow" style="margin-top:18px">Claude · Agents · MCP</span>
@@ -240,8 +268,17 @@ article.prose li strong{color:var(--accent)}
       </div>
     </div>
 
+    <div class="related">
+      <span class="lab">Related reading</span>
+      <ul>
+        <li><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</a></li>
+        <li><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</a></li>
+      </ul>
+    </div>
+
     <div class="backBottom"><a href="/blog/">← All posts</a></div>
   </article>
+  </main>
 
   <footer class="site">
     <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>

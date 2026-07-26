@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>The 80% Rule: Context Engineering for Claude 5</title>
+<meta name="description" content="Anthropic cut 80% of Claude Code's system prompt for Opus 5 with no measurable loss. Here's what that means for your CLAUDE.md and agent harnesses.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
+<meta property="og:type" content="article">
+<meta property="og:title" content="The 80% Rule: Context Engineering for Claude 5">
+<meta property="og:description" content="Anthropic cut 80% of Claude Code's system prompt for Opus 5 with no measurable loss. Here's what that means for your CLAUDE.md and agent harnesses.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/2026-07-26-context-engineering-claude-5-unhobbling.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The 80% Rule: Context Engineering for Claude 5">
+<meta property="article:published_time" content="2026-07-26">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The 80% Rule: Context Engineering for Claude 5">
+<meta name="twitter:description" content="Anthropic cut 80% of Claude Code's system prompt for Opus 5 with no measurable loss. Here's what that means for your CLAUDE.md and agent harnesses.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-07-26-context-engineering-claude-5-unhobbling.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The 80% Rule: Context Engineering for Claude 5",
+  "description": "Anthropic cut 80% of Claude Code's system prompt for Opus 5 with no measurable loss. Here's what that means for your CLAUDE.md and agent harnesses.",
+  "datePublished": "2026-07-26",
+  "dateModified": "2026-07-26",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "image": "https://m-ashrey.github.io/assets/og/2026-07-26-context-engineering-claude-5-unhobbling.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://m-ashrey.github.io/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://m-ashrey.github.io/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "The 80% Rule: Context Engineering for Claude 5", "item": "https://m-ashrey.github.io/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html"}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+html{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding:0 32px}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 0;border-bottom:1px solid var(--line);padding-bottom:16px}
+.bar .mark{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--ink);text-decoration:none}
+.bar .mark i{color:var(--accent);font-style:normal}
+.bar nav{display:flex;gap:20px}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:24ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul,article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+article.prose code{font-family:var(--mono);font-size:13.5px;background:var(--panel);color:var(--accent);padding:2px 6px;border-radius:4px}
+article.prose pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;margin:0 0 24px;overflow-x:auto}
+article.prose pre code{background:none;padding:0;color:#dde2e9;font-size:13.5px}
+
+.callout{margin:28px 0;padding:18px 22px;border-left:3px solid var(--accent);background:var(--panel);border-radius:0 10px 10px 0}
+.callout p{margin:0;font-size:15.5px;color:var(--muted)}
+.callout strong{color:var(--ink)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+.related{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.related .lab{margin-bottom:12px;display:block}
+.related ul{list-style:none;padding:0;margin:0}
+.related li{margin-bottom:10px;font-size:14.5px}
+.related a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+.related a:hover{border-color:var(--accent)}
+
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+.js .rvl{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+.js .rvl.in{opacity:1;transform:none}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+    </nav>
+  </div>
+
+  <main>
+  <header class="artHead rvl">
+    <a class="back" href="/blog/">← All posts</a>
+    <span class="eyebrow" style="margin-top:18px">Context Engineering · Claude · Agent Infrastructure</span>
+    <h1>The 80% rule: context engineering for Claude 5</h1>
+    <div class="byline">
+      <span>Mohamed Ashrey</span><span class="dot"></span><span>July 26, 2026</span><span class="dot"></span><span>7 min read</span>
+    </div>
+    <p class="dek">Anthropic deleted over 80% of Claude Code's system prompt for Opus 5 and Fable 5 and their evals didn't move. The explanation behind that number is more useful than the number itself.</p>
+  </header>
+
+  <article class="prose rvl">
+
+<p class="lede">On July 24th, the same day Claude Opus 5 shipped, Thariq from Anthropic <a href="https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models" target="_blank" rel="noopener">published a post</a> that hit 300 points on Hacker News and is still being shared. The claim: Anthropic removed over 80% of Claude Code's own system prompt for the Opus 5 and Fable 5 generation of models. Their coding evaluations didn't register the change. Four fifths of the guidance came out and quality held steady.</p>
+
+<p>The reaction in the comments was a mix of "obvious in retrospect" and "this breaks everything I've been doing." Both responses are correct. Here's why the 80% number matters, what Anthropic actually changed, and the specific things you should now delete from your own context.</p>
+
+<h2>What "unhobbling" means</h2>
+
+<p>Anthropic's word for what they did is <strong>unhobbling</strong>. The argument goes like this: most of the constraints they'd written into Claude Code's system prompt were guardrails built for older, weaker models. Those models genuinely needed the guardrail — without it, they'd do the wrong thing. Claude Opus 5 and Fable 5 mostly don't. They've internalized enough about coding conventions, documentation norms, and contextual judgment that you don't need to tell them explicitly.</p>
+
+<p>When you leave those constraints in the prompt anyway, something worse than waste happens. The constraints start conflicting with each other, and with the model's own reasoning. One line said to leave documentation "as appropriate." Another said "DO NOT add comments." The model had to spend tokens resolving which instruction won before it could touch a file. You were paying — in latency, in money, in quality — for the model to untangle the scaffolding you'd built to help it.</p>
+
+<p>The fix was not better few-shots or a cleverer reformulation. It was deletion.</p>
+
+<h2>The comment rule: a concrete illustration</h2>
+
+<p>The most cited example from the post is the commenting instruction. Here's what Claude Code's system prompt used to contain:</p>
+
+<div class="callout">
+<p><em>"In code: default to writing no comments. Never write multi-paragraph docstrings or multi-line comment blocks — one short line max. Don't create planning, decision, or analysis documents unless the user asks for them."</em></p>
+</div>
+
+<p>This rule existed because older models would write excessive, often wrong comments. It solved a real problem in 2024. But it also fired in cases where multi-line documentation was exactly right — complex algorithms, public APIs, code that would confuse any reader who hadn't written it themselves.</p>
+
+<p>The replacement, in full: <strong>"Write code that reads like the surrounding code: match its comment density, naming, and idiom."</strong></p>
+
+<p>One sentence. It produces better results across more codebases than the rule set did, because it trusts the model to read the room rather than follow a rigid directive. The old version fails the moment you point it at a repository whose house style includes docstrings. The new version doesn't.</p>
+
+<h2>The six shifts</h2>
+
+<p>Thariq's post describes six places where the right approach changed for Claude 5 generation models. Each one is a migration, not just advice.</p>
+
+<p><strong>Rules → Judgment.</strong> Stop writing "never do X" unless you have a specific, demonstrable failure mode that Claude can't reason its way out of from context. The model can read a codebase, infer conventions, and match them. Explicit rules that repeat what it can figure out don't reinforce the behavior — they compete with it.</p>
+
+<p><strong>Examples → Interface design.</strong> This is the most counterintuitive shift. The old pattern was to give Claude examples of how to call your tools. The new finding: examples constrain the model to a narrow exploration space. A better tool interface teaches Claude how to use it without consuming context on demonstrations. If your parameter accepts three states, make it an enum. The type signature says more than an example does, and it doesn't box the model in.</p>
+
+<p><strong>Everything upfront → Progressive disclosure.</strong> Not everything belongs in the system prompt or CLAUDE.md. Claude Code now supports skills that load at the right time, and deferred tools that only expand their schema when searched for. A verification workflow, a deployment checklist, a code review procedure — these don't need to sit in CLAUDE.md taking up context on every request. Put them in a skill. Load them when the task calls for them.</p>
+
+<p><strong>Repeated instructions → Simple tool descriptions.</strong> Older models sometimes needed the same guidance in the system prompt and the tool description. That's no longer necessary. Put instructions once, where they belong — in the tool description — and delete the mirror copies elsewhere.</p>
+
+<p><strong>Manual memory → Auto-memory.</strong> Claude Code now writes what it learns about a project to a local memory file, loaded at session start. You don't need to design CLAUDE.md as a memory store. Keep it lightweight; let the auto-memory do the bookkeeping.</p>
+
+<p><strong>Simple specs → Rich references.</strong> Instead of a markdown description of what you want, try an HTML mockup. Instead of describing expected output in prose, write a test suite. A rubric — a structured description of what "good" looks like — is a more useful reference than a prose explanation. Claude can handle increasingly complex references, and the richer the target, the better the result.</p>
+
+<h2>Two API changes that will break your integration</h2>
+
+<p>Beyond the prompting shifts, Opus 5 introduced two changes to how the API behaves that aren't defaults you can ignore.</p>
+
+<p><strong>Thinking is on by default.</strong> On Opus 4.8, requests ran without thinking unless you opted in. On Opus 5, thinking happens unless you've explicitly turned it off. <code>max_tokens</code> now caps thinking plus response text together — any workload that ran thinking-free on 4.8 needs that cap revisited before it starts silently truncating output.</p>
+
+<p><strong>Disabling thinking is blocked at certain effort levels.</strong> <code>thinking: {"type": "disabled"}</code> only works at effort <code>high</code> or below. Pair it with <code>xhigh</code> or <code>max</code> and every request returns a 400. This is a hard breaking change from 4.8, where the two settings were independent. Check your harness configurations before assuming Opus 4.8 defaults carry over.</p>
+
+<h2>What to actually do right now</h2>
+
+<p>The migration is mostly subtraction, applied in a specific order.</p>
+
+<p>First, run <code>/doctor</code> in Claude Code (v2.1.206 or later). It deduplicates your local and checked-in CLAUDE.md, proposes cuts to anything Claude could derive from reading the codebase, and reports before changing anything. Low-risk, high-signal.</p>
+
+<p>Second, apply the test to every line in your CLAUDE.md: <em>could Claude work this out by reading the repository?</em> Directory layouts, dependency lists, architecture overviews — all candidates for deletion. What stays is genuine gotchas: non-obvious decisions, dependency quirks, conventions that look wrong until you understand the reason. "We keep all types in <code>types.go</code>" is a gotcha. "Write clean code" is not.</p>
+
+<p>Third, pull every verification instruction. Any line in your system prompt that says "verify your work," "double-check before responding," or "use a subagent to confirm" is stacking on top of behavior the model already does. Opus 5 verifies its own output without being asked. Those lines aren't free — they trigger extra loops on agentic runs that you paid for and didn't need.</p>
+
+<p>Fourth, cap subagent delegation explicitly. Opus 5 reaches for delegation more readily than earlier models. On genuinely parallelizable work, that's a win. On small tasks, it multiplies cost for nothing. Add a line that tells the harness when delegation earns its cost — and when it doesn't.</p>
+
+<p>Fifth, add explicit length instructions. Opus 5 writes longer responses and narrates its own work more than earlier models. Effort controls how much the model thinks, not how much it writes. You need to ask for conciseness directly; lowering effort won't do it.</p>
+
+<h2>The pattern that will keep repeating</h2>
+
+<p>Every six months or so, the right amount of hand-holding decreases. The model gets better at reading context and exercising judgment in ambiguous cases. The harness that was necessary last year is friction this year.</p>
+
+<p>The 80% number is startling, but the frame underneath it is what matters: context engineering doesn't get less important as models improve. The skill shifts. The high-value work moves from writing guardrails to designing interfaces — tools with expressive parameter schemas, skills structured for progressive disclosure, references that give the model a clear target rather than a set of constraints.</p>
+
+<p>What you built over the last year isn't wasted. The knowledge — what your team's workflow looks like, what "good" means for your specific use cases, what context Claude actually needs — that carries forward. What you're refactoring is the encoding, not the knowledge itself. The agents and systems you've built are still valuable. They just need their scaffolding trimmed to match the model they're running on.</p>
+
+<p>Open your CLAUDE.md and read it as if you were the model. How much of it would you have worked out on your own?</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models" target="_blank" rel="noopener">The new rules of context engineering for Claude 5 generation models</a> — Anthropic / Claude Blog (Thariq, July 24, 2026)</li>
+        <li><a href="https://news.ycombinator.com/item?id=49051361" target="_blank" rel="noopener">HN discussion: The new rules of context engineering for Claude 5 generation models</a> — 300 points, July 25, 2026</li>
+        <li><a href="https://charlesjones.dev/blog/claude-opus-5-context-engineering-what-to-delete" target="_blank" rel="noopener">Anthropic Deleted 80% of Claude Code's System Prompt. Here's What to Delete From Yours.</a> — Charles Jones, July 24, 2026</li>
+        <li><a href="https://www.mager.co/blog/2026-07-24-context-engineering-claude-5/" target="_blank" rel="noopener">Claude Is Unhobbled. Your Context Engineering Is Not.</a> — mager.co, July 24, 2026</li>
+      </ol>
+    </div>
+
+    <div class="ctaBlock">
+      <span class="lab">If you're building with Claude</span>
+      <h3>Tools and services for agent builders</h3>
+      <div class="ctaRow">
+        <div class="ctaItem">
+          <div class="k">Audit your MCP server configurations</div>
+          <p>While you're trimming system prompts, it's worth checking your MCP servers for spec-compliance and configuration issues — free scanner takes a minute.</p>
+          <a class="go" href="https://mcp-doctor-cloud.onrender.com" target="_blank" rel="noopener">Free MCP scanner → mcp-doctor-cloud.onrender.com</a><br>
+          <a class="go" href="https://github.com/M-Ashrey/claude-mcp-starter-kit" target="_blank" rel="noopener">Free MCP starter kit → github.com/M-Ashrey/claude-mcp-starter-kit</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Building production agent systems</div>
+          <p>I build AI-agent automations and MCP integrations — production systems, not demos.</p>
+          <a class="go" href="https://m-ashrey.github.io/ai/">See what I build → m-ashrey.github.io/ai</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Curious where your site stands with AI</div>
+          <p>Free, automated AI-readiness scan — no call required.</p>
+          <a class="go" href="https://ai-readiness-scorecard-theta.vercel.app" target="_blank" rel="noopener">Free scan → ai-readiness-scorecard-theta.vercel.app</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="related">
+      <span class="lab">Related reading</span>
+      <ul>
+        <li><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</a></li>
+        <li><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</a></li>
+        <li><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</a></li>
+      </ul>
+    </div>
+
+    <div class="backBottom"><a href="/blog/">← All posts</a></div>
+  </article>
+  </main>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    root.classList.add('js');
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var reveal=function(e){e.classList.add('in');};
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){reveal(x.target);io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    els.forEach(function(e){io.observe(e);});
+    setTimeout(function(){els.forEach(reveal);},1600);
+  })();
+</script>
+</body>
+</html>

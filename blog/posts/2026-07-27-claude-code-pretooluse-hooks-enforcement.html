@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>CLAUDE.md is advice. Hooks enforce it.</title>
+<meta name="description" content="Claude Code's PreToolUse hooks run before every tool call and can block it entirely — here's why that matters more than any CLAUDE.md instruction.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
+<meta property="og:type" content="article">
+<meta property="og:title" content="CLAUDE.md is advice. Hooks enforce it.">
+<meta property="og:description" content="Claude Code's PreToolUse hooks run before every tool call and can block it entirely — here's why that matters more than any CLAUDE.md instruction.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/2026-07-27-claude-code-pretooluse-hooks-enforcement.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CLAUDE.md is advice. Hooks enforce it.">
+<meta property="article:published_time" content="2026-07-27">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CLAUDE.md is advice. Hooks enforce it.">
+<meta name="twitter:description" content="Claude Code's PreToolUse hooks run before every tool call and can block it entirely — here's why that matters more than any CLAUDE.md instruction.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-07-27-claude-code-pretooluse-hooks-enforcement.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "CLAUDE.md is advice. Hooks enforce it.",
+  "description": "Claude Code's PreToolUse hooks run before every tool call and can block it entirely — here's why that matters more than any CLAUDE.md instruction.",
+  "datePublished": "2026-07-27",
+  "dateModified": "2026-07-27",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "image": "https://m-ashrey.github.io/assets/og/2026-07-27-claude-code-pretooluse-hooks-enforcement.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://m-ashrey.github.io/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://m-ashrey.github.io/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "CLAUDE.md is advice. Hooks enforce it.", "item": "https://m-ashrey.github.io/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html"}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+html{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding:0 32px}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 0;border-bottom:1px solid var(--line);padding-bottom:16px}
+.bar .mark{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--ink);text-decoration:none}
+.bar .mark i{color:var(--accent);font-style:normal}
+.bar nav{display:flex;gap:20px}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:24ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul,article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+article.prose code{font-family:var(--mono);font-size:13.5px;background:var(--panel);color:var(--accent);padding:2px 6px;border-radius:4px}
+article.prose pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;margin:0 0 24px;overflow-x:auto}
+article.prose pre code{background:none;padding:0;color:#dde2e9;font-size:13.5px}
+
+.callout{margin:28px 0;padding:18px 22px;border-left:3px solid var(--accent);background:var(--panel);border-radius:0 10px 10px 0}
+.callout p{margin:0;font-size:15.5px;color:var(--muted)}
+.callout strong{color:var(--ink)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+.related{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.related .lab{margin-bottom:12px;display:block}
+.related ul{list-style:none;padding:0;margin:0}
+.related li{margin-bottom:10px;font-size:14.5px}
+.related a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+.related a:hover{border-color:var(--accent)}
+
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+.js .rvl{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+.js .rvl.in{opacity:1;transform:none}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+    </nav>
+  </div>
+
+  <main>
+  <header class="artHead rvl">
+    <a class="back" href="/blog/">← All posts</a>
+    <span class="eyebrow" style="margin-top:18px">Claude Code · Agent Infrastructure · Developer Tools</span>
+    <h1>CLAUDE.md is advice. Hooks enforce it.</h1>
+    <div class="byline">
+      <span>Mohamed Ashrey</span><span class="dot"></span><span>July 27, 2026</span><span class="dot"></span><span>6 min read</span>
+    </div>
+    <p class="dek">Claude Code's PreToolUse hooks run before every tool call and can block it entirely — here's why that matters more than any CLAUDE.md instruction.</p>
+  </header>
+
+  <article class="prose rvl">
+
+<p class="lede">There is a pattern every Claude Code user eventually hits. You write a clear instruction in CLAUDE.md: "never edit .env directly." The model reads it. The session starts cleanly. Then the conversation gets long, the context fills up, and forty turns in it edits .env anyway. You fix the instruction. The same thing happens next week.</p>
+
+<p>This is not a prompting problem. No wording fixes it. The instruction is advice — the model reads it, weighs it against the task at hand, and sometimes the task wins. That is how language models work. The instruction lives in the context window, and context windows have limits, priorities, and attention gradients that no amount of UPPERCASE or repetition fully overcomes.</p>
+
+<p>Claude Code's hook system solves a different class of problem. A hook does not persuade the model to avoid a file. It runs before the tool call happens and refuses it at the operating system level. The model never writes. It gets told why, and moves on. There is no prompting workaround because the hook is not in the prompt.</p>
+
+<h2>The contract</h2>
+
+<p>PreToolUse hooks are simple by design. Claude Code pipes a JSON object to your hook script on stdin before executing any tool call. The object contains <code>tool_name</code>, <code>tool_input</code>, and <code>cwd</code>. Your script reads it, decides what to do, and exits with one of three codes:</p>
+
+<ul>
+  <li><strong>Exit 0</strong>: allow the tool call to proceed.</li>
+  <li><strong>Exit 1</strong>: report an error, but still allow the call.</li>
+  <li><strong>Exit 2</strong>: block the tool call entirely. Anything written to stderr is shown to the model as the reason for the refusal.</li>
+</ul>
+
+<p>That's the full interface. No SDK, no network call, no configuration format to learn. Any script that reads stdin and writes to stderr is a valid hook. Python, Bash, Rust, whatever you have in your PATH. The hook runs synchronously before every matching tool invocation for as long as the session runs, regardless of how long the conversation has been going.</p>
+
+<h2>guard.py: a concrete example</h2>
+
+<p>This week on Hacker News, a developer posted a 60-line Python hook called <a href="https://github.com/avenna01-ceo/claude-code-survival-kr/tree/main/guard" target="_blank" rel="noopener">guard.py</a> that does exactly one thing: block writes to files listed in a <code>.claude/protected.txt</code> config file. It appeared this morning (July 27) and captures the core pattern cleanly.</p>
+
+<p>The hook intercepts four tool types — <code>Edit</code>, <code>Write</code>, <code>MultiEdit</code>, and <code>NotebookEdit</code> — and anything else passes through untouched. For each blocked write, it exits 2 with a specific error message that includes the file path, the matched pattern, and an explicit instruction to the model: <em>"Do not try another tool or another path to reach this file. Tell the user it is protected and ask them to edit it themselves."</em></p>
+
+<p>That last part matters. The refusal doesn't just block the write — it tells the model what to do instead. Without that guidance, the model might try a workaround (a shell command, a different tool). With it, the model understands the constraint and reports it cleanly to the user. The hook is doing two things at once: enforcement and communication.</p>
+
+<p>The default protected patterns are what you'd expect: <code>.env</code>, <code>.env.*</code>, <code>*.pem</code>, <code>*.key</code>, <code>credentials.json</code>, <code>secrets.*</code>. The last three defaults are the guard script itself — <code>.claude/guard.py</code>, <code>.claude/protected.txt</code>, and <code>.claude/settings.json</code>. Without those, a sufficiently motivated agent could modify or delete its own constraints mid-session. The hook protects itself.</p>
+
+<div class="callout">
+<p><strong>Install in two minutes:</strong> copy <code>guard.py</code> to <code>.claude/guard.py</code>, add the hook entry to <code>.claude/settings.json</code>, list your protected files in <code>.claude/protected.txt</code>, restart Claude Code. No dependencies beyond Python 3.8.</p>
+</div>
+
+<h2>The architectural difference</h2>
+
+<p>The distinction between CLAUDE.md instructions and hooks is not one of degree — it is one of kind. An instruction in CLAUDE.md is processed by the language model along with everything else in the context. It influences behavior through the same mechanism that all text influences behavior: weight, attention, position, and the model's training. A hook operates outside that mechanism entirely.</p>
+
+<p>This has a specific implication for security-sensitive operations. The model is not an adversary trying to subvert your instructions — it is a capable, well-intentioned system that sometimes makes mistakes under the pressure of a complex task. When a long-running agent session is trying to complete a multi-file refactor and your .env file is in the path, the model may genuinely believe touching it is necessary. An instruction says "I'd prefer you didn't." A hook says "you cannot."</p>
+
+<p>Hooks are also immune to prompt injection in a way that instructions aren't. A malicious string in a file the agent is reading cannot override a hook — the hook runs at a layer the model has no access to. This matters as agents start reading more untrusted content: third-party APIs, scraped web pages, user-uploaded documents. Any of those could contain text that attempts to redirect the agent's behavior. Hooks don't read that text.</p>
+
+<h2>What else hooks let you do</h2>
+
+<p>File protection is the most obvious use case, but the hook contract enables a broader class of enforcement patterns.</p>
+
+<p><strong>Auditing.</strong> A hook that always exits 0 but logs every tool call to a file gives you a complete record of what the agent did and when. PostToolUse hooks (which run after a tool completes and receive the tool's output) let you log results alongside the calls. Run a session, diff the logs, understand exactly what happened. This is valuable for debugging and for compliance in environments where agent actions need to be auditable.</p>
+
+<p><strong>Cost controls.</strong> A hook can count tool calls and exit 2 once you've hit a threshold. If you're running an expensive automated session and want a hard ceiling on how many shell commands or file writes it can make, a stateful hook (writing a counter to a temp file between invocations) can enforce that ceiling without relying on the model to self-limit.</p>
+
+<p><strong>Pattern enforcement.</strong> The same approach that protects .env files can enforce structural rules: block writes to files in a <code>migrations/</code> directory, prevent the agent from touching anything in <code>dist/</code>, refuse <code>Edit</code> calls targeting files the agent didn't create this session. Any rule that can be expressed as a check over a file path or tool input becomes enforceable.</p>
+
+<p><strong>Approval gates.</strong> A hook can prompt for human confirmation before allowing high-impact operations. Write a hook that exits 2 unless a human types "yes" in a separate terminal window. This turns every dangerous tool call into a checkpoint without changing anything in your prompts or system configuration.</p>
+
+<h2>What stays in CLAUDE.md</h2>
+
+<p>None of this means CLAUDE.md is useless. It serves a different function. CLAUDE.md communicates intent, context, and preference. "We keep migrations in <code>/migrations</code> and they're managed by the ORM — don't touch them" is guidance the model needs to do good work. The hook that blocks writes to <code>migrations/**</code> is the backstop for when the guidance doesn't hold.</p>
+
+<p>The right mental model is defense in depth. CLAUDE.md tells the model what you want. Hooks enforce what you require. For most operations, the model's judgment is fine and CLAUDE.md is sufficient. For the handful of operations where "fine" isn't good enough — credentials, secrets, infrastructure configs, the agent's own settings — hooks are the right tool.</p>
+
+<p>Anthropic's recent <a href="https://claude.com/blog/harnessing-claudes-intelligence" target="_blank" rel="noopener">agent harness design guidance</a> draws a related line: some constraints belong in the model's context, others belong in the scaffolding around it. The more consequential the constraint, the more it should live in scaffolding that the model cannot modify. A hook is the minimal viable scaffolding — a script, a config file, and an exit code.</p>
+
+<h2>The implication for agent design</h2>
+
+<p>As Claude Code agents run longer sessions, tackle bigger codebases, and get handed more autonomy, the gap between "what the model was told" and "what the model will reliably do" becomes more important to manage. Instructions handle the gap well for the 95% of cases where the model is doing exactly what you'd want a capable developer to do. Hooks handle the 5% where the consequences of a mistake are severe enough that you don't want to rely on probability.</p>
+
+<p>Knowing which operations fall into which category — and wiring up hooks for the latter before you need them — is worth more than any amount of careful CLAUDE.md wording. The session that damages something important is always the long one you didn't expect to go sideways.</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://github.com/avenna01-ceo/claude-code-survival-kr/tree/main/guard" target="_blank" rel="noopener">guard.py — PreToolUse hook for Claude Code</a> — avenna01-ceo, GitHub (July 2026)</li>
+        <li><a href="https://news.ycombinator.com/item?id=49063946" target="_blank" rel="noopener">Show HN: A 60-line PreToolUse hook that stops Claude Code from editing your .env</a> — Hacker News, July 27, 2026</li>
+        <li><a href="https://claude.com/blog/harnessing-claudes-intelligence" target="_blank" rel="noopener">Agent Harness Design: 3 Patterns for Harnessing Claude's Intelligence</a> — Anthropic / Claude Blog</li>
+        <li><a href="https://docs.anthropic.com/en/docs/claude-code/hooks" target="_blank" rel="noopener">Claude Code hooks documentation</a> — Anthropic</li>
+      </ol>
+    </div>
+
+    <div class="ctaBlock">
+      <span class="lab">If you're building with Claude</span>
+      <h3>Tools and services for agent builders</h3>
+      <div class="ctaRow">
+        <div class="ctaItem">
+          <div class="k">Audit your MCP server configurations</div>
+          <p>While you're hardening your Claude Code setup, check your MCP servers for spec-compliance issues — free scanner, takes a minute.</p>
+          <a class="go" href="https://mcp-doctor-cloud.onrender.com" target="_blank" rel="noopener">Free MCP scanner → mcp-doctor-cloud.onrender.com</a><br>
+          <a class="go" href="https://github.com/M-Ashrey/claude-mcp-starter-kit" target="_blank" rel="noopener">Free MCP starter kit → github.com/M-Ashrey/claude-mcp-starter-kit</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Building production agent systems</div>
+          <p>I build AI-agent automations and MCP integrations — production systems, not demos.</p>
+          <a class="go" href="https://m-ashrey.github.io/ai/">See what I build → m-ashrey.github.io/ai</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Curious where your site stands with AI</div>
+          <p>Free, automated AI-readiness scan — no call required.</p>
+          <a class="go" href="https://ai-readiness-scorecard-theta.vercel.app" target="_blank" rel="noopener">Free scan → ai-readiness-scorecard-theta.vercel.app</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="related">
+      <span class="lab">Related reading</span>
+      <ul>
+        <li><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html">The 80% Rule: Context Engineering for Claude 5</a></li>
+        <li><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</a></li>
+        <li><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</a></li>
+      </ul>
+    </div>
+
+    <div class="backBottom"><a href="/blog/">← All posts</a></div>
+  </article>
+  </main>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-color-scheme: reduce)').matches) return;
+    root.classList.add('js');
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    els.forEach(function(e){io.observe(e);});
+    setTimeout(function(){els.forEach(function(e){e.classList.add('in');});},1600);
+  })();
+</script>
+</body>
+</html>

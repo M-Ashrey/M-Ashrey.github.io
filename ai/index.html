@@ -104,9 +104,12 @@
   @media (prefers-reduced-motion: reduce){.js .rvl{opacity:1;transform:none;transition:none}}
 
   /* top bar */
-  .bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px}
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;flex-wrap:wrap;gap:14px}
   .bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
   .bar .mark i{font-style:normal;color:var(--accent)}
+  .bar nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+  .bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+  .bar nav a:hover{color:var(--accent)}
   .bar .avail{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--pos);box-shadow:0 0 0 4px rgba(87,201,138,.16)}
 
@@ -214,6 +217,11 @@
 
   <div class="bar">
     <div class="mark">M<i>·</i>Ashrey</div>
+    <nav aria-label="Primary">
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/blog/">Blog</a>
+      <a href="/services/">Services</a>
+    </nav>
     <div class="avail"><span class="dot"></span> AI automation practice — open for engagements</div>
   </div>
 
@@ -358,7 +366,7 @@
 
   <footer>
     <div><b>Sources.</b> Speed-to-lead: National Association of Realtors (2025); MIT / Dr. James Oldroyd; Inman (2025); first-responder advantage from lead-response studies. Market: U.S. Chamber of Commerce Small Business AI report (2025); SMB AI-adoption surveys (2025); Gartner customer-service AI prediction (2025). Figures are directional industry benchmarks from published reports — not audited data or results of this practice.</div>
-    <div class="id">M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a></div>
+    <div class="id">M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · support this work: <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a> · <a href="https://ko-fi.com/ashrey122">Ko-fi</a></div>
   </footer>
 
 </div>

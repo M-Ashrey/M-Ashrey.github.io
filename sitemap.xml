@@ -20,4 +20,10 @@
     <priority>0.8</priority>
   </url>
   <url><loc>https://m-ashrey.github.io/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html</loc><lastmod>2026-07-28</lastmod></url>
+  <url>
+    <loc>https://m-ashrey.github.io/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

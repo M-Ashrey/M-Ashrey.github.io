@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>robots.txt vs noindex: the Claude chats lesson</title>
+<meta name="description" content="Shared Claude chats got indexed by Google despite a robots.txt Disallow rule. The reason is a lesson every developer should know: crawling is not indexing.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
+<meta property="og:type" content="article">
+<meta property="og:title" content="robots.txt vs noindex: the Claude chats lesson">
+<meta property="og:description" content="Shared Claude chats got indexed by Google despite a robots.txt Disallow rule. The reason is a lesson every developer should know: crawling is not indexing.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/2026-07-28-robots-txt-vs-noindex-claude-chats.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="robots.txt vs noindex: the Claude chats lesson">
+<meta property="article:published_time" content="2026-07-28">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="robots.txt vs noindex: the Claude chats lesson">
+<meta name="twitter:description" content="Shared Claude chats got indexed by Google despite a robots.txt Disallow rule. The reason is a lesson every developer should know: crawling is not indexing.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-07-28-robots-txt-vs-noindex-claude-chats.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "robots.txt vs noindex: the Claude chats lesson",
+  "description": "Shared Claude chats got indexed by Google despite a robots.txt Disallow rule. The reason is a lesson every developer should know: crawling is not indexing.",
+  "datePublished": "2026-07-28",
+  "dateModified": "2026-07-28",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "image": "https://m-ashrey.github.io/assets/og/2026-07-28-robots-txt-vs-noindex-claude-chats.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://m-ashrey.github.io/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://m-ashrey.github.io/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "robots.txt vs noindex: the Claude chats lesson", "item": "https://m-ashrey.github.io/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html"}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+html{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding:0 32px}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 0;border-bottom:1px solid var(--line);padding-bottom:16px}
+.bar .mark{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--ink);text-decoration:none}
+.bar .mark i{color:var(--accent);font-style:normal}
+.bar nav{display:flex;gap:20px}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:24ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul,article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+article.prose code{font-family:var(--mono);font-size:13.5px;background:var(--panel);color:var(--accent);padding:2px 6px;border-radius:4px}
+article.prose pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;margin:0 0 24px;overflow-x:auto}
+article.prose pre code{background:none;padding:0;color:#dde2e9;font-size:13.5px}
+
+.callout{margin:28px 0;padding:18px 22px;border-left:3px solid var(--accent);background:var(--panel);border-radius:0 10px 10px 0}
+.callout p{margin:0;font-size:15.5px;color:var(--muted)}
+.callout strong{color:var(--ink)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+.related{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.related .lab{margin-bottom:12px;display:block}
+.related ul{list-style:none;padding:0;margin:0}
+.related li{margin-bottom:10px;font-size:14.5px}
+.related a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+.related a:hover{border-color:var(--accent)}
+
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+.js .rvl{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+.js .rvl.in{opacity:1;transform:none}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+    </nav>
+  </div>
+
+  <main>
+  <header class="artHead rvl">
+    <a class="back" href="/blog/">← All posts</a>
+    <span class="eyebrow" style="margin-top:18px">Web · SEO · AI Platform Security</span>
+    <h1>robots.txt vs noindex: the Claude chats lesson</h1>
+    <div class="byline">
+      <span>Mohamed Ashrey</span><span class="dot"></span><span>July 28, 2026</span><span class="dot"></span><span>6 min read</span>
+    </div>
+    <p class="dek">Shared Claude chats turned up in Google despite a robots.txt Disallow rule. The reason is a distinction every developer keeps getting wrong: crawling is not indexing.</p>
+  </header>
+
+  <article class="prose rvl">
+
+<p class="lede">Yesterday the story broke that shared Claude conversations — and in some cases Artifacts — were showing up in Google and Bing search results. TechCrunch and WIRED both reported it on July 27. If you use Claude's share button, that is worth knowing on its own. But the more useful part for anyone who ships to the web is the technical reason it happened, because it is the same mistake developers make constantly and it is almost never caught until something private ends up in a search index.</p>
+
+<p>Here is the short version. When you clicked share on a Claude conversation, it produced a public URL under <code>claude.ai/share/…</code>. Anyone with the link could open it — that is the intended behavior of a share link. The problem is that some of those links leaked into places search engines crawl: social posts, forums, other indexed pages. Once a URL is discoverable, search engines will try to index it. And the shared Claude pages did not carry the one signal that tells a crawler "do not put this in your index." They were missing a <code>noindex</code> tag.</p>
+
+<h2>The part everyone gets wrong</h2>
+
+<p>The instinct, when you want to keep a URL out of Google, is to block it in <code>robots.txt</code>. That is exactly what Anthropic had done. According to a detailed writeup by Daniel Glover, the Internet Archive shows <code>Disallow: /share/*</code> appearing in <code>claude.ai/robots.txt</code> around August 2, 2025 — right after the near-identical ChatGPT shared-chat indexing story broke — and it has been there ever since. So the directory <em>was</em> disallowed. And pages got indexed anyway.</p>
+
+<p>This surprises people every time, so it is worth stating plainly: <strong>robots.txt controls crawling, not indexing.</strong> Those are two different things.</p>
+
+<ul>
+  <li><strong>Crawling</strong> is a search engine fetching the content of a URL. <code>Disallow</code> in robots.txt asks well-behaved crawlers not to fetch that path.</li>
+  <li><strong>Indexing</strong> is a search engine listing a URL in its results. A page can be indexed <em>without ever being crawled</em> — if Google sees enough links pointing to a URL, it can index the URL itself (title from anchor text, no snippet) even though robots.txt told it not to fetch the body.</li>
+</ul>
+
+<p>Google has documented this behavior for years. Their own guidance says, in effect: if you want a page kept out of search results, do not block it in robots.txt — use a <code>noindex</code> directive instead. And there is a trap inside the trap: <code>noindex</code> only works if the crawler is <em>allowed to fetch the page and see the tag</em>. If you both <code>Disallow</code> the path in robots.txt and add a <code>noindex</code> tag, the crawler never fetches the page, never sees the noindex, and can still index the bare URL from links. The two mechanisms fight each other.</p>
+
+<div class="callout">
+<p><strong>The rule of thumb:</strong> use <code>robots.txt</code> to save crawl budget on pages you do not care about. Use <code>noindex</code> (and keep the path crawlable) for pages you want kept out of search results. For anything actually private, neither is enough — put it behind authentication.</p>
+</div>
+
+<h2>Why noindex was the missing piece</h2>
+
+<p>WIRED reviewed a sample of the exposed Claude share pages and confirmed they did not include the <code>noindex</code> tag that both Google and Bing honor. That is the whole gap. The robots.txt Disallow was doing its documented job — discouraging crawlers from fetching <code>/share/*</code> — but it was never capable of preventing indexing of URLs that had leaked into the link graph. Reporting indicates Google began dropping the results around July 26 after Anthropic updated its configuration and added noindex handling.</p>
+
+<p>It is easy to read this as an Anthropic-specific slip, but it is not. The identical thing happened to ChatGPT shared links a year earlier, which is presumably why Anthropic added the Disallow rule in the first place. Two of the most sophisticated AI companies on earth made the same web-fundamentals mistake, twelve months apart. That should tell you how counterintuitive this distinction is even for strong engineering teams.</p>
+
+<h2>What this means if you ship to the web</h2>
+
+<p>If you run any site with URLs that are technically public but not meant to be discoverable — share links, preview environments, password-reset landing pages, invoice URLs, staging domains, user-generated content pages — assume they can be indexed the moment a single link leaks. A link in a tweet, a Slack message that gets archived publicly, a referrer header that shows up in someone's analytics: any of these can introduce a URL to the crawl graph.</p>
+
+<p>Concretely:</p>
+
+<ul>
+  <li><strong>Do not rely on robots.txt to hide anything.</strong> It is a crawling hint, not an access control, and it is itself a public file that advertises the paths you would rather people not look at.</li>
+  <li><strong>Use <code>X-Robots-Tag: noindex</code> as an HTTP response header</strong> for pages that should stay out of search. It works for non-HTML resources (PDFs, JSON) where you cannot add a meta tag, and it applies before any HTML parsing.</li>
+  <li><strong>Keep noindex pages crawlable.</strong> If you noindex a path, do not also Disallow it in robots.txt, or the crawler will never see the tag.</li>
+  <li><strong>For genuinely private content, require authentication.</strong> A "secret" URL is not a security boundary. If exposure would be harmful, the only correct answer is a login, a signed expiring token, or server-side access checks.</li>
+</ul>
+
+<h2>The AI-agent angle</h2>
+
+<p>There is a second-order lesson here for anyone building agentic systems. Share features, public artifact hosting, and "send someone this conversation" flows are becoming standard in AI products. Every one of those features mints a public URL that may contain whatever the user pasted into the chat — API keys, internal docs, customer data, half-finished code. The convenience of a shareable link is in direct tension with the sensitivity of what people put into these tools.</p>
+
+<p>If you are building a product that generates public URLs from user content, treat search-engine exposure as a design requirement, not an afterthought. Default share pages to <code>noindex</code> via an HTTP header, make the noindex path crawlable so the tag is actually seen, and be explicit with users about what "share" means. The gap between "anyone with the link" and "anyone searching Google" is enormous, and users do not intuitively understand that a share link can become a search result.</p>
+
+<h2>The takeaway</h2>
+
+<p>This was not an exotic vulnerability. No exploit, no breach — just the crawl-versus-index distinction that has tripped up developers since robots.txt was invented in 1994, applied to a new generation of AI share links. The fix is one HTTP header and a mental model: <strong>robots.txt manages crawling, noindex manages indexing, and authentication manages privacy.</strong> Pick the right tool for what you actually need, and never assume an unlinked URL will stay unlinked.</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://techcrunch.com/2026/07/27/psa-your-claude-shared-chats-and-artifacts-may-have-ended-up-on-google/" target="_blank" rel="noopener">PSA: Your Claude shared chats and Artifacts may have ended up on Google</a> — TechCrunch, July 27, 2026</li>
+        <li><a href="https://www.wired.com/story/private-claude-chats-exposed-in-google-and-bing-search-results/" target="_blank" rel="noopener">Private Claude Chats Exposed in Google and Bing Search Results</a> — WIRED, July 27, 2026</li>
+        <li><a href="https://danieljamesglover.com/blog/2026-07-26-shared-claude-conversations-google/" target="_blank" rel="noopener">Shared Claude conversations hit Google</a> — Daniel J. Glover (robots.txt timeline via Internet Archive)</li>
+        <li><a href="https://developers.google.com/search/docs/crawling-indexing/block-indexing" target="_blank" rel="noopener">Block search indexing with noindex</a> — Google Search Central documentation</li>
+      </ol>
+    </div>
+
+    <div class="ctaBlock">
+      <span class="lab">If you're building with AI agents</span>
+      <h3>Tools and services for agent builders</h3>
+      <div class="ctaRow">
+        <div class="ctaItem">
+          <div class="k">Audit your MCP server configurations</div>
+          <p>Before you ship a feature that mints public URLs, check your MCP servers for spec-compliance and exposure issues — free scanner, takes a minute.</p>
+          <a class="go" href="https://mcp-doctor-cloud.onrender.com" target="_blank" rel="noopener">Free MCP scanner → mcp-doctor-cloud.onrender.com</a><br>
+          <a class="go" href="https://github.com/M-Ashrey/claude-mcp-starter-kit" target="_blank" rel="noopener">Free MCP starter kit → github.com/M-Ashrey/claude-mcp-starter-kit</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Building production agent systems</div>
+          <p>I build AI-agent automations and MCP integrations — production systems, not demos.</p>
+          <a class="go" href="https://m-ashrey.github.io/ai/">See what I build → m-ashrey.github.io/ai</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Curious where your site stands with AI</div>
+          <p>Free, automated AI-readiness scan — no call required.</p>
+          <a class="go" href="https://ai-readiness-scorecard-theta.vercel.app" target="_blank" rel="noopener">Free scan → ai-readiness-scorecard-theta.vercel.app</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="related">
+      <span class="lab">Related reading</span>
+      <ul>
+        <li><a href="/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html">CLAUDE.md is advice. Hooks enforce it.</a></li>
+        <li><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</a></li>
+        <li><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html">The 80% Rule: Context Engineering for Claude 5</a></li>
+      </ul>
+    </div>
+
+    <div class="backBottom"><a href="/blog/">← All posts</a></div>
+  </article>
+  </main>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-color-scheme: reduce)').matches) return;
+    root.classList.add('js');
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    els.forEach(function(e){io.observe(e);});
+    setTimeout(function(){els.forEach(function(e){e.classList.add('in');});},1600);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>AI Coding Agents Are Siloing Your Team — Here's the Data</title>
+<meta name="description" content="Stanford's CooperBench and a 25,264-PR GitHub study both show AI coding agents create lone wolves, not better teams. What builders should do about it.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Coding Agents Are Siloing Your Team — Here's the Data">
+<meta property="og:description" content="Stanford's CooperBench and a 25,264-PR GitHub study both show AI coding agents create lone wolves, not better teams. What builders should do about it.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/ai-coding-agents-silo-teams.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="AI Coding Agents Are Siloing Your Team — Here's the Data">
+<meta property="article:published_time" content="2026-07-29">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Coding Agents Are Siloing Your Team — Here's the Data">
+<meta name="twitter:description" content="Stanford's CooperBench and a 25,264-PR GitHub study both show AI coding agents create lone wolves, not better teams. What builders should do about it.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/ai-coding-agents-silo-teams.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AI Coding Agents Are Siloing Your Team — Here's the Data",
+  "description": "Stanford's CooperBench and a 25,264-PR GitHub study both show AI coding agents create lone wolves, not better teams. What builders should do about it.",
+  "datePublished": "2026-07-29",
+  "dateModified": "2026-07-29",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "image": "https://m-ashrey.github.io/assets/og/ai-coding-agents-silo-teams.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://m-ashrey.github.io/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://m-ashrey.github.io/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "AI Coding Agents Are Siloing Your Team — Here's the Data", "item": "https://m-ashrey.github.io/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html"}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+html{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding:0 32px}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 0;border-bottom:1px solid var(--line);padding-bottom:16px}
+.bar .mark{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--ink);text-decoration:none}
+.bar .mark i{color:var(--accent);font-style:normal}
+.bar nav{display:flex;gap:20px}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:24ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul,article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+article.prose code{font-family:var(--mono);font-size:13.5px;background:var(--panel);color:var(--accent);padding:2px 6px;border-radius:4px}
+article.prose pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;margin:0 0 24px;overflow-x:auto}
+article.prose pre code{background:none;padding:0;color:#dde2e9;font-size:13.5px}
+
+.callout{margin:28px 0;padding:18px 22px;border-left:3px solid var(--accent);background:var(--panel);border-radius:0 10px 10px 0}
+.callout p{margin:0;font-size:15.5px;color:var(--muted)}
+.callout strong{color:var(--ink)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+.related{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.related .lab{margin-bottom:12px;display:block}
+.related ul{list-style:none;padding:0;margin:0}
+.related li{margin-bottom:10px;font-size:14.5px}
+.related a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+.related a:hover{border-color:var(--accent)}
+
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+.js .rvl{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+.js .rvl.in{opacity:1;transform:none}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+    </nav>
+  </div>
+
+  <main>
+  <header class="artHead rvl">
+    <a class="back" href="/blog/">← All posts</a>
+    <span class="eyebrow" style="margin-top:18px">AI Agents · Software Teams · Research</span>
+    <h1>AI Coding Agents Are Siloing Your Team</h1>
+    <div class="byline">
+      <span>Mohamed Ashrey</span><span class="dot"></span><span>July 29, 2026</span><span class="dot"></span><span>7 min read</span>
+    </div>
+    <p class="dek">Two new studies — Stanford's CooperBench and an analysis of 25,264 agent-generated GitHub PRs — converge on the same finding: AI coding agents are turning developers into lone wolves.</p>
+  </header>
+
+  <article class="prose rvl">
+
+<p class="lede">The pitch for AI coding agents has always been "more output, faster." And on that narrow metric, they deliver. But two research efforts published in the past few weeks point to a cost nobody put in the slide deck: AI coding agents are dismantling the collaborative habits that make engineering teams function.</p>
+
+<p>The data comes from two independent directions. Stanford HAI's <a href="https://hai.stanford.edu/news/ai-coding-agents-fail-at-teamwork" target="_blank" rel="noopener">CooperBench study</a>, led by postdoctoral scholar Hao Zhu and senior author Diyi Yang, tested what happens when you pair two AI agents on shared coding tasks. And a <a href="https://arxiv.org/abs/2607.04697v2" target="_blank" rel="noopener">Rochester Institute of Technology study</a> by Maliha Noushin Raida and Daqing Hou analyzed 25,264 agent-generated pull requests across 2,361 popular GitHub repositories. Both arrived at the same uncomfortable conclusion.</p>
+
+<h2>When two agents collaborate, performance drops</h2>
+
+<p>CooperBench created over 650 real-world software engineering tasks across Python, TypeScript, Go, and Rust — tasks specifically designed to require coordination between two agents. Each agent could edit code, run local commands, and message its partner in real time. The result: <strong>a single model outperformed two agents sharing the same work.</strong></p>
+
+<p>"Today's best coding agents lose nearly half their capability when paired up to share work," Yang noted. "It shows that social intelligence — not coding skill — is the key bottleneck for AI collaboration."</p>
+
+<p>The researchers expected giving agents the ability to communicate would help. It didn't. The agents could speak fluent English but couldn't use language for social coordination — negotiating who does what, flagging conflicts, verifying commitments. In one observed exchange, Agent B explicitly acknowledged Agent A's warning about an incompatible design approach, then proceeded to overwrite Agent A's code anyway. A human teammate would recognize that move as a relationship-destroying breach of trust. The model didn't register it at all.</p>
+
+<div class="callout">
+<p><strong>The core finding:</strong> Language fluency masked coordination failures rather than resolving them. Agents shared repetitive status updates, left direct questions unanswered, and failed to follow through on promised tasks — behaviors that would get a human developer pulled into a 1:1 with their manager.</p>
+</div>
+
+<h2>On GitHub, one person reviews everything</h2>
+
+<p>The RIT study looked at the human side of the equation. Across 25,264 agent-generated PRs from tools like GitHub Copilot, OpenAI Codex, and Claude Code, a pattern emerged: <strong>78.9% of agentic pull requests were reviewed and merged by a single developer.</strong> Include cases where one person reviewed and left the code untouched, and solo oversight covers close to nine out of ten agent PRs.</p>
+
+<p>This held even at scale. When the researchers looked specifically at small teams that cleared 30+ agentic PRs, the single-reviewer workflow persisted. As <a href="https://www.helpnetsecurity.com/2026/07/22/users-of-ai-coding-agents/" target="_blank" rel="noopener">Raida told Help Net Security</a>: "Increased agentic activity did not necessarily lead to more distributed review practices."</p>
+
+<p>The pattern is clear: one developer prompts the agent, waits for the PR, opens the diff, fixes a few lines, merges. The rest of the team never sees the code. The agent scales output up. The review desk stays one person wide.</p>
+
+<h2>Why this matters more than it sounds</h2>
+
+<p>Code review has never been just about catching bugs. It is how teams share context, maintain architectural consistency, mentor junior developers, and build collective ownership of a codebase. When a feature goes through two or three reviewers, those reviewers understand the code if something breaks at 2 AM. When it goes through one person and an agent, that knowledge lives in exactly one head.</p>
+
+<p>The <a href="https://leaddev.com/ai/ai-coding-agents-kill-team-collaboration" target="_blank" rel="noopener">LeadDev analysis</a> of the same GitHub data frames it bluntly: AI coding agents are killing team collaboration. Not because the agents are bad at writing code — they're often quite good — but because the workflow they enable naturally routes around the practices that keep teams aligned.</p>
+
+<p>Consider what's quietly disappearing:</p>
+
+<ul>
+  <li><strong>Pair programming.</strong> When an agent writes the first draft, there's no pairing session. No conversation about approach before the code exists.</li>
+  <li><strong>Design discussion.</strong> The agent doesn't attend the architecture meeting. It takes a prompt and ships a PR. The design choices are embedded in the output, not debated beforehand.</li>
+  <li><strong>Knowledge transfer.</strong> Junior developers learn by writing code that gets reviewed, and by reviewing code that's explained. An agent-generated PR reviewed by one senior engineer teaches nobody anything.</li>
+  <li><strong>Bus factor.</strong> If one developer is the sole person who reviews and understands all the agent output, losing that developer is catastrophic. And it's happening at exactly the moment when codebases are growing faster than ever.</li>
+</ul>
+
+<h2>The collaboration gap is a training gap</h2>
+
+<p>The Stanford team's diagnosis is specific: agents are not trained to collaborate. They are trained to produce good code in isolation. The social skills that make collaboration work — negotiating task boundaries, verifying mutual understanding, honoring commitments, adapting to a partner's approach — are absent from the training objective.</p>
+
+<p>"As good as they are with language, models do not use it for social action," Zhu explained. "They are trained not to use language in a social manner. That's a problem."</p>
+
+<p>The researchers recommend training objectives that explicitly reward coordination, not just code quality. They suggest contract-like agreements between agents, periodic integration checks, and even AI "screen sharing" to improve mutual awareness. These are not features that exist today in any commercial coding agent.</p>
+
+<h2>What builders should actually do</h2>
+
+<p>If you're running a team that uses AI coding agents — and increasingly, that's most teams — the data suggests some concrete adjustments:</p>
+
+<ul>
+  <li><strong>Require multi-reviewer workflows for agent PRs.</strong> If a human wrote the code, you'd want at least two sets of eyes. Agent code deserves the same, arguably more, because nobody pair-programmed the implementation.</li>
+  <li><strong>Treat agent output as a draft, not a deliverable.</strong> The PR should be the start of a team conversation, not the end. Block auto-merge on agent PRs and require at least one reviewer who didn't write the prompt.</li>
+  <li><strong>Keep pairing alive.</strong> Schedule dedicated pairing sessions that aren't about agent output. The point isn't the code — it's the shared context and mentorship that pairing creates.</li>
+  <li><strong>Track review distribution.</strong> If one person is reviewing 80%+ of agent PRs, that's a bus factor problem and a knowledge-concentration problem. Rotate reviewers deliberately.</li>
+  <li><strong>Watch your juniors.</strong> If junior developers are spending their days reviewing agent output instead of writing code, they're not building the skills they need. Agent PRs are not a substitute for learning-by-doing.</li>
+</ul>
+
+<h2>The takeaway</h2>
+
+<p>AI coding agents produce more code, faster, with fewer people involved. That last part is the problem. The studies are converging: agents can't collaborate with each other (CooperBench), and they're enabling workflows where humans don't collaborate with each other either (the GitHub PR data). The throughput gains are real. So is the isolation. Engineering teams that don't deliberately counteract the siloing effect will wake up one day to a codebase that nobody collectively understands, maintained by individuals who've stopped talking to each other about the work. The agents didn't cause that — but they made it frictionless.</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://hai.stanford.edu/news/ai-coding-agents-fail-at-teamwork" target="_blank" rel="noopener">AI Coding Agents Fail at Teamwork</a> — Stanford HAI, June 2026 (CooperBench study)</li>
+        <li><a href="https://arxiv.org/abs/2607.04697v2" target="_blank" rel="noopener">AI Agent Pull Requests on GitHub: Frequency, Structure, and Merge Conflict Rates</a> — Raida & Hou, Rochester Institute of Technology, arXiv:2607.04697v2</li>
+        <li><a href="https://www.helpnetsecurity.com/2026/07/22/users-of-ai-coding-agents/" target="_blank" rel="noopener">Small teams are the heaviest users of AI coding agents</a> — Help Net Security, July 22, 2026</li>
+        <li><a href="https://leaddev.com/ai/ai-coding-agents-kill-team-collaboration" target="_blank" rel="noopener">AI-coding agents kill team collaboration</a> — LeadDev, July 2026</li>
+        <li><a href="https://chrisloy.dev/post/2026/07/19/coding-too-fast-to-collaborate" target="_blank" rel="noopener">Coding too fast to collaborate</a> — Chris Loy, July 19, 2026</li>
+      </ol>
+    </div>
+
+    <div class="ctaBlock">
+      <span class="lab">If you're building with AI agents</span>
+      <h3>Tools and services for agent builders</h3>
+      <div class="ctaRow">
+        <div class="ctaItem">
+          <div class="k">Check your MCP server security</div>
+          <p>Before deploying agent workflows at team scale, make sure your MCP servers are spec-compliant and not leaking data — free scanner, takes a minute.</p>
+          <a class="go" href="https://mcp-doctor-cloud.onrender.com" target="_blank" rel="noopener">Free MCP scanner → mcp-doctor-cloud.onrender.com</a><br>
+          <a class="go" href="https://github.com/M-Ashrey/claude-mcp-starter-kit" target="_blank" rel="noopener">Free MCP starter kit → github.com/M-Ashrey/claude-mcp-starter-kit</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Building production agent systems</div>
+          <p>I build AI-agent automations and MCP integrations — production systems, not demos.</p>
+          <a class="go" href="https://m-ashrey.github.io/ai/">See what I build → m-ashrey.github.io/ai</a>
+        </div>
+        <div class="ctaItem">
+          <div class="k">Curious where your site stands with AI</div>
+          <p>Free, automated AI-readiness scan — no call required.</p>
+          <a class="go" href="https://ai-readiness-scorecard-theta.vercel.app" target="_blank" rel="noopener">Free scan → ai-readiness-scorecard-theta.vercel.app</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="related">
+      <span class="lab">Related reading</span>
+      <ul>
+        <li><a href="/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html">robots.txt vs noindex: the Claude chats lesson</a></li>
+        <li><a href="/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html">CLAUDE.md is advice. Hooks enforce it.</a></li>
+        <li><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html">The 80% Rule: Context Engineering for Claude 5</a></li>
+      </ul>
+    </div>
+
+    <div class="backBottom"><a href="/blog/">← All posts</a></div>
+  </article>
+  </main>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a></div>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-color-scheme: reduce)').matches) return;
+    root.classList.add('js');
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    els.forEach(function(e){io.observe(e);});
+    setTimeout(function(){els.forEach(function(e){e.classList.add('in');});},1600);
+  })();
+</script>
+</body>
+</html>

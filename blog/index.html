@@ -41,6 +41,12 @@
     "url": "https://m-ashrey.github.io/"
   },
   "blogPost": [
+        {
+      "@type": "BlogPosting",
+      "headline": "OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html",
+      "datePublished": "2026-07-29"
+    },
     {
       "@type": "BlogPosting",
       "headline": "SharedRoot: what a Cowork sandbox escape teaches us about AI agent security",
@@ -195,6 +201,8 @@ article.prose li strong{color:var(--accent)}
   <section class="postsSection rvl">
     <ul class="posts">
 <!-- POSTS:START -->
+          <li class="post"><a href="/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html"><span class="post-date">July 29, 2026</span><span class="post-title">OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think</span><span class="post-dek">OpenAI's move from API provider to enterprise agent platform signals a fundamental change in how AI will be deployed. Here's what it means for developers building with Claude, MCP, and the open ecosystem.</span></a></li>
+
           <li class="post"><a href="/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html"><span class="post-date">July 29, 2026</span><span class="post-title">AI Coding Agents Are Siloing Your Team</span><span class="post-dek">Stanford and GitHub data show agents create lone wolves, not better teams.</span></a></li>
   <li class="post"><a href="/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html"><span class="post-date">July 28, 2026</span><span class="post-title">robots.txt vs noindex: the Claude chats lesson</span><span class="post-dek">Shared Claude chats got indexed by Google despite a robots.txt Disallow rule — because crawling is not indexing.</span></a></li>
   <li class="post"><a href="/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html"><span class="post-date">July 27, 2026</span><span class="post-title">CLAUDE.md is advice. Hooks enforce it.</span><span class="post-dek">Claude Code's PreToolUse hooks block writes before they happen — here's why they matter more than any CLAUDE.md instruction.</span></a></li>
@@ -202,28 +210,3 @@ article.prose li strong{color:var(--accent)}
 <li class="post"><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 25, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">A VM escape in Claude Cowork reaches SSH keys and cloud credentials on the host. The CVE is just the entry point — the structural argument applies to every sandboxed agent.</span></a></li>
 <li class="post"><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"><span class="post-date">July 25, 2026</span><span class="post-title">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</span><span class="post-dek">The biggest spec update since launch drops Tuesday — sessions gone, init handshake removed, and three features start a 12-month deprecation clock.</span></a></li>
 <li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Three quiet API changes matter more than the benchmark charts — and this week's MCP security research sharpens the takeaway.</span></a></li>
-<!-- POSTS:END -->
-    </ul>
-  </section>
-  </main>
-
-  <footer class="site">
-    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a> · support this work: <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a> · <a href="https://ko-fi.com/ashrey122">Ko-fi</a></div>
-  </footer>
-
-</div>
-<script>
-  (function(){
-    var root=document.documentElement;
-    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    root.classList.add('js');
-    var els=[].slice.call(document.querySelectorAll('.rvl'));
-    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
-    var reveal=function(e){e.classList.add('in');};
-    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){reveal(x.target);io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
-    els.forEach(function(e){io.observe(e);});
-    setTimeout(function(){els.forEach(reveal);},1600);
-  })();
-</script>
-</body>
-</html>

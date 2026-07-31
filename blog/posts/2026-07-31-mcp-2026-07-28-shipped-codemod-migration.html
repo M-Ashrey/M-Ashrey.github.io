@@ -1,2 +1,313 @@
-PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9IlVURi04Ij4KPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjAiPgo8bWV0YSBuYW1lPSJnb29nbGUtc2l0ZS12ZXJpZmljYXRpb24iIGNvbnRlbnQ9ImVhb0VrMjliRm8yeVM0S3BNLHdTRWFIZXBjLU9BRnhYSWlaTGw1NzIiLSIgLz4KPHRpdGxlPk1DUCAyMDI2LTA3LTI4IEhhcyBTaGlwcGVkIOKUhCBUaGUgU3RhdGVsZXNzIENvcmUsIFNESyBCZXRlcywgYW5kIFdoYXQgSW91ciBNaWdyYXRpb24gQWN0dWFsbHkgTG9va3MgIS2lig90aXRsZT4KPG1ldGEgbmFtZT0iZGVzY3JpcHRpb24iIGNvbnRlbnQ9IlRoZSBiaWdhellzIE1DUCAyMDI2LTA3LOI4IHNwZWMgcmVzaXWmb24gU2hpcHB8ZCBKdWx5IDGNIi4UaGUgU0TLcyBiZXRgLCBjb8RlbcvW04LIHRoZSBTZXzaW7jhIHRoZSBtaWNyb3NvZnQgICBieCAec3BpY3RyLCBhbmQIG34gYWN0dWFsbHkgdc2VyLXJpY2suIl4+CjxtZXRhIG5hbWU9ImF1dGhvciIgY29udGVudD0iU2hpYmhlcHBlZCBcbiBUaGUgU0RLcyIHRcGFuZGVKGplammF5IERFbmRz5jjY CLOZXIgc2hvw6TGx0IGFSBYiMQ2HNCDPgo8IS2FydClSNEwgKE1)IGluICdjs 1LUZydOUWS IHPuZCBk
-DVzIGEgcHJlc3Mgb2YgU3RhbGVzcyBIZSBzeXMgbGVhcm4gYWphbGx5IGphdmEgcHJvYmxlbWkiITOjVzRBS0FPREM6MERzB1BFPFRTQQo8aHR0cDovL3d3dy53My5vcmcvMjAyNi8gVE1MIF9lbmNvZGluZyBl(UiDEsIj4ii4=
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>MCP 2026-07-28 Has Shipped — The Stateless Core, SDK Betas, and What Your Migration Actually Looks Like</title>
+<meta name="description" content="The biggest MCP revision in 20 months shipped July 28. The SDK betas, codemod, and migration guide are real now — here's what's different from the RC, what the tooling actually does, and the path for server maintainers.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;600&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;600&display=swap"></noscript>
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP 2026-07-28 Has Shipped — The SDK Betas, Codemod, and Migration Path">
+<meta property="og:description" content="The biggest MCP spec revision in 20 months shipped July 28. SDK betas for Python, TypeScript, Go, and C# are live with a codemod. Here's the real migration picture.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MCP 2026-07-28 Has Shipped — the stateless core, SDK betas, and codemod">
+<meta property="article:published_time" content="2026-07-31">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP 2026-07-28 Has Shipped — The SDK Betas, Codemod, and Migration Path">
+<meta name="twitter:description" content="The biggest MCP spec revision in 20 months shipped July 28. SDK betas for Python, TypeScript, Go, and C# are live with a codemod. Here's the real migration picture.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "MCP 2026-07-28 Has Shipped — The SDK Betas, Codemod, and Migration Path",
+  "description": "The biggest MCP spec revision in 20 months shipped July 28. SDK betas for Python, TypeScript, Go, and C# are live with a codemod. Here's the real post-ship picture.",
+  "datePublished": "2026-07-31",
+  "dateModified": "2026-07-31",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "image": "https://m-ashrey.github.io/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://m-ashrey.github.io/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://m-ashrey.github.io/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "MCP 2026-07-28 Has Shipped", "item": "https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(1200px 680px at 88% -12%, rgba(243,182,76,.10), transparent 58%),
+    radial-gradient(1000px 560px at -8% 2%, rgba(126,166,255,.08), transparent 55%),
+    var(--bg);
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 28px}
+a{color:var(--ink);text-decoration:none}
+::selection{background:rgba(243,182,76,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
+
+.rvl{opacity:1}
+.js .rvl{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.js .rvl.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.js .rvl{opacity:1;transform:none;transition:none}}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.bar .mark i{font-style:normal;color:var(--accent)}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+.hero{padding:56px 0 44px}
+.hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5.6vw,56px);line-height:1.04;letter-spacing:-.02em;margin:18px 0 0}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lede{margin-top:20px;color:var(--muted);font-size:clamp(16px,1.8vw,19px);max-width:62ch;line-height:1.6}
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+.postsSection{padding:8px 0 64px}
+ul.posts{list-style:none;border-top:1px solid var(--line)}
+li.post{border-bottom:1px solid var(--line)}
+li.post a{display:block;padding:26px 4px;transition:transform .18s ease,background .18s ease}
+li.post a:hover{transform:translateX(10px);background:linear-gradient(90deg,rgba(243,182,76,.06),transparent)}
+li.post .post-date{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--faint);text-transform:uppercase}
+li.post .post-title{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.6vw,25px);letter-spacing:-.01em;color:var(--ink);margin-top:10px;line-height:1.28}
+li.post a:hover .post-title{color:var(--accent)}
+li.post .post-dek{display:block;color:var(--muted);font-size:14.5px;margin-top:8px;line-height:1.55;max-width:60ch}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:22ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul, article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2);padding:2px 6px;border-radius:4px;color:#e0c97f;border:1px solid var(--line)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+.related{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.related .lab{margin-bottom:12px;display:block}
+.related ul{list-style:none;padding:0;margin:0}
+.related li{margin-bottom:10px;font-size:14.5px}
+.related a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+.related a:hover{border-color:var(--accent)}
+
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+    </nav>
+  </div>
+
+  <main>
+  <header class="artHead rvl">
+    <a class="back" href="/blog/">← All posts</a>
+    <span class="eyebrow" style="margin-top:18px">MCP · SDK · Migration</span>
+    <h1>MCP 2026-07-28 has shipped. Here's what your migration actually looks like.</h1>
+    <div class="byline">
+      <span>Mohamed Ashrey</span><span class="dot"></span><span>July 31, 2026</span><span class="dot"></span><span>7 min read</span>
+    </div>
+    <p class="dek">The full spec, four SDK betas, a codemod that renames your functions, and a migration guide per language. Three days after the biggest MCP revision in twenty months, the tooling is real — and the picture is different from what the preview promised.</p>
+  </header>
+
+  <article class="prose rvl">
+
+<p class="lede">On July 28, the <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank" rel="noopener">MCP 2026-07-28 specification</a> shipped — the largest revision since Anthropic open-sourced the protocol in November 2024. The preview coverage from last week was necessarily speculative: we knew the RC locked in May, we could read the SEPs, but we did not have the final diff, the SDKs, the codemod tool, or any feedback from servers that had actually run through the migration. Three days post-ship, we now have all four — and the picture is clearer than it was.</p>
+
+<h2>The spec isn't just the RC with a stamp</h2>
+
+<p>The release candidate published May 21 was 95% of what shipped, but the final spec tightened several loose screws. The deprecation of Sampling, Roots, and Logging — SEP-2577 — now carries an <strong>explicit twelve-month minimum window</strong> rather than the softer language in earlier drafts. The formal deprecation policy (SEP-2596) went from "planned" to "locked": Active → Deprecated → Removed, with each transition requiring at least one spec cycle. No feature can leap from Deprecated to Removed in fewer than twelve months. For server maintainers who worried the RC was a rushed housecleaning, this is reheating — the window is real and enforced.</p>
+
+<p>Authorization hardening also graduated from draft to final. <strong>RFC 9207 issuer validation</strong> (OAuth 2.0 Authorization Server Issuer Identification) is mandatory for any MCP server doing OAuth 2.1 / OIDC. Dynamic Client Registration (DCR) — the old way — is formally discouraged in favor of Client Instance Metadata Documents (CIMD), a static metadata model that avoids the DCR bootstrap round-trip. If you shipped an MCP server with OAuth before this spec, your authorization flow is likely using DCR. The twelve-month clock on that started July 28.</p>
+
+<p>On the protocol wire, <strong>SEP-2567 removed the <code>Mcp-Session-Id</code> header entirely</strong>. Every request is now self-contained: protocol version, client identity, and capabilities arrive in <code>_meta</code> on every call. Two new headers — <code>Mcp-Method</code> and <code>Mcp-Protocol-Version</code> — enable header-based routing, which means an MCP server running behind a plain NGINX or ALB can route without any deep packet inspection. The spec's own blog calls this "the most highly-requested feature from developers eager to get reliability and scalability for their MCP servers."</p>
+
+<h2>The SDK landscape: four betas, one codemod</h2>
+
+<p>The SDK situation as of July 31 is more concrete than the RC period's "Tier 1 SDKs are expected to ship within the ten-week window." They shipped:</p>
+
+<ul>
+  <li><strong>TypeScript:</strong> Split into <code>@modelcontextprotocol/server</code> and <code>@modelcontextprotocol/client</code> as separate packages on npm, both at v2 beta. The codemod ships as a CLI: <code>npx @modelcontextprotocol/codemod</code>. It handles the <code>.tool()</code> → <code>registerTool</code> rename, error-type renames, and the old initialize path removal automatically.</li>
+  <li><strong>Python:</strong> <code>pip install "mcp[cli]==2.0.0b1"</code>. The <code>createMcpHandler</code> entry point from <code>@modelcontextprotocol/server</code> serves 2026-07-28 per request while also handling 2025-11-25 traffic from the same endpoint — the adapter packages connect it to Node.js, Express, Hono, and Fastify.</li>
+  <li><strong>Go:</strong> Same module path, pre-release tag — <code>go get github.com/modelcontextprotocol/go-sdk@v1.7.0-pre.1</code>.</li>
+  <li><strong>C#:</strong> <code>dotnet add package ModelContextProtocol --prerelease</code></li>
+</ul>
+
+<p>The critical detail in the migration docs is that <strong>v2 packages and the 2026-07-28 protocol revision are two separate steps</strong>. You can install v2 SDKs and continue speaking 2025-11-25 wire protocol while you become. Conversely, you can enable the new protocol revision on v2 SDKs when ready. This decoupling — SDK version ≠ wire protocol version — is not how most API ecosystems work, and MCP's choice to separate the two axes was deliberate: it lets teams upgrade dependencies without immediately breaking wire compatibility.</p>
+
+<p>The TypeScript codemod covers the entire surface area of v1-to-v2 API changes: <code>.tool()</code> → <code>registerTool</code>, the error-type renames, and the initial removal from client bootstrap code. It does <em>not</em> handle the architectural shifts — removing session-store code, adding <code>_meta</code> forwarding, or replacing <code>tasks/list</code> pagination — but those aren't mechanical anyway. The codemod reduces a three-afternoon migration to one afternoon plus one architectural refactor.</p>
+
+<h2>What breaks now vs. what breaks later</h2>
+
+<p>The preview coverage lumped all changes together, but the shipping reality separates them into three categories:</p>
+
+<ul>
+  <li><strong>Immediately gone:</strong> <code>initialize</code> / <code>initialized</code> handshake (SEP-2575) and <code>tasks/list</code>. If your server exports these, new clients speaking 2026-07-28 will get errors. Older clients still negotiate version and will get the old behavior, but new ones won't.</li>
+  <li><strong>Deprecated with a 12-month clock:</strong> Sampling, Roots, Logging (SEP-2577). Still works, still spec-compliant, but the clock is ticking.</li>
+  <li><strong>New-but-optional:</strong> Multi Round-Trip Requests, header-based routing, cacheable list results, the formal extensions framework (Tasks as an extension, and MCP Apps), EMA as a hardened authorization surface. None of these are required — your server can serve the new spec without implementing any of them.</li>
+</ul>
+
+<p>The most expensive migration for most server maintainers is not the codemod — it is removing session state. SE-2567 kills <code>Mcp-Session-Id</code> and the implicit state it assumed. Any server that used Redis, Memcached, or an in-memory dict to track sessions per connected client needs to re-architect around per-request state in <code>_meta</code>. The Glama MCP gateway maintainer, in an HN comment that surfaced after the ship, pegged state-management bugs as their #1 operational pain point — which explains why they pushed hardest to get this change through the RC.</p>
+
+<h2>Anthropic's take: "rolling out across Claude products"</h2>
+
+<p>Anthropic published <a href="https://claude.com/blog/bringing-mcp-2026-07-28-to-claude" target="_blank" rel="noopener">its own post</a> on July 28 confirming that 2026-07-28 support is "rolling out across Claude products soon," with the stateless core, standardized extensions, and hardened auth as the headline shipment. Claude Code, the Claude desktop experience, and the API's MCP surface all received updates that same week, including Cleanup's <code>MCP servers need authentication</code> startup notice being over-counting claude.ai connectors. The full product-level readiness is still mid-rollout, but the direction across the Claude lineup is alignment on this spec.</p>
+
+<p>The practical consequence: if you're an MCP server maintainer whose primary users come through Claude tools, the window for supporting 2026-07-28 on your end is effectively now. Clients will start probing <code>server/discover</code> and expecting <code>_meta</code> on every request — and if your server only speaks 2025-11-25, those requests won't work once Claude flips to the new spec for default endpoints.</p>
+
+<h2>The concrete order of operations</h2>
+
+<p>If you haven't touched your MCP server since the RC, here is the order I'd follow now that the tooling is real:</p>
+
+<ol>
+  <li><strong>Run the codemod.</strong> For TypeScript servers, <code>npx @modelcontextprotocol/codemod</code> gets the mechanical renames out of the way — <code>.tool()</code> to <code>registerTool</code>, error renames, init removal. For Python, the v2 beta package does the same import-path migration.</li>
+  <li><strong>Remove the initialize handshake.</strong> In client code, replace any <code>initialize</code> call with <code>server/discover</code>. In server code, stop requiring sessions first. The protocol version must now arrive in <code>_meta</code> on every request.</li>
+  <li><strong>Key session dependencies.</strong> Search for <code>Mcp-Session-Id</code>, any session-store initialization (Redis, Memcached, dict), and any code path that assumes a per-connection object lives across requests. Those code paths are now dead — even if your server still speaks 2025-11-25, the writing on the wall says this architecture is gone in twelve months, and v2 clients already skip the session.</li>
+  <li><strong>Audit OAuth.</strong> If you do OAuth, check whether you're using DCR (old) or CIMED (new). DCR works for now with a twelve-month clock. The mandatory OIDC issuer validation (RFC 9207) means whatever target you direct users to for OAuth now has to validate across the new path.</li>
+  <li><strong>Remove <code>tasks/list</code></strong> if you used the old Tasks API (the pre-2025-11-25 experimental one). That endpoint went from clamped to removed. The replacement is task handles in the Tasks extension, with a handle-based polling model.</li>
+  <li><strong>If you use Sampling, Roots, or Logging:</strong> start planning their removal now. They work until mid-2027, but you don't want to hit month eleven and scramble. The new Tasks extension absorbs most of what Sampling did; the Roots/Logging replacements are still emerging.</li>
+</ol>
+
+<p>The migration is not trivial. But it's also not the breaking-change fire the preview coverage sometimes made it sound like. The codemod plus the 12-month removal window means you have time. The right move now is to upgrade in a branch, run the codemod, and avoid new dependencies on anything deprecated. The window is wide enough that no server needs to go down for this — but the servers that wait until month eleven will have the same amount of work without the same amount of time.</p>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If you're maintaining an MCP server, <a href="https://mcp-doctor-cloud.onrender.com">mcp-doctor</a> can audit your spec compliance. If this write-up saved you a morning of reading changelogs, <a href="https://ko-fi.com/ashrey122">consider buying me coffee</a> — or check out <a href="https://m-ashrey.github.io/services/">my services</a> if you need help with the migration directly.</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank" rel="noopener">The 2026-07-28 Specification</a> — Model Context Protocol Blog</li>
+        <li><a href="https://blog.modelcontextprotocol.io/posts/sdk-betas-2026-07-28/" target="_blank" rel="noopener">Beta SDKs for the 2026-07-28 MCP Spec ReleaseCandidate</a> — Model Context Protocol Blog</li>
+        <li><a href="https://claude.com/blog/bringing-mcp-2026-07-28-to-claude" target="_blank" rel="noopener">MCP 2026-07-28 spec: stateless core, coming to Claude</a> — Anthropic Blog</li>
+        <li><a href="https://venturebeat.com/infrastructure/mcp-just-got-its-biggest-update-ever-heres-what-changes-for-ai-agents" target="_blank" rel="noopener">MCP just got its biggest update ever — here's what changes for AI agents</a> — VentureBeat, Jul 28, 2026</li>
+        <li><a href="https://arstechnica.com/ai/2026/07/with-a-stateless-makeover-new-mcp-spec-targets-enterprise-scale/" rel="noopener">With a stateless makeover, new MCP spec targets enterprise scale</a> — Ars Technica, Jul 28, 2026</li>
+        <li><a href="https://www.developersdigest.tech/blog/mcp-2026-07-28-breaking-changes" target="_blank" rel="noopener">The MCP 2026-07-28 Rewrite: What Breaks and How to Migrate</a> — Developers Digest</li>
+        <li><a href="https://news.ycombinator.com/item?id=49088058" target="_blank" rel="noopener">MCP 2026-07-28 Specification: transport going stateless</a> — Hacker News discussion</li>
+        <li><a href="https://stacktr.ee/blog/mcp-2026-spec-changes" target="_blank" rel="noopener">MCP 2026-07-28 spec: what changed, what breaks</a> — Stacktree</li>
+      </ol>
+    </div>
+
+    <div class="related">
+      <span class="lab">Related reading</span>
+      <ul>
+        <li><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</a></li>
+        <li><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</a></li>
+      </ul>
+    </div>
+
+    <div class="backBottom"><a href="/blog/">← All posts</a></div>
+  </article>
+  </main>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">AI practice</a></div>
+  </footer>
+
+</div>
+<script type="text/javascript">
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    root.classList.add('js');
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){reveal(x.target);io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    var delay=function(e){e.classList.add('in');};
+    els.forEach(function(e){io.observe(e);});
+    setTimeout(function(){els.forEach(reveal);},1600);
+  })();
+</script>
+</body>
+</html>

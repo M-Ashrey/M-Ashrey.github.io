@@ -1,216 +1,222 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
-<title>The Blog — M-Ashrey</title>
-<meta name="description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
-<meta name="author" content="Mohamed Ashrey">
-<link rel="canonical" href="https://m-ashrey.github.io/blog/">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="apple-touch-icon" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap"></noscript>
-<meta property="og:type" content="website">
-<meta property="og:title" content="The Blog — M-Ashrey">
-<meta property="og:description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
-<meta property="og:url" content="https://m-ashrey.github.io/blog/">
-<meta property="og:site_name" content="M-Ashrey">
-<meta property="og:image" content="https://m-ashrey.github.io/assets/og/blog-index.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The Agent Lab — notes on AI agents, MCP & automation">
-<meta name="theme-color" content="#0c0d10">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Blog — M-Ashrey">
-<meta name="twitter:description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
-<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/blog-index.png">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  "name": "The Blog — M-Ashrey",
-  "description": "Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.",
-  "url": "https://m-ashrey.github.io/blog/",
-  "publisher": {
-    "@type": "Person",
-    "name": "Mohamed Ashrey",
-    "url": "https://m-ashrey.github.io/"
-  },
-  "blogPost": [
-        {
-      "@type": "BlogPosting",
-      "headline": "OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think",
-      "url": "https://m-ashrey.github.io/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html",
-      "datePublished": "2026-07-29"
-    },
-    {
-      "@type": "BlogPosting",
-      "headline": "SharedRoot: what a Cowork sandbox escape teaches us about AI agent security",
-      "url": "https://m-ashrey.github.io/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html",
-      "datePublished": "2026-07-25"
-    },
-    {
-      "@type": "BlogPosting",
-      "headline": "MCP goes stateless on July 28. Here's what breaks and what gets cheaper.",
-      "url": "https://m-ashrey.github.io/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html",
-      "datePublished": "2026-07-25"
-    },
-    {
-      "@type": "BlogPosting",
-      "headline": "Claude Opus 5 just shipped. Here's what actually matters if you're building agents.",
-      "url": "https://m-ashrey.github.io/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html",
-      "datePublished": "2026-07-24"
-    }
-  ]
-}
-</script>
-<style>
-:root{
-  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
-  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
-  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
-  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
-  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
-  --measure:68ch;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-main{display:block}
-html{-webkit-text-size-adjust:100%}
-@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
-body{
-  font-family:var(--sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-  background:
-    radial-gradient(1200px 680px at 88% -12%, rgba(243,182,76,.10), transparent 58%),
-    radial-gradient(1000px 560px at -8% 2%, rgba(126,166,255,.08), transparent 55%),
-    var(--bg);
-}
-.wrap{max-width:880px;margin:0 auto;padding:0 28px}
-a{color:var(--ink);text-decoration:none}
-::selection{background:rgba(243,182,76,.28)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
-
-.rvl{opacity:1}
-.js .rvl{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
-.js .rvl.in{opacity:1;transform:none}
-@media (prefers-reduced-motion: reduce){.js .rvl{opacity:1;transform:none;transition:none}}
-
-.bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;border-bottom:1px solid var(--line)}
-.bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
-.bar .mark i{font-style:normal;color:var(--accent)}
-.bar nav{display:flex;gap:22px;align-items:center}
-.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
-.bar nav a:hover{color:var(--accent)}
-.bar nav a.current{color:var(--ink)}
-
-.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
-
-/* blog index hero */
-.hero{padding:56px 0 44px}
-.hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5.6vw,56px);line-height:1.04;letter-spacing:-.02em;margin:18px 0 0}
-.hero h1 em{font-style:italic;color:var(--accent)}
-.hero .lede{margin-top:20px;color:var(--muted);font-size:clamp(16px,1.8vw,19px);max-width:62ch;line-height:1.6}
-.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
-.back:hover{color:var(--accent);border-color:var(--accent)}
-
-/* posts list */
-.postsSection{padding:8px 0 64px}
-ul.posts{list-style:none;border-top:1px solid var(--line)}
-li.post{border-bottom:1px solid var(--line)}
-li.post a{display:block;padding:26px 4px;transition:padding-left .18s ease,background .18s ease}
-li.post a:hover{padding-left:14px;background:linear-gradient(90deg,rgba(243,182,76,.06),transparent)}
-li.post .post-date{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--faint);text-transform:uppercase}
-li.post .post-title{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.6vw,25px);letter-spacing:-.01em;color:var(--ink);margin-top:10px;line-height:1.28}
-li.post a:hover .post-title{color:var(--accent)}
-li.post .post-dek{display:block;color:var(--muted);font-size:14.5px;margin-top:8px;line-height:1.55;max-width:60ch}
-
-footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
-footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
-footer.site a:hover{color:var(--accent)}
-
-/* article page */
-.artHead{padding:48px 0 8px}
-.artHead .eyebrow{margin-bottom:16px;display:block}
-.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:22ch}
-.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
-.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
-.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
-
-article.prose{padding:36px 0 8px;max-width:var(--measure)}
-article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
-article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
-article.prose p.lede{font-size:18px;color:var(--ink)}
-article.prose strong{color:var(--ink);font-weight:600}
-article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
-article.prose a:hover{border-color:var(--accent)}
-article.prose ul, article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
-article.prose li{margin-bottom:10px}
-article.prose li strong{color:var(--accent)}
-
-.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
-.sources .lab{margin-bottom:12px;display:block}
-.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
-.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
-.sources a:hover{color:var(--accent);border-color:var(--accent)}
-
-/* CTA block */
-.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
-.ctaBlock .lab{margin-bottom:10px;display:block}
-.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
-.ctaRow{display:flex;flex-direction:column;gap:16px}
-.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
-.ctaItem:first-child{border-top:0;padding-top:0}
-.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
-.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
-.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
-.ctaItem a.go:hover{border-color:var(--accent)}
-
-.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
-.backBottom a{color:var(--muted);font-size:14px}
-.backBottom a:hover{color:var(--accent)}
-
-@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
-
-</style>
-</head>
-<body>
-<div class="wrap">
-
-  <div class="bar">
-    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
-    <nav>
-      <a href="https://m-ashrey.github.io/">Home</a>
-      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
-      <a class="current" href="/blog/">Blog</a>
-      <a href="/services/">Services</a>
-    </nav>
-  </div>
-
-  <main>
-  <header class="hero rvl">
-    <div class="eyebrow">Claude · MCP · AI agents</div>
-    <h1>Notes from <em>building</em> on this stack.</h1>
-    <p class="lede">Current, specific, cited analysis on Claude, the Model Context Protocol, and AI-agent tooling — written for developers and builders, not press releases. New posts as things actually happen.</p>
-  </header>
-
-  <section class="postsSection rvl">
-    <ul class="posts">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>The Blog — M-Ashrey</title>
+<meta name="description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap"></noscript>
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Blog — M-Ashrey">
+<meta property="og:description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/blog-index.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab — notes on AI agents, MCP & automation">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Blog — M-Ashrey">
+<meta name="twitter:description" content="Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/blog-index.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "The Blog — M-Ashrey",
+  "description": "Notes on Claude, MCP, and AI agents from Mohamed Ashrey — current, cited, no-hype analysis for developers building and shipping on this stack today.",
+  "url": "https://m-ashrey.github.io/blog/",
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/"
+  },
+  "blogPost": [
+            {      "@type": "BlogPosting",
+      "headline": "What Tasks and MCP Apps Actually Change for Agent Infrastructure",
+      "url": "https://m-ashrey.github.io/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/",
+      "datePublished": "2026-08-02"
+    },{
+      "@type": "BlogPosting",
+      "headline": "OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html",
+      "datePublished": "2026-07-29"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "SharedRoot: what a Cowork sandbox escape teaches us about AI agent security",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html",
+      "datePublished": "2026-07-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "MCP goes stateless on July 28. Here's what breaks and what gets cheaper.",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html",
+      "datePublished": "2026-07-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Claude Opus 5 just shipped. Here's what actually matters if you're building agents.",
+      "url": "https://m-ashrey.github.io/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html",
+      "datePublished": "2026-07-24"
+    }
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(1200px 680px at 88% -12%, rgba(243,182,76,.10), transparent 58%),
+    radial-gradient(1000px 560px at -8% 2%, rgba(126,166,255,.08), transparent 55%),
+    var(--bg);
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 28px}
+a{color:var(--ink);text-decoration:none}
+::selection{background:rgba(243,182,76,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
+
+.rvl{opacity:1}
+.js .rvl{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.js .rvl.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.js .rvl{opacity:1;transform:none;transition:none}}
+
+.bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.bar .mark i{font-style:normal;color:var(--accent)}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+
+/* blog index hero */
+.hero{padding:56px 0 44px}
+.hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5.6vw,56px);line-height:1.04;letter-spacing:-.02em;margin:18px 0 0}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lede{margin-top:20px;color:var(--muted);font-size:clamp(16px,1.8vw,19px);max-width:62ch;line-height:1.6}
+.back{margin-top:22px;display:inline-block;color:var(--faint);font-size:13.5px;border-bottom:1px solid var(--line2)}
+.back:hover{color:var(--accent);border-color:var(--accent)}
+
+/* posts list */
+.postsSection{padding:8px 0 64px}
+ul.posts{list-style:none;border-top:1px solid var(--line)}
+li.post{border-bottom:1px solid var(--line)}
+li.post a{display:block;padding:26px 4px;transition:padding-left .18s ease,background .18s ease}
+li.post a:hover{padding-left:14px;background:linear-gradient(90deg,rgba(243,182,76,.06),transparent)}
+li.post .post-date{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--faint);text-transform:uppercase}
+li.post .post-title{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(19px,2.6vw,25px);letter-spacing:-.01em;color:var(--ink);margin-top:10px;line-height:1.28}
+li.post a:hover .post-title{color:var(--accent)}
+li.post .post-dek{display:block;color:var(--muted);font-size:14.5px;margin-top:8px;line-height:1.55;max-width:60ch}
+
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+
+/* article page */
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:22ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul, article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* CTA block */
+.ctaBlock{margin-top:48px;border-radius:18px;border:1px solid var(--line2);background:linear-gradient(180deg,var(--panel),var(--bg2));padding:32px}
+.ctaBlock .lab{margin-bottom:10px;display:block}
+.ctaBlock h3{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-.01em;margin-bottom:18px}
+.ctaRow{display:flex;flex-direction:column;gap:16px}
+.ctaItem{padding:16px 0;border-top:1px solid var(--line)}
+.ctaItem:first-child{border-top:0;padding-top:0}
+.ctaItem .k{font-weight:600;font-size:15px;color:var(--ink)}
+.ctaItem p{color:var(--muted);font-size:14.5px;margin-top:6px;line-height:1.55}
+.ctaItem a.go{color:var(--accent);font-weight:600;font-size:14.5px;display:inline-block;margin-top:8px;border-bottom:1px solid rgba(243,182,76,.4)}
+.ctaItem a.go:hover{border-color:var(--accent)}
+
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+      <a href="/services/">Services</a>
+    </nav>
+  </div>
+
+  <main>
+  <header class="hero rvl">
+    <div class="eyebrow">Claude · MCP · AI agents</div>
+    <h1>Notes from <em>building</em> on this stack.</h1>
+    <p class="lede">Current, specific, cited analysis on Claude, the Model Context Protocol, and AI-agent tooling — written for developers and builders, not press releases. New posts as things actually happen.</p>
+  </header>
+
+  <section class="postsSection rvl">
+    <ul class="posts">
 <!-- POSTS:START -->
+          <li class="post"><a href="/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/"><span class="post-date">August 2, 2026</span><span class="post-title">What Tasks and MCP Apps Actually Change for Agent Infrastructure</span><span class="post-dek">The server that just answers tool calls is the old product. The server that runs jobs, polls progress, and renders UI — that's what Tasks and MCP Apps unlock in MCP 2026-07-28.</span></a></li>
+
           <li class="post"><a href="/blog/2026-08-01-claude-code-builtin-browser/"><span class="post-date">August 1, 2026</span><span class="post-title">Claude Code now has its own browser. That changes how you ship.</span><span class="post-dek">Claude Code's built-in browser (Week 28) and Chrome extension (Week 27 GA) solve the biggest friction in agentic development: context switching. Here's why the combination matters more than another model launch.</span></a></li>
 
           <li class="post"><a href="/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"><span class="post-date">July 31, 2026</span><span class="post-title">MCP 2026-07-28 has shipped. Here's what your migration actually looks like.</span><span class="post-dek">The biggest MCP revision in 20 months shipped July 28. SDK betas, a codemod, and a real migration path — here's the post-ship picture with sources.</span></a></li>
-
-          <li class="post"><a href="/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html"><span class="post-date">July 29, 2026</span><span class="post-title">OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think</span><span class="post-dek">OpenAI's move from API provider to enterprise agent platform signals a fundamental change in how AI will be deployed. Here's what it means for developers building with Claude, MCP, and the open ecosystem.</span></a></li>
-
-          <li class="post"><a href="/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html"><span class="post-date">July 29, 2026</span><span class="post-title">AI Coding Agents Are Siloing Your Team</span><span class="post-dek">Stanford and GitHub data show agents create lone wolves, not better teams.</span></a></li>
-  <li class="post"><a href="/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html"><span class="post-date">July 28, 2026</span><span class="post-title">robots.txt vs noindex: the Claude chats lesson</span><span class="post-dek">Shared Claude chats got indexed by Google despite a robots.txt Disallow rule — because crawling is not indexing.</span></a></li>
-  <li class="post"><a href="/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html"><span class="post-date">July 27, 2026</span><span class="post-title">CLAUDE.md is advice. Hooks enforce it.</span><span class="post-dek">Claude Code's PreToolUse hooks block writes before they happen — here's why they matter more than any CLAUDE.md instruction.</span></a></li>
-        <li class="post"><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html"><span class="post-date">July 26, 2026</span><span class="post-title">The 80% Rule: Context Engineering for Claude 5</span><span class="post-dek">Anthropic deleted 80% of Claude Code’s system prompt for Opus 5 with no loss. Here’s what changed.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 25, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">A VM escape in Claude Cowork reaches SSH keys and cloud credentials on the host. The CVE is just the entry point — the structural argument applies to every sandboxed agent.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"><span class="post-date">July 25, 2026</span><span class="post-title">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</span><span class="post-dek">The biggest spec update since launch drops Tuesday — sessions gone, init handshake removed, and three features start a 12-month deprecation clock.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Three quiet API changes matter more than the benchmark charts — and this week's MCP security research sharpens the takeaway.</span></a></li>
+
+          <li class="post"><a href="/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html"><span class="post-date">July 29, 2026</span><span class="post-title">OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think</span><span class="post-dek">OpenAI's move from API provider to enterprise agent platform signals a fundamental change in how AI will be deployed. Here's what it means for developers building with Claude, MCP, and the open ecosystem.</span></a></li>
+
+          <li class="post"><a href="/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html"><span class="post-date">July 29, 2026</span><span class="post-title">AI Coding Agents Are Siloing Your Team</span><span class="post-dek">Stanford and GitHub data show agents create lone wolves, not better teams.</span></a></li>
+  <li class="post"><a href="/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html"><span class="post-date">July 28, 2026</span><span class="post-title">robots.txt vs noindex: the Claude chats lesson</span><span class="post-dek">Shared Claude chats got indexed by Google despite a robots.txt Disallow rule — because crawling is not indexing.</span></a></li>
+  <li class="post"><a href="/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html"><span class="post-date">July 27, 2026</span><span class="post-title">CLAUDE.md is advice. Hooks enforce it.</span><span class="post-dek">Claude Code's PreToolUse hooks block writes before they happen — here's why they matter more than any CLAUDE.md instruction.</span></a></li>
+        <li class="post"><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html"><span class="post-date">July 26, 2026</span><span class="post-title">The 80% Rule: Context Engineering for Claude 5</span><span class="post-dek">Anthropic deleted 80% of Claude Code’s system prompt for Opus 5 with no loss. Here’s what changed.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 25, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">A VM escape in Claude Cowork reaches SSH keys and cloud credentials on the host. The CVE is just the entry point — the structural argument applies to every sandboxed agent.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"><span class="post-date">July 25, 2026</span><span class="post-title">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</span><span class="post-dek">The biggest spec update since launch drops Tuesday — sessions gone, init handshake removed, and three features start a 12-month deprecation clock.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Three quiet API changes matter more than the benchmark charts — and this week's MCP security research sharpens the takeaway.</span></a></li>

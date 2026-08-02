@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>What Tasks and MCP Apps Actually Change for Agent Infrastructure — M-Ashrey</title>
+<meta name="description" content="The MCP 2026-07-28 spec shipped two official extensions — Tasks and MCP Apps — that transform the protocol from a tool wire format into an agent runtime. Here's what each one changes for developers shipping production MCP servers today.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/2026-08-02-mcp-tasks-apps-agent-infrastructure/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&family=Inter:wght@400;600&display=swap"></noscript>
+<meta property="og:type" content="article">
+<meta property="og:title" content="What Tasks and MCP Apps Actually Change for Agent Infrastructure">
+<meta property="og:description" content="After the stateless core, the two extensions that matter most — and what they mean for developers building MCP servers today.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MCP Tasks and MCP Apps explained — the two extensions that turn MCP into an agent runtime">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What Tasks and MCP Apps Actually Change for Agent Infrastructure">
+<meta name="twitter:description" content="After the stateless core ships, the two extensions that matter most — and what they already change for agent development.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "What Tasks and MCP Apps Actually Change for Agent Infrastructure",
+  "description": "After the stateless core ships, the two extensions that matter most — and what they already mean for agent development.",
+  "url": "https://m-ashrey.github.io/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/",
+  "datePublished": "2026-08-02",
+  "dateModified": "2026-08-02",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/"
+  },
+  "image": "https://m-ashrey.github.io/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/og.png",
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/"
+  }
+}
+</script>
+<style>
+:root{--bg:#0c0d10;--bg2:#101216;--panel:#15181e;--panel2:#191d24;--line:#242a33;--line2:#2f3742;--ink:#f4f6f9;--muted:#aab4c1;--faint:#828e9c;--accent:#f3b64c;--accent-ink:#1c1305;--cool:#7ea6ff;--pos:#57c98a;--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;--measure:68ch}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{font-family:var(--sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:radial-gradient(1200px 680px at 88% -12%, rgba(243,182,76,.10), transparent 58%),radial-gradient(1000px 560px at -8% 2%, rgba(126,166,255,.08), transparent 55%),var(--bg)}
+.wrap{max-width:880px;margin:0 auto;padding:0 28px}
+a{color:var(--ink);text-decoration:none}
+::selection{background:rgba(243,182,76,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.bar .mark i{font-style:normal;color:var(--accent)}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:22ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul, article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+article.prose blockquote{margin:26px 0;padding:18px 22px;border-left:3px solid var(--accent);background:var(--bg2);color:var(--muted);font-size:15.5px;line-height:1.7;border-radius:0 8px 8px 0}
+article.prose blockquote p{margin-bottom:8px;color:var(--muted)}
+article.prose blockquote p:last-child{margin-bottom:0}
+article.prose pre{margin:24px 0;padding:20px 24px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;color:var(--muted);line-height:1.65;white-space:pre}
+article.prose code{font-family:var(--mono);font-size:.88em;color:var(--cool);background:rgba(126,166,255,.10);padding:2px 6px;border-radius:5px}
+article.prose pre code{color:var(--muted);background:transparent;padding:0;border-radius:0;font-size:13.5px}
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a href="/blog/">Blog</a>
+      <a href="/services/">Services</a>
+    </nav>
+  </div>
+
+  <main>
+    <header class="artHead">
+      <span class="eyebrow">MCP 2026-07-28</span>
+      <h1>What Tasks and MCP Apps Actually Change for Agent Infrastructure</h1>
+      <div class="byline">
+        Mohamed Ashrey<span class="dot"></span>August 2, 2026<span class="dot"></span>~1,000 words
+      </div>
+      <p class="dek">The server that just answers tool calls is the old product. The server that runs jobs, polls progress, and renders UI into the chat is the new one — and the spec already ships the extensions to make that possible.</p>
+    </header>
+
+    <article class="prose">
+      <p class="lede">Everyone is talking about the <strong>stateless core</strong> — no session IDs, request/response model, serverless-compatible. That's important infrastructure. But statelessness is a wiring change. Once you've absorbed it, you still need capabilities. And that's what the two official extensions — <strong>Tasks</strong> and <strong>MCP Apps</strong> — are meant to provide.</p>
+
+      <p>They didn't arrive on July 28 as beta experiments. They arrived as <strong>ratified extensions</strong>, part of the same specification that removed <code>Mcp-Session-Id</code> and the init handshake. This matters because it signals that the protocol authors don't see MCP as a finished wire format. They see it as a <strong>platform</strong> — and extensions are how new capabilities get added without everyone having to adopt them at once.</p>
+
+      <h2>Tasks are what happens when tools take too long</h2>
+
+      <p>Earlier MCP versions treated tool calls as a blocking request. The model sends <code>tools/call</code>, the server does the work, and the response comes back. For a file read or a simple API call, that's fine. It breaks down for anything long-running: compiling a codebase, running a test suite, deploying infrastructure, training a small model.</p>
+
+      <p>Those operations span minutes, not milliseconds. An agent waiting for a blocking response wastes tokens, ties up the model, and gives the user nothing useful to look at.</p>
+
+      <p><strong>Tasks</strong> solves this with polling. The flow works like this:</p>
+
+      <ol>
+        <li>The server returns a <strong>task handle</strong> instead of a final result. The handle has a unique <code>taskId</code> and a status field.</li>
+        <li>The client polls <code>tasks/get</code> with that <code>taskId</code> whenever it needs an update.</li>
+        <li>The task can be in one of five states: <strong>working</strong>, <strong>input_required</strong> (the server needs more data and can prompt the client), <strong>completed</strong>, <strong>failed</strong>, or <strong>cancelled</strong>.</li>
+        <li>The client can also call <code>tasks/update</code> mid-flight to supply data if the task requested it.</li>
+      </ol>
+
+      <p>This matters because it moves the server from a synchronous helper to a <strong>job runner</strong>. The model submits work, disconnects, and checks back at intervals that make sense for the task. The server owns the lifecycle. This is how long-running agent tools are supposed to work.</p>
+
+      <p>There are sharp edges — the spec removed <code>tasks/list</code> from the earlier experimental API, so the client must track task IDs itself. A server can also <strong>return a task handle unsolicited</strong>, meaning it can create a task as a side effect of any request, not just within a dedicated task method. This gives implementers flexibility but requires clients to handle task references anywhere in the response.</p>
+
+      <p>As of August 2026, client support is still early. The Claude desktop app renders task progress inline in conversations, but Claude Code is still in uptake. For developers writing MCP servers <em>today</em>, the practical advice is:</p>
+
+      <ul>
+        <li><strong>Wrap long operations in task IDs</strong> now, even if only for future-proofing.</li>
+        <li><strong>Return status and completion estimates</strong> so the client can display meaningful progress instead of a spinner.</li>
+        <li><strong>Don't remove your synchronous path yet</strong> — many clients haven't implemented the polling loop. Ship both.</li>
+      </ul>
+
+      <h2>2. MCP Apps: the UI that lives inside the agent conversation</h2>
+
+      <p>Every integration that currently sends plain text could send an HTML page instead — graphs, forms, dashboards, diff views, previews. That's <strong>MCP Apps</strong>, formally <strong>SEP-1865</strong>, and it's the most significant user-facing change since MCP launched.</p>
+
+      <p>Here's how it works:</p>
+
+      <blockquote>
+        <p>A server declares UI templates in its tool metadata. When the model calls a tool, the host renders the declared HTML in a <strong>sandboxed iframe</strong>. The rendered UI communicates back to the host over the same JSON-RPC protocol — and everything passes through the same consent layer as a direct tool call.</p>
+      </blockquote>
+
+      <p>This is not a chat bubble. This is a <strong>real DOM</strong> inside the agent conversation. A fraud-detection MCP server could render a highlighted transaction timeline. An analytics server could render an interactive chart with date range sliders. A deployment server could render a step-by-step pipeline viewer with live log streaming.</p>
+
+      <p>Two design details that matter:</p>
+
+      <ul>
+        <li><strong>Templates are declared ahead of time.</strong> The server lists its HTML templates in its tool definitions, so the host can prefetch, cache, and security-review them before a user ever triggers a tool call. This prevents the server from injecting arbitrary HTML at runtime.</li>
+        <li><strong>Graceful degradation is built in.</strong> If the host doesn't support MCP Apps, the server falls back to returning plain text or structured data. You don't need to guess whether the client has a rendering engine.</li>
+      </ul>
+
+      <p>Both the desktop app and the web Claude interface already support MCP Apps on Claude's side. For server developers, this means: you can now ship a <strong>visual experience</strong> alongside your tool logic, and it reaches users through the same MCP serve that was previously limited to text.</p>
+
+      <h2>3. Why this changes how developers should think about MCP servers</h2>
+
+      <p>Before 2026-07-28, "making an MCP server" meant publishing a tool list: <em>here are my functions, call them with JSON, I'll reply with JSON.</em> A server was an API that spoke MCP instead of REST or gRPC.</p>
+
+      <p>With Tasks and Apps, the mental model shifts:</p>
+
+      <ul>
+        <li>A <strong>server</strong> becomes a <strong>service</strong> — it owns not just tool execution but the lifecycle of long-running work and the user interface for interacting with it.</li>
+        <li>A <strong>tool call</strong> becomes a <strong>session</strong> — the client polls, the server reports, and the human sees interactive progress, not just a spinner.</li>
+        <li>A <strong>response</strong> becomes a <strong>UI surface</strong> — charts, forms, and interactive components replace raw JSON in the conversation.</li>
+      </ul>
+
+      <p>While this is all optional — no one is forced to implement Tasks or Apps — the signal is clear: the protocol team expects MCP to function as an <strong>agent runtime</strong>, not just a pipe for structured data. The extensions are the first proof that this vision is being shipped, not just announced.</p>
+
+      <h2>What's next and what's still missing</h2>
+
+      <p>Two gaps are still open as of August 2, 2026:</p>
+
+      <ol>
+        <li><strong>Client adoption is uneven.</strong> Tasks works on Claude (app, managed agents) and Azure Functions, but many community-hosted clients and edge deployments are still catching up. MCP Apps is currently Claude-only on the host side.</li>
+        <li><strong>Tooling for server developers is nascent.</strong> There's no canonical debugger for polling-based tasks, no standard dashboard for viewing/app/task states, and no agreed-upon method for testing MCP Apps across different host implementations.</li>
+      </ol>
+
+      <p>But the direction is right. A protocol that can handle long-running async work and interactive UI is a protocol that can serve professional agent workloads — not just hobby projects. The extensions are the signal that MCP is building for that.</p>
+
+      <p>The stateless core made MCP deployable. Tasks and MCP Apps make it functional.</p>
+
+      <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+      <p style="font-size:0.95rem;color:#888">If this helped you think about where to take your MCP servers next, consider <a href="https://ko-fi.com/ashrey122">supporting my work on Ko-fi</a> or check out <a href="https://m-ashrey.github.io/services/">my services</a> for agent consulting and MCP server development.</p>
+    </article>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/">The 2026-07-28 MCP Specification Release Candidate</a> — MCP Blog, July 28, 2026</li>
+        <li><a href="https://aaif.io/blog/mcp-2026-07-28-whats-changing-and-how-to-migrate">MCP 2026-07-28: From Local Tool to Distributed Protocol</a> — Agentic AI Foundation</li>
+        <li><a href="https://stacktr.ee/blog/mcp-2026-spec-changes">MCP 2026-07-28 spec: what changed, what breaks</a> — Stacktree</li>
+        <li><a href="https://claude.com/blog/bringing-mcp-2026-07-28-to-claude">MCP 2026-07-28 spec: stateless core, coming to Claude</a> — Anthropic</li>
+        <li><a href="https://devblogs.microsoft.com/azure-sdk/long-running-mcp-tools-azure-functions/">How to build long-running MCP tools on Azure Functions</a> — Microsoft Azure Blog</li>
+        <li><a href="https://workos.com/blog/mcp-async-tasks-ai-agent-workflows">MCP Async Tasks: Building long-running workflows for AI Agents</a> — WorkOS</li>
+        <li><a href="https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/">MCP Apps — Bringing UI Capabilities To MCP Clients</a> — MCP Blog</li>
+      </ol>
+    </div>
+
+    <div class="backBottom">
+      <a href="/blog/">← Back to blog index</a>
+    </div>
+  </main>
+
+  <footer class="site">
+    <p>© 2026 Mohamed Ashrey. Built with care and a Claude-heavy stack.</p>
+    <p><a href="https://github.com/M-Ashrey">GitHub</a> · <a href="https://youtube.com/@TheAgentLab">YouTube</a> · <a href="https://m-ashrey.github.io/services/">Services</a></p>
+  </footer>
+</div>
+</body>
+</html>

@@ -232,4 +232,35 @@ article.prose li strong{color:var(--accent)}
         <li class="post"><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html"><span class="post-date">July 26, 2026</span><span class="post-title">The 80% Rule: Context Engineering for Claude 5</span><span class="post-dek">Anthropic deleted 80% of Claude Code’s system prompt for Opus 5 with no loss. Here’s what changed.</span></a></li>
 <li class="post"><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 25, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">A VM escape in Claude Cowork reaches SSH keys and cloud credentials on the host. The CVE is just the entry point — the structural argument applies to every sandboxed agent.</span></a></li>
 <li class="post"><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"><span class="post-date">July 25, 2026</span><span class="post-title">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</span><span class="post-dek">The biggest spec update since launch drops Tuesday — sessions gone, init handshake removed, and three features start a 12-month deprecation clock.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Three quiet API changes matter more than the benchmark charts — and this week's MCP security research sharpens the takeaway.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Three quiet API changes matter more than the benchmark charts — and this week's MCP security research sharpens the takeaway.</span></a></li>
+
+<!-- POSTS:END -->
+    </ul>
+  </section>
+  </main>
+
+  <footer class="site">
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">hire me</a> · support this work: <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a> · <a href="https://ko-fi.com/ashrey122">Ko-fi</a></div>
+    <div style="margin-top:8px"><a href="/terms/">Terms</a> &middot; <a href="/refunds/">Refunds</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="mailto:m.ashrey122@gmail.com">Contact</a></div>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    var root=document.documentElement;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var els=[].slice.call(document.querySelectorAll('.rvl'));
+    if(!els.length) return;
+    var reveal=function(e){e.classList.add('in');};
+    var showAll=function(){els.forEach(reveal);root.classList.remove('js');};
+    try{
+      root.classList.add('js');
+      if(!('IntersectionObserver' in window)){showAll();return;}
+      var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){reveal(x.target);io.unobserve(x.target);}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+      els.forEach(function(e){io.observe(e);});
+      setTimeout(showAll,1600);
+    }catch(err){showAll();}
+  })();
+</script>
+</body>
+</html>

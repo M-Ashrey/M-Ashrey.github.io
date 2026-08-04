@@ -12,11 +12,9 @@
 <link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;600;700&display=swap" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;600;700&display=swap">
 <meta property="og:type" content="product">
-<meta property="og:title" content="Autonomous Kindle Publishing Pipeline">
+<meta property="og:title" content="Autonomous Kindle Publishing Pipeline | a KDP process that fails closed">
 <meta property="og:description" content="A Kindle publishing pipeline with seven gates built as scripts that fail closed, so it cannot advance when a step has been skipped. 69 USD, five human steps.">
 <meta property="og:url" content="https://m-ashrey.github.io/kits/a01-kindle-ebooks/">
 <meta property="og:site_name" content="M-Ashrey">
@@ -25,7 +23,7 @@
 <meta property="og:image:height" content="630">
 <meta name="theme-color" content="#0c0d10">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Autonomous Kindle Publishing Pipeline">
+<meta name="twitter:title" content="Autonomous Kindle Publishing Pipeline | a KDP process that fails closed">
 <meta name="twitter:description" content="A Kindle publishing pipeline with seven gates built as scripts that fail closed, so it cannot advance when a step has been skipped. 69 USD, five human steps.">
 <meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-08-04-kindle-70-percent-royalty-ceiling-12-99.png">
 <style>
@@ -180,16 +178,32 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
   .specRow .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
   .specRow .v{font-family:var(--serif);font-size:20px;font-weight:600;margin-top:5px}
 </style>
+<style>
+  .buyRow{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:22px}
+  .buyBtn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:11px;padding:16px 30px;
+    font-family:var(--sans);font-weight:700;font-size:16.5px;cursor:pointer;transition:filter .15s ease,transform .15s ease}
+  .buyBtn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+  .buyBtn[disabled]{opacity:.55;cursor:progress;transform:none}
+  .buyAlt{background:none;border:0;color:var(--faint);font-size:13.5px;font-family:var(--sans);
+    text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
+  .buyAlt:hover{color:var(--accent)}
+  .buyNote{color:var(--faint);font-size:13px;margin-top:12px;max-width:52ch;line-height:1.55}
+  .wlWrap[hidden]{display:none}
+  .wlWrap{margin-top:22px;padding:20px 22px;border:1px solid var(--line);border-radius:13px;background:var(--bg2)}
+  .wlWrap h3{font-family:var(--serif);font-weight:600;font-size:18px;margin:0 0 8px}
+  .wlWrap p{color:var(--muted);font-size:14px;margin:0 0 14px;line-height:1.55}
+</style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="bar">
     <a class="mark" href="https://m-ashrey.github.io/">M<i>&middot;</i>Ashrey</a>
-    <nav>
+    <nav aria-label="Primary">
       <a href="https://m-ashrey.github.io/">Home</a>
       <a href="https://m-ashrey.github.io/ai/">AI practice</a>
       <a href="/blog/">Blog</a>
+      <a class="current" href="/kits/">Kits</a>
       <a href="/services/">Services</a>
     </nav>
   </div>
@@ -274,37 +288,40 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
   <p><strong>New title uploads are capped at three per day.</strong> If your plan was volume as the strategy, the platform already priced that in.</p>
   <p><strong>This is a new vertical for me.</strong> It reuses none of my MCP tooling. I built it because the unit economics stood up, not because it was adjacent to what I already had.</p>
 </div>
-
-<h2>Price</h2>
+<h2>Get it</h2>
 
 <div class="priceCard">
   <div class="amt">69 USD<span>one payment</span></div>
-  <p>No subscription and no running cost. The scripts are stdlib Python, KDP charges nothing to publish, and the pipeline can sit dormant for a year at zero cost.</p>
+  <p>No subscription and no running cost. Delivered by email as a download link, usually within a minute of payment.</p>
+  <div class="buyRow">
+    <button class="buyBtn" id="buyBtn" disabled>Loading checkout&hellip;</button>
+    <button class="buyAlt" id="showWaitlist" type="button">Email it to me instead</button>
+  </div>
+  <p class="buyNote" id="buyNote">Card payment handled by Paddle, who are the merchant of record. You get a download link by email straight after.</p>
 </div>
 
-<h2>Checkout opens shortly</h2>
-
-<p>Payment and delivery are being wired up now. I'd rather leave the button off than take money before the download is properly gated. Leave your email and you'll get the link the day it opens, at the founding price, ahead of anywhere else.</p>
-
-<form class="wlForm" action="https://api.web3forms.com/submit" method="POST">
-  <input type="hidden" name="access_key" value="26c8992d-3a5e-4c52-ad73-20f25e4dac70">
-  <input type="hidden" name="subject" value="Waitlist: Autonomous Kindle Publishing Pipeline (a01, 69 USD)">
-  <input type="hidden" name="from_name" value="a01-kindle-ebooks waitlist">
-  <input type="checkbox" name="botcheck" style="display:none">
-  <label for="email" style="position:absolute;left:-9999px">Email</label>
-  <input id="email" type="email" name="email" required placeholder="you@company.com" autocomplete="email">
-  <button type="submit">Join the waitlist</button>
-</form>
-<p class="wlNote">One email when it opens. No newsletter, no sequence.</p>
+<div class="wlWrap" id="waitlistBlock" hidden>
+  <h3>Prefer it by email?</h3>
+  <p>Leave your email and you'll get the link the day it opens, at the founding price, ahead of anywhere else.</p>
+  <form class="wlForm" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="26c8992d-3a5e-4c52-ad73-20f25e4dac70">
+    <input type="hidden" name="subject" value="Waitlist: Autonomous Kindle Publishing Pipeline (a01, 69 USD)">
+    <input type="hidden" name="from_name" value="kit waitlist">
+    <input type="checkbox" name="botcheck" style="display:none">
+    <label for="email" style="position:absolute;left:-9999px">Email</label>
+    <input id="email" type="email" name="email" required placeholder="you@company.com" autocomplete="email">
+    <button type="submit">Send me the link</button>
+  </form>
+</div>
 
     <div class="related">
       <span class="lab">Related reading</span>
       <ul>
         <li><a href="/blog/posts/2026-08-04-kindle-70-percent-royalty-ceiling-12-99.html">Amazon raised the Kindle 70% royalty ceiling to $12.99, and almost nobody noticed</a></li>
         <li><a href="/kits/a09-mcp-audit/">MCP Reliability Audit Kit</a></li>
+        <li><a href="/kits/">All kits</a></li>
       </ul>
     </div>
-
   </article>
   </main>
 
@@ -313,5 +330,64 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
   </footer>
 
 </div>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+(function(){
+  var PRICE_ID = "pri_01kz6nt1efwtv8a8w1j62s8ke2";
+  var TOKEN = "live_45d22d92977b9c151c92705683a";
+  var btn = document.getElementById("buyBtn");
+  var alt = document.getElementById("showWaitlist");
+  var note = document.getElementById("buyNote");
+  var block = document.getElementById("waitlistBlock");
+
+  function showWaitlist(){ if(block) block.hidden = false; }
+  if (alt) alt.addEventListener("click", showWaitlist);
+
+  // If checkout cannot open for any reason, fall back to email capture rather
+  // than leaving someone on a dead button. This also means the page needs no
+  // change when the account becomes able to take payments.
+  function degrade(msg){
+    if (btn) { btn.disabled = true; btn.textContent = "Checkout unavailable"; btn.style.display = "none"; }
+    if (alt) alt.style.display = "none";
+    if (note) note.textContent = msg;
+    showWaitlist();
+  }
+
+  if (!window.Paddle) {
+    degrade("Checkout could not load. Leave your email below and I'll send the download link directly.");
+    return;
+  }
+
+  try {
+    Paddle.Environment.set("production");
+    Paddle.Initialize({
+      token: TOKEN,
+      eventCallback: function(ev){
+        if (ev && ev.name === "checkout.error") {
+          degrade("Checkout is not open just yet. Leave your email and you'll get the link the day it is.");
+        }
+      }
+    });
+    btn.disabled = false;
+    btn.textContent = "Buy for 69 USD";
+    btn.addEventListener("click", function(){
+      try {
+        Paddle.Checkout.open({
+          items: [{ priceId: PRICE_ID, quantity: 1 }],
+          settings: {
+            variant: "one-page",
+            theme: "dark",
+            successUrl: "https://m-ashrey.github.io/kits/thanks/"
+          }
+        });
+      } catch (e) {
+        degrade("Checkout could not open. Leave your email and I'll send the download link directly.");
+      }
+    });
+  } catch (e) {
+    degrade("Checkout could not start. Leave your email and I'll send the download link directly.");
+  }
+})();
+</script>
 </body>
 </html>

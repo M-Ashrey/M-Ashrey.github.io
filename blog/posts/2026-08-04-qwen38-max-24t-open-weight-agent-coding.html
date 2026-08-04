@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Qwen3.8-Max Is a 2.4T-Parameter Open-Weight Agent. This Changes the Game for Builders.</title>
+<meta name="description" content="Alibaba's Qwen3.8-Max brings 2.4T parameters, 1M-token context, and 16-day autonomous coding runs — and it goes open-weight next week. Here's why this matters for anyone building on Claude, MCP, or anywhere else.">
+<meta name="author" content="Mohamed Ashrey">
+<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-08-04-qwen38-max-24t-open-weight-agent.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qwen3.8-Max Is a 2.4T-Parameter Open-Weight Agent. This Changes the Game for Builders.">
+<meta property="og:description" content="Alibaba's Qwen3.8-Max brings 2.4T parameters, 1M-token context, and 16-day autonomous coding runs — and goes open-weight next week. Here's why this matters for anyone building with Claude, MCP, or anywhere else.">
+<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-08-04-qwen3.8-max-24t-open-weight-agent.html">
+<meta property="og:site_name" content="M-Ashrey">
+<meta property="og:image" content="https://m-ashrey.github.io/assets/og/2026-08-04-qwen38-max.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Qwen3.8-Max: 2.4T open-weight agent model from Alibaba">
+<meta property="article:published_time" content="2026-08-04">
+<meta property="article:author" content="Mohamed Ashrey">
+<meta name="theme-color" content="#0c0d10">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Qwen3.8-Max Is a 2.4T-Parameter Open-Weight Agent. This Changes Everything.">
+<meta name="twitter:description" content="Alibaba's Qwen3.8-Max brings 2.4T parameters, 1M-token context, and 16-day autonomous coding runs — and goes open-weight next week.">
+<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-08-04-qwen38-max.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Qwen3.8-Max Is a 2.4T-Parameter Open-Weight Agent. This Changes the Game for Builders.",
+  "description": "Alibaba's Qwen3.8-Max brings 2.4T parameters, 1M-token context, and 16-day autonomous coding runs — and goes open-weight next week. What this means for developers building with Claude, MCP, and anywhere else.",
+  "datePublished": "2026-08-04",
+  "dateModified": "2026-08-04",
+  "author": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey",
+    "url": "https://m-ashrey.github.io/",
+    "sameAs": ["https://github.com/M-Ashrey"]
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Mohamed Ashrey"
+  },
+  "image": "https://m-ashrey.github.io/assets/og/2026-08-04-qwen38-max.png"
+}
+</script>
+<style>
+:root{
+  --bg:#0c0d10; --bg2:#101216; --panel:#15181e; --panel2:#191d24; --line:#242a33; --line2:#2f3742;
+  --ink:#f4f6f9; --muted:#aab4c1; --faint:#828e9c;
+  --accent:#f3b64c; --accent-ink:#1c1305; --cool:#7ea6ff; --pos:#57c98a;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+main{display:block}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(1200px 680px at 88% -12%, rgba(243,182,76,.10), transparent 58%),
+    radial-gradient(1000px 560px at -8% 2%, rgba(126,166,255,.08), transparent 55%),
+    var(--bg);
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 28px}
+a{color:var(--ink);text-decoration:none}
+::selection{background:rgba(243,182,76,.28)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.bar .mark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.bar .mark i{font-style:normal;color:var(--accent)}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{color:var(--muted);font-size:13.5px;transition:color .15s ease}
+.bar nav a:hover{color:var(--accent)}
+.bar nav a.current{color:var(--ink)}
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lab{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);text-transform:uppercase}
+.artHead{padding:48px 0 8px}
+.artHead .eyebrow{margin-bottom:16px;display:block}
+.artHead h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:22ch}
+.byline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;color:var(--faint);font-size:13.5px;font-family:var(--mono)}
+.byline .dot{width:3px;height:3px;border-radius:50%;background:var(--faint);display:inline-block}
+.dek{margin-top:22px;color:var(--muted);font-size:clamp(16px,2vw,19px);max-width:var(--measure);line-height:1.6}
+article.prose{padding:36px 0 8px;max-width:var(--measure)}
+article.prose h2{font-family:var(--serif);font-weight:500;font-size:clamp(21px,2.8vw,28px);letter-spacing:-.015em;margin:44px 0 16px;line-height:1.25}
+article.prose p{margin:0 0 20px;font-size:16.5px;color:#dde2e9;line-height:1.75}
+article.prose p.lede{font-size:18px;color:var(--ink)}
+article.prose strong{color:var(--ink);font-weight:600}
+article.prose a{color:var(--accent);border-bottom:1px solid rgba(243,182,76,.35)}
+article.prose a:hover{border-color:var(--accent)}
+article.prose ul, article.prose ol{margin:0 0 20px;padding-left:22px;color:#dde2e9;font-size:16.5px;line-height:1.75}
+article.prose li{margin-bottom:10px}
+article.prose li strong{color:var(--accent)}
+.sources{margin-top:40px;padding:22px 24px;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+.sources .lab{margin-bottom:12px;display:block}
+.sources ol{padding-left:20px;margin:0;font-size:13.5px;color:var(--muted);line-height:1.9}
+.sources a{color:var(--muted);border-bottom:1px solid var(--line2)}
+.sources a:hover{color:var(--accent);border-color:var(--accent)}
+footer.site{border-top:1px solid var(--line);padding:34px 0 80px;color:var(--faint);font-size:12.5px;line-height:1.8}
+footer.site a{color:var(--faint);text-decoration:underline;text-underline-offset:2px}
+footer.site a:hover{color:var(--accent)}
+.backBottom{margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.backBottom a{color:var(--muted);font-size:14px}
+.backBottom a:hover{color:var(--accent)}
+@media(max-width:640px){.wrap{padding:0 20px}.bar nav{gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <nav>
+      <a href="https://m-ashrey.github.io/">Home</a>
+      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+      <a href="/services/">Services</a>
+    </nav>
+  </div>
+
+  <main>
+    <header class="artHead">
+      <span class="eyebrow">August 4, 2026 &middot; AI Agents</span>
+      <h1>Qwen3.8-Max Is a 2.4T-Parameter Open-Weight Agent. This Changes the Game for Builders.</h1>
+      <div class="byline">
+        <span>Mohamed Ashrey</span>
+        <span class="dot"></span>
+        <span>4 minute read</span>
+      </div>
+      <p class="dek">Alibaba launched Qwen3.8-Max yesterday: a 2.4-trillion-parameter MoE model with million-token context that ran a coding agent autonomously for 16 days. It goes open-weight next week. If you build agents — with Claude, with MCP, with anything — this is the moment the ground shifts.</p>
+    </header>
+
+    <article class="prose">
+      <p class="lede">Yesterday, Alibaba dropped something that changes the landscape for every developer building AI agents. Qwen3.8-Max landed with 2.4 trillion total parameters — a sparse mixture-of-experts architecture activating ~95B at inference — and it ships with a million-token context window, native multimodal vision, and a stated ability to run autonomous coding agents across 500+ turns without stalling. And it will be fully open-weight within a week.</p>
+
+      <h2>The numbers that matter</h2>
+
+      <p>Let's cut through the spec sheet. The three numbers that actually change the equation for builders:</p>
+
+      <p><strong>2.4 trillion parameters, 95B active.</strong> This is MoE done right — enormous capacity with manageable inference cost. You get the depth of a giant model without the per-token price tag of a dense one. For reference, Llama 4's largest model is in this tier but remains closed; Qwen3.8-Max matches the scale and ships the weights.</p>
+
+      <p><strong>1 million tokens of context.</strong> Claude, Gemini, and OpenAI are not competing on 1M+ context alone anymore. A million tokens means you can feed an entire codebase, an entire conversation history, or everything from a multi-day agent session into a single prompt. This is table stakes for long-horizon agents.</p>
+
+      <p><strong>$2/M input, $6/M output, $0.25/M cached.</strong> At these prices, Qwen3.8-Max undercuts Claude Opus 5 ($15/M input, $75/M output) by an order of magnitude. If you're building agents that burn millions of tokens — and real agent workflows do — the economics here are radically different.</p>
+
+      <h2>The agent claim that raises the bar</h2>
+
+      <p>Alibaba didn't just announce numbers. They published a <strong>GitHub repo showing a 16-day autonomous coding run</strong>: Qwen3.8-Max starting from an empty folder and evolving a project through self-directed planning, coding, testing, and bug-fixing — without human hand-holding. The repo (<a href="https://github.com/qwen-code-dev-bot/oh-my-cli" rel="noopener">github.com/qwen-code-dev-bot/oh-my-cli</a>) shows the full commit trail.</p>
+
+      <p>This is a clear shot across the bow of every proprietary agent platform. Claude Code is impressive. Codex runs well. But both are tied to proprietary backends and per-seat pricing that makes it impossible to run true long-horizon autonomous agents without the meter running. Qwen3.8-Max argues: what if you could do the same, with open weights, at a fraction of the cost?</p>
+
+      <p>The announcement also highlighted a chip design optimization cycle spanning <strong>500+ turns</strong> and a <strong>year-long e-commerce strategy simulation</strong>. These are not demos — they're existence proofs that a single model can plan, act, observe, and replan over days or weeks without collapsing.</p>
+
+      <h2>Open-weight next week — and what that unlocks</h2>
+
+      <p>The Qwen team said explicitly: <strong>open weights arrive next week</strong>, alongside Qwen3.8-27B — a 27-billion-parameter dense model that will run on consumer hardware. Unsloth has <a href="https://x.com/UnslothAI/status/2084109040578437307" rel="noopener">already confirmed</a> they're making quants so everyone can run it locally. The r/LocalLLaMA thread hit 2,674 upvotes and 635 comments within 24 hours — the hunger for this is palpable.</p>
+
+      <p>This matters for three reasons you can act on:</p>
+
+      <ol>
+        <li><strong>Host your own agent runtime.</strong> With open-weight Qwen3.8-Max running on your own infrastructure (vLLM support is already being <a href="https://github.com/vllm-project/vllm/issues?q=qwen3.8" rel="noopener">worked on</a>), you can build agents with zero API rate limits, no per-token bills, and complete data sovereignty. MCP tools, Claude Code workflows — all of it — can point to your self-hosted model. This is the first 2T+ model where that's actually possible.</li>
+        <li><strong>Fine-tune for your domain.</strong> Open weights mean you can specialize Qwen3.8-Max for your specific agent tasks — coding style, internal APIs, company knowledge. No RLHF committee deciding what your agent is allowed to know.</li>
+        <li><strong>Multimodal agents that see.</strong> Qwen3.8-Max handles text, images, and video natively. Not as input reading — as a continuous feedback loop. An agent that watches a UI, spots a bug in a video of the app running, and corrects itself. That's what the "16-day run" was doing.</li>
+      </ol>
+
+      <h2>Where Claude and MCP builders should pay attention</h2>
+
+      <p>The reason you keep an eye on this if you build on Claude and MCP is simple: <strong>it disrupts the cost equation</strong>. Right now, a complex MCP agent using Claude Opus 5 can easily burn $5-10 per multi-turn session. At Qwen3.8-Max pricing — and especially when running self-hosted with open weights — that number collapses.</p>
+
+      <p>Qwen3.8-Max won't replace Claude for every use case. Anthropic's safety stance, the Claude brand, and the tight integration with the Claude Code ecosystem are genuine. But for anyone building production agents, the ability to use an open-weight model for 90% of the grunt work and reserve the expensive frontier model for final quality control is now on the table.</p>
+
+      <p>The model is available now on <a href="https://chat.qwen.ai/?models=qwen3.8-max" rel="noopener">Qwen Chat</a> and via <a href="https://www.qwencloud.com/models/qwen3.8-max" rel="noopener">QwenCloud API</a>, with the official blog at <a href="https://qwen.ai/blog?id=qwen3.8" rel="noopener">qwen.ai/blog</a>.</p>
+
+      <p>Open-weight next week. 2.4T parameters. Million-token context. Multimodal. A two-dollar-per-million-token input price. If you are building AI agents in the second half of 2026, these numbers matter. And they're not from San Francisco.</p>
+
+      <p>August 4, 2026.</p>
+
+      <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+      <p style="font-size:0.95rem;color:#888">If this helped you think about where agent tooling is going, consider <a href="https://ko-fi.com/ashrey122">supporting my open-source MCP work on Ko-fi</a> or <a href="https://m-ashrey.github.io/services/">checking out what I build</a>.</p>
+
+      <div class="sources">
+        <span class="lab">Sources</span>
+        <ol>
+          <li><a href="https://x.com/Alibaba_Qwen/status/2084100707423289643" rel="noopener noreferrer">Alibaba Qwen — Official Qwen3.8-Max Launch Thread</a> (August 3, 2026)</li>
+          <li><a href="https://github.com/qwen-code-dev-bot/oh-my-cli" rel="noopener noreferrer">Qwen Code Dev Bot — Oh My CLI (16-day autonomous coding trace)</a></li>
+          <li><a href="https://qwen.ai/blog?id=qwen3.8" rel="noopener noreferrer">Qwen Blog — Qwen3.8 Technical Announcement</a></li>
+          <li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1ve0psn/qwen3827b_announced_alongside_qwen38max/" rel="noopener noreferrer">r/LocalLLaMA — Qwen3.8-27B and Qwen3. 8-Max discussion</a> (2,674 upvotes, 635 comments)</li>
+        </ol>
+      </div>
+    </article>
+
+    <div class="backBottom">
+      <a href="/blog/">← Back to the blog index</a>
+    </div>
+  </main>
+
+  <footer class="site">
+    <p>&copy; 2026 Mohamed Ashrey. Built with bare HTML and the tools I write about.<br>
+    <a href="https://github.com/M-Ashrey">GitHub</a> · <a href="https://ko-fi.com/ashrey122">Ko-fi</a> · <a href="/services/">Services</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

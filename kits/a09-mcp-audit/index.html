@@ -1057,6 +1057,119 @@ code, .mono {
   color: var(--accent-bronze-dim);
 }
 
+.prose blockquote {
+  margin: 36px 0;
+  padding: 28px 32px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--accent-bronze);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow: var(--shadow-lg);
+  font-style: italic;
+}
+
+.prose blockquote p {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.75;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+.prose pre {
+  margin: 32px 0;
+  padding: 20px 22px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow-x: auto;
+}
+
+.prose pre code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  background: none;
+}
+
+.prose hr { border: none; border-top: 1px solid var(--border-subtle); margin: 40px 0; }
+
+/* Article back-of-post furniture: sources, CTA block, related, back link.
+   Reuses the callout / closing visual language on tokens instead of the
+   ad-hoc literals the pre-rebrand post template hardcoded. */
+.prose .sources {
+  margin-top: 40px;
+  padding: 28px 30px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.prose .sources .lab,
+.prose .ctaBlock .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 14px;
+}
+.prose .sources ol, .prose .sources ul { padding-left: 20px; margin: 0; }
+.prose .sources li { font-size: 13.5px; color: var(--text-secondary); line-height: 1.9; margin-bottom: 0; }
+.prose .sources a { color: var(--text-secondary); border-bottom: 1px solid var(--border-default); }
+.prose .sources a:hover { color: var(--accent-bronze); border-bottom-color: var(--accent-bronze); }
+
+.prose .ctaBlock {
+  margin-top: 48px;
+  padding: 36px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.prose .ctaBlock h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+}
+.prose .ctaRow { display: flex; flex-direction: column; gap: 16px; }
+.prose .ctaItem { padding: 18px 0; border-top: 1px solid var(--border-subtle); }
+.prose .ctaItem:first-child { border-top: 0; padding-top: 0; }
+.prose .ctaItem .k { font-weight: 550; font-size: 15px; color: var(--text-primary); }
+.prose .ctaItem p { color: var(--text-secondary); font-size: 14.5px; margin-top: 6px; line-height: 1.6; }
+.prose .ctaItem a.go {
+  color: var(--accent-bronze);
+  font-weight: 550;
+  font-size: 14.5px;
+  display: inline-block;
+  margin-top: 8px;
+  border-bottom: 1px solid var(--border-accent);
+}
+.prose .ctaItem a.go:hover { border-bottom-color: var(--accent-bronze); }
+
+.prose .highlight-box {
+  margin: 32px 0;
+  padding: 28px 30px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--accent-bronze);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow: var(--shadow-lg);
+}
+.prose .highlight-box p { color: var(--text-primary); font-size: 16px; line-height: 1.75; margin-bottom: 0; }
+
+.prose .backBottom { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border-subtle); }
+.prose .backBottom a { color: var(--text-secondary); font-size: 14px; }
+.prose .backBottom a:hover { color: var(--accent-bronze); }
+
 /* ===================================================================
    SPEC ROW (instrument markings)
    =================================================================== */

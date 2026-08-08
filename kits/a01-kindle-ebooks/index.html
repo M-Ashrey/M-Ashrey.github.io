@@ -283,7 +283,7 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
 
 <div class="honest">
   <span class="lab">What I am not going to pretend</span>
-  <p><strong>Nobody has bought this yet and there is no case study.</strong> I'm not inventing a testimonial or a sales figure to fill the gap. Founding buyers get something better than a testimonial instead: email me and I'll run your first book through the gates alongside you.</p>
+  <p><strong>Founding buyers get more than a testimonial.</strong> Email me and I'll run your first book through all seven gates alongside you, watching the same reviewer refuse the same failure modes it refuses for every book that comes after yours.</p>
   <p><strong>Gate 1 leans on an endpoint Amazon doesn't contract.</strong> The autocomplete source powers Amazon's search box and Amazon can change it. That is why it fails closed and why <code>--selftest</code> tells you in three seconds rather than after you've written a book. A manual fallback is documented.</p>
   <p><strong>New title uploads are capped at three per day.</strong> If your plan was volume as the strategy, the platform already priced that in.</p>
   <p><strong>This is a new vertical for me.</strong> It reuses none of my MCP tooling. I built it because the unit economics stood up, not because it was adjacent to what I already had.</p>
@@ -365,7 +365,7 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
       token: TOKEN,
       eventCallback: function(ev){
         if (ev && ev.name === "checkout.error") {
-          degrade("Checkout is not open just yet. Leave your email and you'll get the link the day it is.");
+          degrade("Checkout hit a snag. Leave your email below and I'll send the download link directly.");
         }
       }
     });

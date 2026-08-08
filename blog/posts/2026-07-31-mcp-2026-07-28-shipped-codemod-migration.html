@@ -7,7 +7,7 @@
 <title>MCP 2026-07-28 Has Shipped — The Stateless Core, SDK Betas, and What Your Migration Actually Looks Like</title>
 <meta name="description" content="The biggest MCP revision in 20 months shipped July 28. The SDK betas, codemod, and migration guide are real now — here's what's different from the RC, what the tooling actually does, and the path for server maintainers.">
 <meta name="author" content="Mohamed Ashrey">
-<link rel="canonical" href="https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html">
+<link rel="canonical" href="https://theagentlab.site/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +17,9 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="MCP 2026-07-28 Has Shipped — The SDK Betas, Codemod, and Migration Path">
 <meta property="og:description" content="The biggest MCP spec revision in 20 months shipped July 28. SDK betas for Python, TypeScript, Go, and C# are live with a codemod. Here's the real migration picture.">
-<meta property="og:url" content="https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html">
+<meta property="og:url" content="https://theagentlab.site/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html">
 <meta property="og:site_name" content="M-Ashrey">
-<meta property="og:image" content="https://m-ashrey.github.io/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png">
+<meta property="og:image" content="https://theagentlab.site/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="MCP 2026-07-28 Has Shipped — the stateless core, SDK betas, and codemod">
@@ -29,7 +29,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MCP 2026-07-28 Has Shipped — The SDK Betas, Codemod, and Migration Path">
 <meta name="twitter:description" content="The biggest MCP spec revision in 20 months shipped July 28. SDK betas for Python, TypeScript, Go, and C# are live with a codemod. Here's the real migration picture.">
-<meta name="twitter:image" content="https://m-ashrey.github.io/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png">
+<meta name="twitter:image" content="https://theagentlab.site/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -41,17 +41,17 @@
   "author": {
     "@type": "Person",
     "name": "Mohamed Ashrey",
-    "url": "https://m-ashrey.github.io/",
+    "url": "https://theagentlab.site/",
     "sameAs": ["https://github.com/M-Ashrey"]
   },
   "publisher": {
     "@type": "Person",
     "name": "Mohamed Ashrey"
   },
-  "image": "https://m-ashrey.github.io/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png",
+  "image": "https://theagentlab.site/assets/og/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"
+    "@id": "https://theagentlab.site/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"
   }
 }
 </script>
@@ -60,9 +60,9 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://m-ashrey.github.io/"},
-    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://m-ashrey.github.io/blog/"},
-    {"@type": "ListItem", "position": 3, "name": "MCP 2026-07-28 Has Shipped", "item": "https://m-ashrey.github.io/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"}
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://theagentlab.site/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://theagentlab.site/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "MCP 2026-07-28 Has Shipped", "item": "https://theagentlab.site/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"}
   ]
 }
 </script>
@@ -183,10 +183,10 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
 <div class="wrap">
 
   <div class="bar">
-    <a class="mark" href="https://m-ashrey.github.io/">M<i>·</i>Ashrey</a>
+    <a class="mark" href="https://theagentlab.site/">M<i>·</i>Ashrey</a>
     <nav>
-      <a href="https://m-ashrey.github.io/">Home</a>
-      <a href="https://m-ashrey.github.io/ai/">AI practice</a>
+      <a href="https://theagentlab.site/">Home</a>
+      <a href="https://theagentlab.site/ai/">AI practice</a>
       <a class="current" href="/blog/">Blog</a>
     <a href="/kits/">Kits</a>
     </nav>
@@ -264,7 +264,7 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
 <p>The migration is not trivial. But it's also not the breaking-change fire the preview coverage sometimes made it sound like. The codemod plus the 12-month removal window means you have time. The right move now is to upgrade in a branch, run the codemod, and avoid new dependencies on anything deprecated. The window is wide enough that no server needs to go down for this — but the servers that wait until month eleven will have the same amount of work without the same amount of time.</p>
 
 <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
-<p style="font-size:0.95rem;color:#888">If you're maintaining an MCP server, <a href="https://mcp-doctor-cloud.onrender.com">mcp-doctor</a> can audit your spec compliance. If this write-up saved you a morning of reading changelogs, <a href="https://ko-fi.com/ashrey122">consider buying me coffee</a> — or check out <a href="https://m-ashrey.github.io/services/">my services</a> if you need help with the migration directly.</p>
+<p style="font-size:0.95rem;color:#888">If you're maintaining an MCP server, <a href="https://mcp-doctor-cloud.onrender.com">mcp-doctor</a> can audit your spec compliance. If this write-up saved you a morning of reading changelogs, <a href="https://ko-fi.com/ashrey122">consider buying me coffee</a> — or check out <a href="https://theagentlab.site/services/">my services</a> if you need help with the migration directly.</p>
 
     <div class="sources">
       <span class="lab">Sources</span>
@@ -293,7 +293,7 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
   </main>
 
   <footer class="site">
-    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://m-ashrey.github.io/ai/">AI practice</a></div>
+    <div>M-Ashrey · AI-agent automations &amp; MCP integrations · <a href="https://github.com/M-Ashrey">github.com/M-Ashrey</a> · <a href="https://theagentlab.site/ai/">AI practice</a></div>
   <div style="margin-top:8px"><a href="/terms/">Terms</a> &middot; <a href="/refunds/">Refunds</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="mailto:m.ashrey122@gmail.com">Contact</a></div>
   </footer>
 

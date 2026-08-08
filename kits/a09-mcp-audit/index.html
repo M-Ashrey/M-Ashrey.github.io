@@ -248,7 +248,7 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
 <div class="honest">
   <span class="lab">What I am not going to pretend</span>
   <p><strong>There is a real caveat you should read before buying, not after.</strong> MCP spec revision 2026-07-28 removed the initialize handshake and the session id header. mcp-doctor 0.1.0 still sends the older protocol version, so a server that has fully migrated will fail its health check for protocol reasons rather than because anything is wrong with it. That is gated in the run skill, required as a limitations line in every report the kit produces, and it is kill criterion seven in ECONOMICS.md. I would rather you learn it here than in front of a client.</p>
-  <p><strong>Nobody has bought this kit and there is no case study.</strong> I am not inventing a testimonial. Founding buyers get the better version of one: email me and I will do your first audit alongside you.</p>
+  <p><strong>Founding buyers get more than a testimonial.</strong> Email me and I will run your first audit alongside you: same fixed order, same severity calls, same report template every client gets, with my eyes on your target server in real time.</p>
   <p><strong>The CLI is free and open source.</strong> <a href="https://github.com/M-Ashrey/mcp-doctor">mcp-doctor</a> costs nothing and you can read every line of it. What you are paying for is the layer that turns running it into a service you can sell: the fixed order, the report template, the severity calls, the cadence. If you would rather build that layer yourself, the CLI is right there and I mean that.</p>
 </div>
 
@@ -333,7 +333,7 @@ article.prose code{font-family:var(--mono);font-size:0.88em;background:var(--bg2
       token: TOKEN,
       eventCallback: function(ev){
         if (ev && ev.name === "checkout.error") {
-          degrade("Checkout is not open just yet. Leave your email and you'll get the link the day it is.");
+          degrade("Checkout hit a snag. Leave your email below and I'll send the download link directly.");
         }
       }
     });

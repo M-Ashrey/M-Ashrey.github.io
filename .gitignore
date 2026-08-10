@@ -1,0 +1,53 @@
+# This repository is published to GitHub Pages, so its working directory is a
+# public directory with a delay. Anything listed here is something that must
+# never survive a careless `git add -A`.
+
+# --- credentials -------------------------------------------------------------
+# A helper-store file sits in this working directory. It has never been pushed
+# and it must never be. It is listed first because it is the only entry here
+# whose absence would be a security incident rather than noise.
+.git-credentials
+.git-credentials.*
+.netrc
+.env
+.env.*
+
+# --- mount artifacts ---------------------------------------------------------
+# The repo is edited over a FUSE mount, which leaves a .fuse_hidden* stub
+# beside every file that is rewritten while something still holds it open.
+# They are byte copies of real pages, so committing one publishes a stale
+# duplicate of a live page under a garbage name.
+.fuse_hidden*
+
+# --- local tool output -------------------------------------------------------
+# Browser evidence for UI work. Screenshots are large, regenerated on demand
+# and meaningless to a visitor.
+.playwright-mcp/
+# Design-tooling hook cache, per checkout.
+.impeccable/
+
+# --- scratch copies of the single sources of truth ----------------------------
+# assets/brand.css and index.html are the only places the ecosystem styles and
+# script are allowed to live; see the build rule in assets/brand_inline.py and
+# assets/eco_build.py. These two files are unreferenced extracts of those
+# blocks, kept by hand while working and stale the moment either source moves.
+# Ignoring them keeps a second, silently divergent copy out of the repository.
+assets/_eco_css.txt
+assets/_eco_script.js
+
+# --- editor and OS noise -----------------------------------------------------
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# --- python bytecode ---------------------------------------------------------
+# The build scripts under assets/ are stdlib Python and are meant to be read.
+# Their bytecode is not.
+__pycache__/
+*.py[cod]

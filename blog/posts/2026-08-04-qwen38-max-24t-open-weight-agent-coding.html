@@ -1901,7 +1901,12 @@ code, .mono {
    The hero core is a control, not an ornament. #ecosystem-toggle sits
    over it; activating it animates the standard page content away and
    hands the viewport to #ecosystem-panel, which draws the real system
-   topology. Collapsed, nothing here renders and the page is unchanged.
+   topology around the very same core.
+
+   Nothing here is a new object. The hero canvas is promoted to a fixed
+   flight layer and transformed into the centre of the diagram, so the
+   expansion reads as one object opening rather than a page change.
+   Every other agent is the same geodesic glyph at a smaller rank.
 
    Colour is load-bearing and semantic, so direction of trust reads
    without the legend:
@@ -1912,10 +1917,33 @@ code, .mono {
    only. A counter here would be a fabricated number on a brand asset.
 
    Under prefers-reduced-motion the WebGL stage is swapped for
-   .ecosystem-static, a zero-JS SVG of the identical topology, and the
-   global reduced-motion rule at the foot of this file collapses every
-   transition, so the state change is instant rather than animated.
+   .ecosystem-static, a zero-JS SVG of the identical topology drawn with
+   the identical glyph, and the global reduced-motion rule at the foot
+   of this file collapses every transition, so the state change is an
+   instant swap with no travel at all.
    =================================================================== */
+
+/* --- the shared geodesic glyph -------------------------------------- */
+/* One <symbol>, referenced by <use> from the live chips and from both
+   static twins. Strokes are non-scaling, so a 16px operator and a 104px
+   core are both drawn with a true hairline. */
+.eco-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.eco-glyph {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--accent-bronze);
+  stroke-width: 1;
+}
 
 /* --- the control over the hero core --------------------------------- */
 .ecosystem-toggle {
@@ -1969,22 +1997,23 @@ code, .mono {
 }
 
 /* --- the page stepping aside ---------------------------------------- */
+/* .hero-canvas is deliberately absent from this list. It does not fade,
+   it travels. */
 .nav-bar,
 .footer,
 .hero-content,
-.hero-canvas,
 .hero-static,
 main > .page-container > .section {
   transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-body.ecosystem-open { overflow: hidden; }
+body.ecosystem-open,
+body.eco-collapsing { overflow: hidden; }
 
 body.ecosystem-open .nav-bar,
 body.ecosystem-open .footer,
 body.ecosystem-open .hero-content,
-body.ecosystem-open .hero-canvas,
 body.ecosystem-open .hero-static,
 body.ecosystem-open main > .page-container > .section:not(.hero) {
   opacity: 0;
@@ -1992,11 +2021,37 @@ body.ecosystem-open main > .page-container > .section:not(.hero) {
   pointer-events: none;
 }
 
-/* A perspective ancestor would capture position: fixed, so the toggle
-   could never leave the hero box. Drop it while the panel is open. */
-body.ecosystem-open .hero-graphic { perspective: none; }
+/* --- the reverse ------------------------------------------------------
+   Collapse is the expand played backwards, so every window that opens at
+   offset D into the expand has to close at ECO_EXPAND_MS - D - duration
+   into the collapse. body.eco-collapsing carries those mirrored delays for
+   exactly as long as the collapse runs. The page furniture is the last
+   thing to leave on the way out, so it is the last thing to return.
+   --eco-page-back-delay = 1720 - 0 - 500. */
+body.eco-collapsing {
+  --eco-page-back-delay: 1220ms;
+}
 
-body.ecosystem-open .ecosystem-toggle {
+body.eco-collapsing .nav-bar,
+body.eco-collapsing .footer,
+body.eco-collapsing .hero-content,
+body.eco-collapsing .hero-static,
+body.eco-collapsing main > .page-container > .section:not(.hero) {
+  transition-delay: var(--eco-page-back-delay);
+}
+
+/* A perspective ancestor would capture position: fixed, so neither the
+   toggle nor the core in flight could leave the hero box. The flight
+   class outlives ecosystem-open on purpose: on collapse the class comes
+   off the body while the core is still travelling home, and restoring
+   perspective mid flight reinterprets its viewport coordinates against
+   the hero box and throws it off screen. */
+body.ecosystem-open .hero-graphic,
+body.eco-collapsing .hero-graphic,
+body.eco-core-flying .hero-graphic { perspective: none; }
+
+body.ecosystem-open .ecosystem-toggle,
+body.eco-collapsing .ecosystem-toggle {
   position: fixed;
   top: 22px;
   right: 26px;
@@ -2005,8 +2060,23 @@ body.ecosystem-open .ecosystem-toggle {
   width: auto;
   height: auto;
   padding: 0;
-  z-index: calc(var(--z-nav) + 2);
+  z-index: calc(var(--z-nav) + 4);
 }
+
+/* --- the core in flight ---------------------------------------------
+   The same canvas, the same WebGL context, the same rAF loop. Only the
+   containing block and a transform change. */
+.hero-canvas.is-eco-flight {
+  position: fixed;
+  inset: auto;
+  z-index: calc(var(--z-nav) + 3);
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* When the live core has landed, the diagram must not also draw one. */
+.ecosystem-panel.eco-core-live .eco-node--core > .eco-glyph { visibility: hidden; }
 
 /* --- the expanded region -------------------------------------------- */
 .ecosystem-panel {
@@ -2018,14 +2088,54 @@ body.ecosystem-open .ecosystem-toggle {
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-monolith);
   opacity: 0;
-  transform: scale(0.985);
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Out is the reflection of in through (0.5, 0.5), not the same curve
+     played backwards: reusing cubic-bezier(0.22, 1, 0.36, 1) in reverse
+     would make the return front loaded where the outbound was back
+     loaded. Every easing on this page is mirrored the same way.
+     --eco-panel-out-delay = 1720 - 0 - 400. */
+  transition: opacity 0.4s cubic-bezier(0.64, 0, 0.78, 0)
+              var(--eco-panel-out-delay, 0ms);
 }
 
 .ecosystem-panel[hidden] { display: none; }
 .ecosystem-panel:focus { outline: none; }
-body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
+
+body.ecosystem-open .ecosystem-panel {
+  opacity: 1;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.eco-collapsing .ecosystem-panel { --eco-panel-out-delay: 1320ms; }
+
+/* --- the frame arrives after the object ------------------------------
+   Naming the view before the core has stopped moving is what made this
+   read as a navigation. The core travels first and alone, the structure
+   grows out of it, and only then does the page furniture catch up.
+   --eco-chrome-delay is CORE_FLIGHT_MS less the fade, so the title and
+   the legend finish landing just after the core does. On the way out the
+   window is mirrored: 1720 - 700 - 320 = 700ms, which lands the chrome
+   off screen before the core starts moving. */
+.ecosystem-panel {
+  --eco-chrome-fade: 320ms;
+  --eco-chrome-delay: 700ms;
+  --eco-chrome-out-delay: 0ms;
+}
+
+body.eco-collapsing .ecosystem-panel { --eco-chrome-out-delay: 700ms; }
+
+.eco-head,
+.eco-legend {
+  opacity: 0;
+  transition: opacity var(--eco-chrome-fade) cubic-bezier(0.64, 0, 0.78, 0)
+              var(--eco-chrome-out-delay);
+}
+
+body.ecosystem-open .eco-head,
+body.ecosystem-open .eco-legend {
+  opacity: 1;
+  transition: opacity var(--eco-chrome-fade) cubic-bezier(0.22, 1, 0.36, 1)
+              var(--eco-chrome-delay);
+}
 
 .eco-head {
   position: absolute;
@@ -2064,7 +2174,7 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
 /* --- WebGL stage and its DOM node chips ------------------------------ */
 .ecosystem-stage {
   position: absolute;
-  inset: 132px 30px 34px;
+  inset: 138px 34px 40px;
 }
 
 .eco-canvas {
@@ -2076,6 +2186,8 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
   pointer-events: none;
 }
 
+/* Labels sit above the edges, always. The canvas never draws over a
+   word, because the canvas is a layer below this one. */
 .eco-nodes {
   position: absolute;
   inset: 0;
@@ -2083,27 +2195,80 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
   pointer-events: none;
 }
 
-/* --eco-zoom keeps the chips scale-invariant against the fitted world,
-   so the lattice never collides with itself on a narrow viewport. It is
-   written by the layout pass; the fallback keeps the zero-JS case sane. */
+/* The chip box is the glyph and nothing else. Text hangs outside it, so
+   no label is ever drawn on top of the object it names. */
 .eco-node {
   position: absolute;
-  transform: translate(-50%, -50%) scale(var(--eco-zoom, 1));
+  width: var(--eco-glyph-size, 26px);
+  height: var(--eco-glyph-size, 26px);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  /* Two transitions, one per direction. A name steps in by its distance
+     from the core, so on the way out it leaves by that same distance
+     counted from the far end: --eco-out-delay is set per chip in the
+     script as ECO_EXPAND_MS - in-delay - 340ms. The outermost operator
+     goes first, the ORCHESTRATOR label last. */
+  transition: opacity 0.34s cubic-bezier(0.64, 0, 0.78, 0) var(--eco-out-delay, 0ms);
+}
+
+.eco-nodes.is-in .eco-node {
+  opacity: 1;
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1) var(--eco-in-delay, 0ms);
+}
+
+.eco-node-text {
+  position: absolute;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 7px 12px;
-  white-space: nowrap;
-  background: var(--bg-surface-1);
-  border: 1px solid var(--border-strong);
+  gap: 2px;
+  padding: 3px 7px;
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  /* A plate, not a box. It buys the text clearance from any edge that
+     would otherwise cross it, without drawing a frame. */
+  background: color-mix(in srgb, var(--bg-void) 88%, transparent);
+}
+
+.eco-node--at-below .eco-node-text {
+  top: calc(100% + var(--eco-label-gap, 10px));
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+}
+
+.eco-node--at-above .eco-node-text {
+  bottom: calc(100% + var(--eco-label-gap, 10px));
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+}
+
+.eco-node--at-right .eco-node-text {
+  left: calc(100% + var(--eco-label-gap, 10px));
+  top: 50%;
+  transform: translateY(-50%);
+  align-items: flex-start;
+}
+
+.eco-node--at-left .eco-node-text {
+  right: calc(100% + var(--eco-label-gap, 10px));
+  top: 50%;
+  transform: translateY(-50%);
+  align-items: flex-end;
+}
+
+.eco-node--at-center .eco-node-text {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
 }
 
 .eco-node-label {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: calc(10px * var(--eco-text-fit, 1));
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2112,52 +2277,51 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
 
 .eco-node-note {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: calc(9.5px * var(--eco-text-fit, 1));
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
 }
 
+/* --- rank ------------------------------------------------------------ */
+/* The core is the orchestrator, so it needs no box drawn over it. The
+   label sits clear of the sphere and a hairline leader carries the
+   association instead. */
 .eco-node--core {
-  padding: 13px 22px;
-  background: var(--bg-surface-2);
-  border-color: var(--accent-bronze);
-  box-shadow: var(--shadow-lg);
+  --eco-label-gap: 14px;
+  color: var(--accent-bronze);
 }
 
-.eco-node--core .eco-node-label { font-size: 13px; color: var(--accent-bronze); }
-
-.eco-node--hub {
-  padding: 10px 17px;
-  background: var(--bg-surface-2);
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-md);
+.eco-node--core .eco-node-label {
+  font-size: calc(12px * var(--eco-text-fit, 1));
+  letter-spacing: 0.14em;
+  color: var(--accent-bronze);
 }
 
-.eco-node--hub .eco-node-label { font-size: 11px; }
-.eco-node--leaf { background: var(--bg-inset); }
-.eco-node--poller { border-color: var(--accent-slate); }
+.eco-node--core::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 2px);
+  width: 1px;
+  height: calc(var(--eco-label-gap) - 2px);
+  background: var(--accent-bronze-dim);
+}
+
+.eco-node--hub .eco-node-label { font-size: calc(11px * var(--eco-text-fit, 1)); }
+.eco-node--hub .eco-glyph { stroke: var(--accent-bronze); }
+.eco-node--leaf .eco-glyph { stroke: var(--accent-bronze-dim); }
+.eco-node--poller .eco-glyph { stroke: var(--accent-slate); }
 .eco-node--poller .eco-node-label { color: var(--accent-slate); }
+.eco-node--operator .eco-glyph { stroke: var(--accent-bronze-dim); }
 
-.eco-node--operator {
-  width: 11px;
-  height: 11px;
-  padding: 0;
-  background: var(--bg-surface-3);
-  border-color: var(--accent-bronze-dim);
-  box-shadow: var(--shadow-xs);
-}
-
-.eco-node--group {
-  padding: 0;
+.eco-node--group .eco-node-text {
   background: none;
-  border: 0;
-  box-shadow: none;
+  padding: 0;
 }
 
 .eco-node--group .eco-node-label {
-  font-size: 9px;
   letter-spacing: 0.22em;
   color: var(--text-tertiary);
 }
@@ -2204,58 +2368,54 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
 /* --- zero-JS static topology (reduced motion, or no WebGL) ----------- */
 .ecosystem-static {
   position: absolute;
-  inset: 118px 26px 26px;
+  inset: 126px 30px 30px;
   display: none;
 }
 
 .eco-svg { display: block; width: 100%; height: 100%; }
+.eco-svg--tall { display: none; }
 
-.eco-svg-edge { fill: none; stroke-linecap: round; stroke-width: 1.4; }
-.eco-svg-edge--delegate { stroke: var(--accent-bronze); stroke-opacity: 0.6; }
-.eco-svg-edge--inbound  { stroke: var(--accent-slate); stroke-opacity: 0.85; stroke-width: 1.8; }
-.eco-svg-edge--return   { stroke: var(--accent-sage); stroke-opacity: 0.9; stroke-width: 2.2; }
-.eco-svg-edge--evidence { stroke: var(--accent-sage); stroke-opacity: 0.34; }
-.eco-svg-edge--lateral  { stroke: var(--accent-bronze-dim); stroke-opacity: 0.32; }
+.eco-svg-edge { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.1; }
+.eco-svg-edge--delegate { stroke: var(--accent-bronze); stroke-opacity: 0.26; }
+.eco-svg-edge--inbound  { stroke: var(--accent-slate); stroke-opacity: 0.34; }
+.eco-svg-edge--evidence { stroke: var(--accent-sage); stroke-opacity: 0.24; }
+.eco-svg-edge--qagate   { stroke: var(--accent-sage); stroke-opacity: 0.46; stroke-width: 1.4; }
+.eco-svg-edge--lateral  { stroke: var(--accent-bronze-dim); stroke-opacity: 0.18; }
 
-.eco-svg-marker--inbound { fill: var(--accent-slate); }
-.eco-svg-marker--return  { fill: var(--accent-sage); }
+.eco-svg-arrow { stroke: none; fill-opacity: 0.7; }
+.eco-svg-arrow--inbound { fill: var(--accent-slate); }
+.eco-svg-arrow--qagate  { fill: var(--accent-sage); }
+.eco-svg-arrow--delegate { fill: var(--accent-bronze); }
+.eco-svg-arrow--evidence { fill: var(--accent-sage); }
 
-.eco-svg-chip { fill: var(--bg-surface-1); stroke: var(--border-strong); stroke-width: 1; }
-.eco-svg-chip--core { fill: var(--bg-surface-2); stroke: var(--accent-bronze); stroke-width: 1.5; }
-.eco-svg-chip--hub { fill: var(--bg-surface-2); stroke: var(--border-accent); }
-.eco-svg-chip--leaf { fill: var(--bg-inset); }
-.eco-svg-chip--poller { stroke: var(--accent-slate); }
-.eco-svg-chip--operator { fill: var(--bg-surface-3); stroke: var(--accent-bronze-dim); }
+.eco-svg-leader { stroke: var(--accent-bronze-dim); stroke-width: 1; }
+
+.eco-svg-glyph { fill: none; stroke: var(--accent-bronze); stroke-width: 1; }
+.eco-svg-glyph--leaf { stroke: var(--accent-bronze-dim); }
+.eco-svg-glyph--poller { stroke: var(--accent-slate); }
+.eco-svg-glyph--operator { stroke: var(--accent-bronze-dim); }
+
+.eco-svg-plate { fill: var(--bg-void); fill-opacity: 0.88; stroke: none; }
 
 .eco-svg-label {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-anchor: middle;
+  letter-spacing: 0.12em;
   fill: var(--text-primary);
 }
 
-.eco-svg-label--core { font-size: 15px; fill: var(--accent-bronze); }
-.eco-svg-label--leaf { font-size: 11px; }
-.eco-svg-label--poller { font-size: 11px; fill: var(--accent-slate); }
+.eco-svg-label--core { font-size: 12px; letter-spacing: 0.14em; fill: var(--accent-bronze); }
+.eco-svg-label--hub { font-size: 11px; }
+.eco-svg-label--poller { fill: var(--accent-slate); }
+.eco-svg-label--group { letter-spacing: 0.22em; fill: var(--text-tertiary); }
 
 .eco-svg-note {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 9.5px;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-anchor: middle;
-  fill: var(--text-tertiary);
-}
-
-.eco-svg-group {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-anchor: middle;
-  fill: var(--text-tertiary);
+  letter-spacing: 0.12em;
+  fill: var(--text-secondary);
 }
 
 /* Three.js absent or blocked: fall back to the same static topology. */
@@ -2265,7 +2425,21 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .ecosystem-stage { display: none; }
   .ecosystem-static { display: block; }
-  .ecosystem-panel { opacity: 1; transform: none; }
+  .ecosystem-panel { opacity: 1; }
+  .eco-node { opacity: 1; }
+  /* No travel, so nothing waits for it. Instant swap to the static view,
+     in both directions: every mirrored delay is zeroed here as well as in
+     the global reset at the foot of this file. */
+  .eco-head, .eco-legend { opacity: 1; transition: none; }
+  body.ecosystem-open .eco-head,
+  body.ecosystem-open .eco-legend { transition-delay: 0s; }
+  body.eco-collapsing {
+    --eco-page-back-delay: 0s;
+  }
+  .ecosystem-panel {
+    --eco-chrome-out-delay: 0s;
+    --eco-panel-out-delay: 0s;
+  }
 }
 
 /* ===================================================================
@@ -2295,9 +2469,12 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
   .eco-head { top: 18px; left: 20px; }
   .eco-head-title { font-size: 20px; }
   .eco-head-sub { display: none; }
-  .eco-node-note { display: none; }
-  .ecosystem-stage { inset: 74px 34px 132px; }
-  .ecosystem-static { inset: 68px 26px 128px; }
+  .ecosystem-stage { inset: 78px 20px 122px; }
+  .ecosystem-static { inset: 74px 16px 118px; }
+  /* The portrait plan is a different composition, not a squashed one.
+     This breakpoint is mirrored by TALL_MAX_WIDTH_PX in the script. */
+  .eco-svg--wide { display: none; }
+  .eco-svg--tall { display: block; }
   .eco-legend {
     left: 16px;
     right: 16px;
@@ -2311,11 +2488,21 @@ body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
   .eco-legend-key { width: 14px; }
   /* Top right belongs to the heading on a narrow screen, so the control
      stacks above the legend instead. */
-  body.ecosystem-open .ecosystem-toggle { top: auto; bottom: 72px; right: 16px; }
+  body.ecosystem-open .ecosystem-toggle,
+  body.eco-collapsing .ecosystem-toggle { top: auto; bottom: 72px; right: 16px; }
 }
 
+/* A zeroed duration is not an instant swap if a delay survives it. The
+   collapse carries mirrored transition delays of up to 1320ms, so the
+   delays have to go too, or a reduced-motion user waits over a second for
+   a state change they asked to be immediate. */
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+  }
 }
 </style>
 </head>

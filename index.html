@@ -1898,6 +1898,378 @@ code, .mono {
 .footer-copy a:hover { color: var(--accent-bronze); }
 
 /* ===================================================================
+   AGENT ECOSYSTEM
+   The hero core is a control, not an ornament. #ecosystem-toggle sits
+   over it; activating it animates the standard page content away and
+   hands the viewport to #ecosystem-panel, which draws the real system
+   topology. Collapsed, nothing here renders and the page is unchanged.
+
+   Colour is load-bearing and semantic, so direction of trust reads
+   without the legend:
+     --accent-bronze  delegation travelling outward from a parent
+     --accent-slate   inbound poller traffic arriving at the core
+     --accent-sage    verified returns, QA pass, evidence
+   There are no quantities anywhere in this view. Structure and flow
+   only. A counter here would be a fabricated number on a brand asset.
+
+   Under prefers-reduced-motion the WebGL stage is swapped for
+   .ecosystem-static, a zero-JS SVG of the identical topology, and the
+   global reduced-motion rule at the foot of this file collapses every
+   transition, so the state change is instant rather than animated.
+   =================================================================== */
+
+/* --- the control over the hero core --------------------------------- */
+.ecosystem-toggle {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-surface);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 0 4%;
+  background: none;
+  border: 0;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.ecosystem-toggle-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: inherit;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.ecosystem-toggle:hover { color: var(--accent-bronze); }
+
+.ecosystem-toggle:hover .ecosystem-toggle-face {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.ecosystem-toggle-glyph {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border: 1px solid var(--accent-bronze);
+  border-radius: 50%;
+  box-shadow: var(--shadow-xs);
+}
+
+/* --- the page stepping aside ---------------------------------------- */
+.nav-bar,
+.footer,
+.hero-content,
+.hero-canvas,
+.hero-static,
+main > .page-container > .section {
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.ecosystem-open { overflow: hidden; }
+
+body.ecosystem-open .nav-bar,
+body.ecosystem-open .footer,
+body.ecosystem-open .hero-content,
+body.ecosystem-open .hero-canvas,
+body.ecosystem-open .hero-static,
+body.ecosystem-open main > .page-container > .section:not(.hero) {
+  opacity: 0;
+  transform: translateY(-18px) scale(0.985);
+  pointer-events: none;
+}
+
+/* A perspective ancestor would capture position: fixed, so the toggle
+   could never leave the hero box. Drop it while the panel is open. */
+body.ecosystem-open .hero-graphic { perspective: none; }
+
+body.ecosystem-open .ecosystem-toggle {
+  position: fixed;
+  top: 22px;
+  right: 26px;
+  bottom: auto;
+  left: auto;
+  width: auto;
+  height: auto;
+  padding: 0;
+  z-index: calc(var(--z-nav) + 2);
+}
+
+/* --- the expanded region -------------------------------------------- */
+.ecosystem-panel {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-nav) + 1);
+  overflow: hidden;
+  background: var(--bg-void);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-monolith);
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ecosystem-panel[hidden] { display: none; }
+.ecosystem-panel:focus { outline: none; }
+body.ecosystem-open .ecosystem-panel { opacity: 1; transform: none; }
+
+.eco-head {
+  position: absolute;
+  top: 26px;
+  left: 34px;
+  z-index: var(--z-surface);
+  pointer-events: none;
+}
+
+.eco-head-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 8px;
+}
+
+.eco-head-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.eco-head-sub {
+  margin-top: 6px;
+  max-width: 46ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-tertiary);
+}
+
+/* --- WebGL stage and its DOM node chips ------------------------------ */
+.ecosystem-stage {
+  position: absolute;
+  inset: 132px 30px 34px;
+}
+
+.eco-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+}
+
+.eco-nodes {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-surface);
+  pointer-events: none;
+}
+
+/* --eco-zoom keeps the chips scale-invariant against the fitted world,
+   so the lattice never collides with itself on a narrow viewport. It is
+   written by the layout pass; the fallback keeps the zero-JS case sane. */
+.eco-node {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(var(--eco-zoom, 1));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 12px;
+  white-space: nowrap;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.eco-node-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.eco-node-note {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.eco-node--core {
+  padding: 13px 22px;
+  background: var(--bg-surface-2);
+  border-color: var(--accent-bronze);
+  box-shadow: var(--shadow-lg);
+}
+
+.eco-node--core .eco-node-label { font-size: 13px; color: var(--accent-bronze); }
+
+.eco-node--hub {
+  padding: 10px 17px;
+  background: var(--bg-surface-2);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.eco-node--hub .eco-node-label { font-size: 11px; }
+.eco-node--leaf { background: var(--bg-inset); }
+.eco-node--poller { border-color: var(--accent-slate); }
+.eco-node--poller .eco-node-label { color: var(--accent-slate); }
+
+.eco-node--operator {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  background: var(--bg-surface-3);
+  border-color: var(--accent-bronze-dim);
+  box-shadow: var(--shadow-xs);
+}
+
+.eco-node--group {
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.eco-node--group .eco-node-label {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--text-tertiary);
+}
+
+/* --- legend ---------------------------------------------------------- */
+.eco-legend {
+  position: absolute;
+  left: 34px;
+  bottom: 30px;
+  z-index: var(--z-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 15px 18px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.eco-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.eco-legend-key {
+  width: 20px;
+  height: 2px;
+  flex: none;
+  border-radius: 1px;
+}
+
+.eco-legend-key--delegate { background: var(--accent-bronze); }
+.eco-legend-key--inbound  { background: var(--accent-slate); }
+.eco-legend-key--return   { background: var(--accent-sage); }
+
+/* --- zero-JS static topology (reduced motion, or no WebGL) ----------- */
+.ecosystem-static {
+  position: absolute;
+  inset: 118px 26px 26px;
+  display: none;
+}
+
+.eco-svg { display: block; width: 100%; height: 100%; }
+
+.eco-svg-edge { fill: none; stroke-linecap: round; stroke-width: 1.4; }
+.eco-svg-edge--delegate { stroke: var(--accent-bronze); stroke-opacity: 0.6; }
+.eco-svg-edge--inbound  { stroke: var(--accent-slate); stroke-opacity: 0.85; stroke-width: 1.8; }
+.eco-svg-edge--return   { stroke: var(--accent-sage); stroke-opacity: 0.9; stroke-width: 2.2; }
+.eco-svg-edge--evidence { stroke: var(--accent-sage); stroke-opacity: 0.34; }
+.eco-svg-edge--lateral  { stroke: var(--accent-bronze-dim); stroke-opacity: 0.32; }
+
+.eco-svg-marker--inbound { fill: var(--accent-slate); }
+.eco-svg-marker--return  { fill: var(--accent-sage); }
+
+.eco-svg-chip { fill: var(--bg-surface-1); stroke: var(--border-strong); stroke-width: 1; }
+.eco-svg-chip--core { fill: var(--bg-surface-2); stroke: var(--accent-bronze); stroke-width: 1.5; }
+.eco-svg-chip--hub { fill: var(--bg-surface-2); stroke: var(--border-accent); }
+.eco-svg-chip--leaf { fill: var(--bg-inset); }
+.eco-svg-chip--poller { stroke: var(--accent-slate); }
+.eco-svg-chip--operator { fill: var(--bg-surface-3); stroke: var(--accent-bronze-dim); }
+
+.eco-svg-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-anchor: middle;
+  fill: var(--text-primary);
+}
+
+.eco-svg-label--core { font-size: 15px; fill: var(--accent-bronze); }
+.eco-svg-label--leaf { font-size: 11px; }
+.eco-svg-label--poller { font-size: 11px; fill: var(--accent-slate); }
+
+.eco-svg-note {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-anchor: middle;
+  fill: var(--text-tertiary);
+}
+
+.eco-svg-group {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-anchor: middle;
+  fill: var(--text-tertiary);
+}
+
+/* Three.js absent or blocked: fall back to the same static topology. */
+.ecosystem-panel.eco-no-webgl .ecosystem-stage { display: none; }
+.ecosystem-panel.eco-no-webgl .ecosystem-static { display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ecosystem-stage { display: none; }
+  .ecosystem-static { display: block; }
+  .ecosystem-panel { opacity: 1; transform: none; }
+}
+
+/* ===================================================================
    RESPONSIVE
    =================================================================== */
 @media (max-width: 1080px) {
@@ -1921,6 +2293,26 @@ code, .mono {
   .closing { padding: 34px 28px; }
   .buy-slab { padding: 30px 26px; }
   .footer-nav { gap: 32px; }
+  .eco-head { top: 18px; left: 20px; }
+  .eco-head-title { font-size: 20px; }
+  .eco-head-sub { display: none; }
+  .eco-node-note { display: none; }
+  .ecosystem-stage { inset: 74px 34px 132px; }
+  .ecosystem-static { inset: 68px 26px 128px; }
+  .eco-legend {
+    left: 16px;
+    right: 16px;
+    bottom: 14px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    padding: 10px 12px;
+  }
+  .eco-legend-row { font-size: 9px; letter-spacing: 0.06em; gap: 8px; }
+  .eco-legend-key { width: 14px; }
+  /* Top right belongs to the heading on a narrow screen, so the control
+     stacks above the legend instead. */
+  body.ecosystem-open .ecosystem-toggle { top: auto; bottom: 72px; right: 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1964,6 +2356,12 @@ code, .mono {
       <div class="hero-graphic" id="hero-container">
         <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
         <div class="hero-static" aria-hidden="true"></div>
+        <button type="button" class="ecosystem-toggle" id="ecosystem-toggle" aria-expanded="false" aria-controls="ecosystem-panel">
+          <span class="ecosystem-toggle-face">
+            <span class="ecosystem-toggle-glyph" aria-hidden="true"></span>
+            <span class="ecosystem-toggle-name" id="ecosystem-toggle-name">Expand the agent ecosystem</span>
+          </span>
+        </button>
       </div>
     </div>
   </section>
@@ -2150,6 +2548,239 @@ code, .mono {
 </div>
 </main>
 
+<div class="ecosystem-panel" id="ecosystem-panel" role="region" aria-label="Agent ecosystem architecture" tabindex="-1" hidden>
+
+  <div class="eco-head" aria-hidden="true">
+    <div class="eco-head-label">System Topology</div>
+    <div class="eco-head-title">The agent ecosystem</div>
+    <p class="eco-head-sub">One orchestrator, a production loop, a marketing loop, a poller rack and a terminal operator field. Structure and direction of flow only.</p>
+  </div>
+
+  <div class="ecosystem-stage" id="ecosystem-stage">
+    <canvas class="eco-canvas" id="ecosystem-canvas" aria-hidden="true"></canvas>
+    <div class="eco-nodes" id="ecosystem-nodes" aria-hidden="true"></div>
+  </div>
+
+  <div class="ecosystem-static" id="ecosystem-static" aria-hidden="true">
+    <svg class="eco-svg" viewBox="0 0 1280 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <defs>
+        <marker id="eco-arrow-inbound" class="eco-svg-marker eco-svg-marker--inbound" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z"/></marker>
+        <marker id="eco-arrow-return" class="eco-svg-marker eco-svg-marker--return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z"/></marker>
+      </defs>
+      <g class="eco-svg-edges eco-svg-edges--lateral">
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="84.9" y1="622.9" x2="149.9" y2="638.9"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="167.3" y1="647.9" x2="185.5" y2="662.3"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="202.9" y1="673" x2="241.6" y2="690.2"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="259" y1="694.6" x2="339.7" y2="699.9"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="357.1" y1="704.5" x2="399.3" y2="724.1"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="416.7" y1="728.2" x2="496.6" y2="728.5"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="514" y1="728.8" x2="586.4" y2="731.2"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="603.8" y1="732.6" x2="679.1" y2="742.4"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="696.5" y1="741.3" x2="762" y2="725.1"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="779.4" y1="723.1" x2="859" y2="724.6"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="876.4" y1="723.2" x2="940.5" y2="711.5"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="957.9" y1="705.9" x2="995.8" y2="688.3"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="1013.2" y1="683.4" x2="1094.9" y2="675.1"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="1109.3" y1="665.5" x2="1119.3" y2="650.4"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="1133.8" y1="637.5" x2="1167.7" y2="621.2"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="84.9" y1="623.6" x2="399.3" y2="725.3"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="416.7" y1="728.1" x2="859" y2="724.8"/>
+        <line class="eco-svg-edge eco-svg-edge--lateral" x1="876.4" y1="721.7" x2="1167.7" y2="620.1"/>
+      </g>
+      <g class="eco-svg-edges eco-svg-edges--evidence">
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="84.9" y1="616.3" x2="579.3" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="167.3" y1="635.3" x2="591.5" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="202.9" y1="662.5" x2="598.8" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="259" y1="685.8" x2="606.5" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="355.2" y1="691.8" x2="615.3" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="413.1" y1="719.4" x2="621.7" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="508.2" y1="719.8" x2="629.4" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="596.1" y1="722.7" x2="636.5" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="686.8" y1="734.8" x2="643.6" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="767.8" y1="714.2" x2="650.4" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="862.8" y1="716.1" x2="658.1" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="942.2" y1="701.2" x2="665.5" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="995.8" y1="675.8" x2="672.2" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="1094.9" y1="667.7" x2="682.2" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="1116.4" y1="636.1" x2="688.7" y2="359.5"/>
+        <line class="eco-svg-edge eco-svg-edge--evidence" x1="1167.7" y1="612.4" x2="698.5" y2="359.5"/>
+      </g>
+      <g class="eco-svg-edges eco-svg-edges--delegate">
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="585.6" y1="296.5" x2="383.5" y2="179.5"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="694.4" y1="296.5" x2="896.5" y2="179.5"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="268.5" y1="124.5" x2="166.6" y2="83"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="332.3" y1="124.5" x2="322.5" y2="51"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="396" y1="124.5" x2="486.5" y2="83"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="359.6" y1="179.5" x2="415.7" y2="245"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="884" y1="124.5" x2="793.5" y2="83"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="947.7" y1="124.5" x2="957.5" y2="51"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="1011.5" y1="124.5" x2="1126.6" y2="77.6"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="320.8" y1="179.5" x2="81" y2="612.1"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="326" y1="179.5" x2="161.7" y2="632.3"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="328.5" y1="179.5" x2="196.6" y2="660.5"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="331.7" y1="179.5" x2="251.7" y2="685.3"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="336.6" y1="179.5" x2="348.2" y2="691.8"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="339.4" y1="179.5" x2="406.9" y2="719.4"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="344.1" y1="179.5" x2="502.7" y2="719.8"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="348.3" y1="179.5" x2="591.2" y2="722.7"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="932.1" y1="179.5" x2="691.5" y2="734.8"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="935.7" y1="179.5" x2="773.3" y2="714.2"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="940.3" y1="179.5" x2="868.9" y2="716.1"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="944.3" y1="179.5" x2="949.2" y2="701.2"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="947.1" y1="179.5" x2="1003.5" y2="675.6"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="952.4" y1="179.5" x2="1100.9" y2="665.5"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="954.2" y1="179.5" x2="1121.8" y2="633"/>
+        <line class="eco-svg-edge eco-svg-edge--delegate" x1="957.7" y1="179.5" x2="1172.1" y2="608.4"/>
+      </g>
+      <g class="eco-svg-edges eco-svg-edges--inbound">
+        <line class="eco-svg-edge eco-svg-edge--inbound" x1="128.8" y1="247.7" x2="554" y2="314.5" marker-end="url(#eco-arrow-inbound)"/>
+        <line class="eco-svg-edge eco-svg-edge--inbound" x1="117.2" y1="305.6" x2="554" y2="324.3" marker-end="url(#eco-arrow-inbound)"/>
+        <line class="eco-svg-edge eco-svg-edge--inbound" x1="109.5" y1="365.9" x2="554" y2="334.1" marker-end="url(#eco-arrow-inbound)"/>
+        <line class="eco-svg-edge eco-svg-edge--inbound" x1="113.4" y1="425.8" x2="554" y2="344" marker-end="url(#eco-arrow-inbound)"/>
+        <line class="eco-svg-edge eco-svg-edge--inbound" x1="128.8" y1="481.4" x2="554" y2="353.8" marker-end="url(#eco-arrow-inbound)"/>
+      </g>
+      <g class="eco-svg-edges eco-svg-edges--return">
+        <path class="eco-svg-edge eco-svg-edge--return" d="M484.6,280.2 L484.7,290.2 L485,299.5 L485.6,308 L486.4,315.6 L487.5,322.5 L488.8,328.5 L490.3,333.8 L492.1,338.3 L494.1,342 L496.4,344.8 L498.9,346.9 L501.7,348.2 L504.7,348.7 L507.9,348.4 L511.5,347.3 L515.2,345.4 L519.2,342.7 L523.4,339.2 L527.9,334.9 L532.6,329.8 L537.6,324 L542.8,317.3 L548.3,309.8 L554,301.5" marker-end="url(#eco-arrow-return)"/>
+      </g>
+      <g class="eco-svg-nodes">
+        <g class="eco-svg-node eco-svg-node--core" transform="translate(640 328)">
+          <rect class="eco-svg-chip eco-svg-chip--core" x="-78" y="-23.5" width="156" height="47" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--core" x="0" y="-7" dy=".34em">ORCHESTRATOR</text>
+          <text class="eco-svg-note" x="0" y="10" dy=".34em">ROUTING + QA GATE</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--hub" transform="translate(336 152)">
+          <rect class="eco-svg-chip eco-svg-chip--hub" x="-75" y="-19.5" width="150" height="39" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--hub" x="0" y="-7" dy=".34em">PRODUCTION LOOP</text>
+          <text class="eco-svg-note" x="0" y="10" dy=".34em">KIT PRODUCTION LINE</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--hub" transform="translate(944 152)">
+          <rect class="eco-svg-chip eco-svg-chip--hub" x="-90.8" y="-19.5" width="181.5" height="39" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--hub" x="0" y="-7" dy=".34em">MARKETING LOOP</text>
+          <text class="eco-svg-note" x="0" y="10" dy=".34em">PUBLISHING + DISTRIBUTION</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--leaf" transform="translate(120 64)">
+          <rect class="eco-svg-chip eco-svg-chip--leaf" x="-52.4" y="-11" width="104.7" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--leaf" x="0" y="0" dy=".34em">DEMAND GATE</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--leaf" transform="translate(320 32)">
+          <rect class="eco-svg-chip eco-svg-chip--leaf" x="-33.1" y="-11" width="66.2" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--leaf" x="0" y="0" dy=".34em">DESIGN</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--leaf" transform="translate(528 64)">
+          <rect class="eco-svg-chip eco-svg-chip--leaf" x="-71.6" y="-11" width="143.2" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--leaf" x="0" y="0" dy=".34em">ASSET DELEGATION</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--leaf" transform="translate(432 264)">
+          <rect class="eco-svg-chip eco-svg-chip--leaf" x="-44.6" y="-11" width="89.3" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--leaf" x="0" y="0" dy=".34em">QA RETURN</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--leaf" transform="translate(752 64)">
+          <rect class="eco-svg-chip eco-svg-chip--leaf" x="-37" y="-11" width="73.9" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--leaf" x="0" y="0" dy=".34em">PUBLISH</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--leaf" transform="translate(960 32)">
+          <rect class="eco-svg-chip eco-svg-chip--leaf" x="-40.8" y="-11" width="81.6" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--leaf" x="0" y="0" dy=".34em">OUTREACH</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--leaf" transform="translate(1160 64)">
+          <rect class="eco-svg-chip eco-svg-chip--leaf" x="-25.4" y="-11" width="50.8" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--leaf" x="0" y="0" dy=".34em">COPY</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--poller" transform="translate(80 240)">
+          <rect class="eco-svg-chip eco-svg-chip--poller" x="-40.8" y="-11" width="81.6" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--poller" x="0" y="0" dy=".34em">STEERING</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--poller" transform="translate(80 304)">
+          <rect class="eco-svg-chip eco-svg-chip--poller" x="-29.2" y="-11" width="58.5" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--poller" x="0" y="0" dy=".34em">HEAVY</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--poller" transform="translate(80 368)">
+          <rect class="eco-svg-chip eco-svg-chip--poller" x="-21.6" y="-11" width="43.1" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--poller" x="0" y="0" dy=".34em">MID</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--poller" transform="translate(80 432)">
+          <rect class="eco-svg-chip eco-svg-chip--poller" x="-25.4" y="-11" width="50.8" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--poller" x="0" y="0" dy=".34em">FAST</text>
+        </g>
+        <g class="eco-svg-node eco-svg-node--poller" transform="translate(80 496)">
+          <rect class="eco-svg-chip eco-svg-chip--poller" x="-40.8" y="-11" width="81.6" height="22" rx="3"/>
+          <text class="eco-svg-label eco-svg-label--poller" x="0" y="0" dy=".34em">JUDGMENT</text>
+        </g>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="70.7" y="615.3" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="153.1" y="635.5" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="188.7" y="663.7" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="244.8" y="688.5" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="342.9" y="695" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="402.5" y="722.6" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="499.8" y="723" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="589.6" y="725.9" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="682.3" y="738" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="765.2" y="717.4" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="862.2" y="719.3" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="943.7" y="704.4" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="999" y="678.8" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="1098.1" y="668.7" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="1119.6" y="636.2" width="11" height="11" rx="2"/>
+        <rect class="eco-svg-chip eco-svg-chip--operator" x="1170.9" y="611.6" width="11" height="11" rx="2"/>
+      </g>
+      <g class="eco-svg-groups">
+        <text class="eco-svg-group" x="80" y="168" dy=".34em">INBOUND POLLERS</text>
+        <text class="eco-svg-group" x="640" y="780" dy=".34em">TERMINAL OPERATORS</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="eco-legend" aria-hidden="true">
+    <div class="eco-legend-row"><span class="eco-legend-key eco-legend-key--delegate"></span>Delegation, outbound</div>
+    <div class="eco-legend-row"><span class="eco-legend-key eco-legend-key--inbound"></span>Inbound polling</div>
+    <div class="eco-legend-row"><span class="eco-legend-key eco-legend-key--return"></span>Verified return, QA pass</div>
+  </div>
+
+  <!-- The structured text alternative. A canvas on its own is not
+       accessible, so the real hierarchy lives here as markup. -->
+  <div class="visually-hidden" id="ecosystem-desc">
+    <h2>Agent ecosystem architecture</h2>
+    <p>A diagram of how work moves through the lab. It shows structure and direction of flow only; it carries no counts, metrics or live state. Bronze lines are delegation travelling outward from a parent. Slate lines are inbound polling arriving at the core. Sage lines are verified returns: QA passes and evidence coming back.</p>
+    <ul>
+      <li>Orchestrator, at the centre. Routing and the QA gate. Sole writer of READY to IN PROGRESS, and the only hand that promotes work to DONE. It delegates to two loops.
+        <ul>
+          <li>Production loop, upper left. The kit production line. It receives delegation from the orchestrator and owns four stages.
+            <ul>
+              <li>Demand gate</li>
+              <li>Design</li>
+              <li>Asset delegation</li>
+              <li>QA return. This stage runs back into the orchestrator on a distinct return path, drawn separately from every outbound line.</li>
+            </ul>
+          </li>
+          <li>Marketing loop, upper right. Publishing and distribution. It receives delegation from the orchestrator and owns three stages.
+            <ul>
+              <li>Publish</li>
+              <li>Outreach</li>
+              <li>Copy</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Inbound pollers, lower left. Five pollers, each pointing into the orchestrator.
+        <ul>
+          <li>Steering</li>
+          <li>Heavy</li>
+          <li>Mid</li>
+          <li>Fast</li>
+          <li>Judgment</li>
+        </ul>
+      </li>
+      <li>Terminal operators, a wide arc across the lower field. Sixteen small execution nodes, placed by a golden-angle distribution rather than at random. Each operator has three kinds of connection:
+        <ul>
+          <li>Delegation down: operators on the left half of the arc receive work from the production loop, operators on the right half from the marketing loop.</li>
+          <li>Lateral chatter: each operator links to its neighbour along the arc, with longer skip links every fifth node.</li>
+          <li>Evidence return: every operator returns evidence to the orchestrator.</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
 <footer class="footer">
   <div class="footer-inner page-container">
     <div class="footer-brand">
@@ -2294,6 +2925,11 @@ code, .mono {
     function start() { if (!running) { running = true; tick(); } }
     function stop() { if (running) { running = false; cancelAnimationFrame(frame); } }
 
+    /* Two independent reasons to be idle: off screen, or handed over to
+       the expanded ecosystem view. sync() is the only caller of start. */
+    var onScreen = true, handedOver = false;
+    function sync() { (onScreen && !handedOver) ? start() : stop(); }
+
     if ('ResizeObserver' in window) {
       new ResizeObserver(size).observe(host);
     } else {
@@ -2303,11 +2939,19 @@ code, .mono {
 
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
-        entries[0].isIntersecting ? start() : stop();
+        onScreen = entries[0].isIntersecting;
+        sync();
       }, { threshold: 0.01 }).observe(host);
     } else {
       start();
     }
+
+    /* The ecosystem panel owns the viewport while it is open, so the
+       collapsed core stops burning frames behind it. */
+    document.addEventListener('agentlab:ecosystem', function (e) {
+      handedOver = !!(e.detail && e.detail.expanded);
+      sync();
+    });
 
     /* DOM to canvas contract: hovering the primary CTA lifts emission. */
     var cta = document.querySelector('.hero-actions .btn-primary');
@@ -2323,6 +2967,582 @@ code, .mono {
   } else {
     boot();
   }
+})();
+</script>
+
+<script>
+/* ---------------------------------------------------------------
+   AGENT ECOSYSTEM
+   The hero core is a control. Activating #ecosystem-toggle animates
+   the standard page content away, inerts it, and expands the core
+   into the real topology: one orchestrator, two loops with their
+   children, a rack of inbound pollers, and a golden-angle arc of
+   terminal operators.
+
+   Three things this view will never do:
+     - show a quantity. No counters, no metrics, no totals. It depicts
+       flow and structure, and a fabricated number on a brand asset is
+       worse than an empty one.
+     - reach for a random number generator. Operator placement is a
+       golden-angle distribution and packet timing is derived from the
+       golden ratio, so a given frame is reproducible on any machine.
+     - invent a colour. Every colour is read back out of the CSS
+       custom properties at boot.
+
+   Colour carries direction of trust: bronze delegates outward, slate
+   polls inward, sage returns verified.
+
+   Reduced motion is handled without losing content. No WebGL, no rAF,
+   no packets; the panel serves #ecosystem-static instead, which is the
+   same topology as a zero-JS SVG. matchMedia is observed live, so
+   flipping the OS setting mid-session is handled without a reload.
+   --------------------------------------------------------------- */
+(function () {
+  var toggle = document.getElementById('ecosystem-toggle');
+  var panel  = document.getElementById('ecosystem-panel');
+  var stage  = document.getElementById('ecosystem-stage');
+  var canvas = document.getElementById('ecosystem-canvas');
+  var chips  = document.getElementById('ecosystem-nodes');
+  var nameEl = document.getElementById('ecosystem-toggle-name');
+  if (!toggle || !panel || !stage || !canvas || !chips || !nameEl) return;
+
+  /* --- KINETIC TOKENS ------------------------------------------- */
+  var BASE_BREATH_HZ         = 0.8;       /* shared with the hero core */
+  var BASE_ROTATION          = 0.0006;
+  var GOLDEN_ANGLE           = Math.PI * (3 - Math.sqrt(5));
+  var GOLDEN_RATIO_FRAC      = 0.6180339887498949;
+  var WORLD_W                = 320;       /* world box, x -160..160     */
+  var WORLD_H                = 200;       /* world box, y -100..100     */
+  var OPERATOR_COUNT         = 16;
+  var OPERATOR_ARC_START_DEG = 198;
+  var OPERATOR_ARC_SPAN_DEG  = 144;
+  var OPERATOR_RX            = 146;
+  var OPERATOR_RY            = 48;
+  var OPERATOR_CY            = -36;
+  var OPERATOR_GOLDEN_SPREAD = 0.045;
+  var LATERAL_SKIP           = 5;         /* Fibonacci                  */
+  var EVIDENCE_PACKET_EVERY  = 4;
+  var RETURN_BOW             = -30;
+  var CURVE_SEGMENTS         = 24;
+  var TRIM_MARGIN            = 2.0;
+  var TRIM_MARGIN_OPERATOR   = 0.8;
+  var PACKET_SPEED_HZ        = 0.16;
+  var PACKET_SPEED_SPREAD    = 0.28;
+  var PACKET_SIZE_PX         = 3.6;
+  var PACKET_OPACITY         = 0.92;
+  var EDGE_OPACITY_DELEGATE  = 0.40;
+  var EDGE_OPACITY_INBOUND   = 0.55;
+  var EDGE_OPACITY_EVIDENCE  = 0.28;
+  var EDGE_OPACITY_QA_GATE   = 0.85;
+  var EDGE_OPACITY_LATERAL   = 0.20;
+  var ARROW_LENGTH           = 4.5;
+  var ARROW_HALF_WIDTH       = 1.8;
+  var ARROW_OPACITY          = 0.85;
+  var CHIP_REFERENCE_SCALE   = 3.6;      /* px per world unit at design */
+  var CHIP_ZOOM_MIN          = 0.50;
+  var CHIP_ZOOM_MAX          = 1.15;
+  var CORE_ECHO_RADIUS       = 12;
+  var CORE_ECHO_DETAIL       = 2;
+  var CORE_ECHO_SWELL        = 0.10;
+  var CORE_ECHO_BASE_OPACITY = 0.20;
+  var CORE_ECHO_GAIN         = 0.55;
+  var COLLAPSE_MS            = 560;
+
+  /* qagate is the single QA RETURN edge back into the orchestrator. It
+     is its own channel, not a louder evidence line, because it is the
+     one path that changes the state of the gate. */
+  var KINDS = ['delegate', 'inbound', 'evidence', 'qagate', 'lateral'];
+  var EDGE_OPACITY = {
+    delegate: EDGE_OPACITY_DELEGATE,
+    inbound:  EDGE_OPACITY_INBOUND,
+    evidence: EDGE_OPACITY_EVIDENCE,
+    qagate:   EDGE_OPACITY_QA_GATE,
+    lateral:  EDGE_OPACITY_LATERAL
+  };
+  var TOKEN = {
+    delegate: '--accent-bronze',
+    inbound:  '--accent-slate',
+    evidence: '--accent-sage',
+    qagate:   '--accent-sage',
+    lateral:  '--accent-bronze-dim'
+  };
+
+  /* --- MODEL ----------------------------------------------------- */
+  var nodes = [], byId = {}, edges = [], packets = [];
+
+  function addNode(id, label, note, kind, x, y) {
+    var n = { id: id, label: label, note: note, kind: kind, x: x, y: y,
+              hw: 0, hh: 0, el: null };
+    nodes.push(n);
+    byId[id] = n;
+    return n;
+  }
+
+  function addEdge(a, b, kind, arrow, bow, flow) {
+    edges.push({ from: byId[a], to: byId[b], kind: kind, arrow: !!arrow,
+                 bow: bow || 0, flow: flow !== false,
+                 pts: null, acc: null, len: 0 });
+  }
+
+  function defineModel() {
+    if (nodes.length) return;
+    var spec = [
+      ['orchestrator',     'ORCHESTRATOR',       'Routing + QA gate',         'core',      0,  18],
+      ['production',       'PRODUCTION LOOP',    'Kit production line',       'hub',     -76,  62],
+      ['marketing',        'MARKETING LOOP',     'Publishing + distribution', 'hub',      76,  62],
+      ['demand-gate',      'DEMAND GATE',        '',                          'leaf',   -130,  84],
+      ['design',           'DESIGN',             '',                          'leaf',    -80,  92],
+      ['asset-delegation', 'ASSET DELEGATION',   '',                          'leaf',    -28,  84],
+      ['qa-return',        'QA RETURN',          '',                          'leaf',    -52,  34],
+      ['publish',          'PUBLISH',            '',                          'leaf',     28,  84],
+      ['outreach',         'OUTREACH',           '',                          'leaf',     80,  92],
+      ['copy',             'COPY',               '',                          'leaf',    130,  84],
+      ['steering',         'STEERING',           '',                          'poller', -140,  40],
+      ['heavy',            'HEAVY',              '',                          'poller', -140,  24],
+      ['mid',              'MID',                '',                          'poller', -140,   8],
+      ['fast',             'FAST',               '',                          'poller', -140,  -8],
+      ['judgment',         'JUDGMENT',           '',                          'poller', -140, -24],
+      ['grp-pollers',      'INBOUND POLLERS',    '',                          'group',  -140,  58],
+      ['grp-operators',    'TERMINAL OPERATORS', '',                          'group',     0, -95]
+    ];
+    var i;
+    for (i = 0; i < spec.length; i++) {
+      addNode(spec[i][0], spec[i][1], spec[i][2], spec[i][3], spec[i][4], spec[i][5]);
+    }
+
+    /* Terminal operators. An even sweep along the arc, with the radius
+       modulated by the golden angle so the field reads as a lattice
+       rather than a ring. Deterministic by construction. */
+    for (i = 0; i < OPERATOR_COUNT; i++) {
+      var t = (i + 0.5) / OPERATOR_COUNT;
+      var th = (OPERATOR_ARC_START_DEG + t * OPERATOR_ARC_SPAN_DEG) * Math.PI / 180;
+      var k = 1 + OPERATOR_GOLDEN_SPREAD * Math.cos(i * GOLDEN_ANGLE);
+      addNode('op-' + i, '', '', 'operator',
+              OPERATOR_RX * k * Math.cos(th),
+              OPERATOR_CY + OPERATOR_RY * k * Math.sin(th));
+    }
+
+    addEdge('orchestrator', 'production', 'delegate', false, 0);
+    addEdge('orchestrator', 'marketing',  'delegate', false, 0);
+
+    var prodKids = ['demand-gate', 'design', 'asset-delegation', 'qa-return'];
+    for (i = 0; i < prodKids.length; i++) addEdge('production', prodKids[i], 'delegate', false, 0);
+    var mktKids = ['publish', 'outreach', 'copy'];
+    for (i = 0; i < mktKids.length; i++) addEdge('marketing', mktKids[i], 'delegate', false, 0);
+
+    /* Not just another line out of a hub: the one path back into the
+       gate. Bowed, sage, and the only returning edge with a head. */
+    addEdge('qa-return', 'orchestrator', 'qagate', true, RETURN_BOW);
+
+    var pollers = ['steering', 'heavy', 'mid', 'fast', 'judgment'];
+    for (i = 0; i < pollers.length; i++) addEdge(pollers[i], 'orchestrator', 'inbound', true, 0);
+
+    for (i = 0; i < OPERATOR_COUNT; i++) {
+      addEdge((i < OPERATOR_COUNT / 2) ? 'production' : 'marketing', 'op-' + i, 'delegate', false, 0);
+      addEdge('op-' + i, 'orchestrator', 'evidence', false, 0,
+              (i % EVIDENCE_PACKET_EVERY) === 0);
+    }
+    for (i = 0; i < OPERATOR_COUNT - 1; i++) {
+      var fwd = (i % 2) === 0;                    /* chatter runs both ways */
+      addEdge('op-' + (fwd ? i : i + 1), 'op-' + (fwd ? i + 1 : i), 'lateral', false, 0);
+    }
+    for (i = 0; i + LATERAL_SKIP < OPERATOR_COUNT; i += LATERAL_SKIP) {
+      addEdge('op-' + i, 'op-' + (i + LATERAL_SKIP), 'lateral', false, 0);
+    }
+
+    for (i = 0; i < nodes.length; i++) buildChip(nodes[i]);
+  }
+
+  function buildChip(n) {
+    var el = document.createElement('div');
+    el.className = 'eco-node eco-node--' + n.kind;
+    if (n.label) {
+      var lab = document.createElement('span');
+      lab.className = 'eco-node-label';
+      lab.textContent = n.label;
+      el.appendChild(lab);
+    }
+    if (n.note) {
+      var note = document.createElement('span');
+      note.className = 'eco-node-note';
+      note.textContent = n.note;
+      el.appendChild(note);
+    }
+    chips.appendChild(el);
+    n.el = el;
+  }
+
+  /* --- SCENE ----------------------------------------------------- */
+  var gl = null, viewW = 0, viewH = 0, scale = 1, t0 = Date.now();
+
+  function tokenColor(name) {
+    var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    var c = new THREE.Color();
+    if (v) c.set(v);
+    return c;
+  }
+
+  function ensureScene() {
+    if (gl) return true;
+    if (typeof THREE === 'undefined') { panel.classList.add('eco-no-webgl'); return false; }
+    try {
+      defineModel();
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000);
+      camera.position.z = 100;
+
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setClearColor(0x000000, 0);
+
+      var colors = {}, lines = {}, arrows = {}, i;
+      for (i = 0; i < KINDS.length; i++) {
+        var kind = KINDS[i];
+        colors[kind] = tokenColor(TOKEN[kind]);
+        var lm = new THREE.LineBasicMaterial({
+          color: colors[kind], transparent: true, opacity: EDGE_OPACITY[kind]
+        });
+        lines[kind] = new THREE.LineSegments(new THREE.BufferGeometry(), lm);
+        scene.add(lines[kind]);
+        var am = new THREE.MeshBasicMaterial({
+          color: colors[kind], transparent: true, opacity: ARROW_OPACITY,
+          side: THREE.DoubleSide, depthWrite: false
+        });
+        arrows[kind] = new THREE.Mesh(new THREE.BufferGeometry(), am);
+        scene.add(arrows[kind]);
+      }
+
+      var echoMat = new THREE.LineBasicMaterial({
+        color: colors.delegate, transparent: true,
+        opacity: CORE_ECHO_BASE_OPACITY, blending: THREE.AdditiveBlending
+      });
+      var echo = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(CORE_ECHO_RADIUS, CORE_ECHO_DETAIL)),
+        echoMat);
+      scene.add(echo);
+
+      var packetMat = new THREE.PointsMaterial({
+        size: PACKET_SIZE_PX, sizeAttenuation: false, vertexColors: true,
+        transparent: true, opacity: PACKET_OPACITY,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      });
+      var points = new THREE.Points(new THREE.BufferGeometry(), packetMat);
+      scene.add(points);
+
+      gl = { scene: scene, camera: camera, renderer: renderer, colors: colors,
+             lines: lines, arrows: arrows, echo: echo, echoMat: echoMat,
+             points: points, packetMat: packetMat, pos: null, geom: null,
+             frame: null, running: false };
+
+      if ('ResizeObserver' in window) new ResizeObserver(requestLayout).observe(stage);
+      else window.addEventListener('resize', requestLayout);
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          onScreen = entries[0].isIntersecting;
+          syncLoop();
+        }, { threshold: 0.01 }).observe(stage);
+      }
+
+      layout();
+      return true;
+    } catch (err) {
+      gl = null;
+      panel.classList.add('eco-no-webgl');
+      return false;
+    }
+  }
+
+  /* --- LAYOUT ---------------------------------------------------- */
+  function toPxX(x) { return viewW / 2 + x * scale; }
+  function toPxY(y) { return viewH / 2 - y * scale; }
+
+  function layout() {
+    if (!gl) return;
+    var rect = stage.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    viewW = rect.width;
+    viewH = rect.height;
+    scale = Math.min(viewW / WORLD_W, viewH / WORLD_H);
+
+    gl.renderer.setSize(viewW, viewH, false);
+    var cam = gl.camera;
+    cam.left   = -viewW / (2 * scale);
+    cam.right  =  viewW / (2 * scale);
+    cam.top    =  viewH / (2 * scale);
+    cam.bottom = -viewH / (2 * scale);
+    cam.updateProjectionMatrix();
+
+    /* gl_PointSize is in device pixels, so hold the CSS size steady. */
+    gl.packetMat.size = PACKET_SIZE_PX * gl.renderer.getPixelRatio();
+
+    /* The chips scale with the fitted world rather than staying a fixed
+       pixel size. Without this the lattice collides with itself as soon
+       as the viewport narrows, because the geometry shrinks and the
+       labels do not. */
+    var zoom = Math.max(CHIP_ZOOM_MIN,
+               Math.min(CHIP_ZOOM_MAX, scale / CHIP_REFERENCE_SCALE));
+    chips.style.setProperty('--eco-zoom', zoom);
+
+    var i, n;
+    for (i = 0; i < nodes.length; i++) {
+      n = nodes[i];
+      n.el.style.left = toPxX(n.x) + 'px';
+      n.el.style.top  = toPxY(n.y) + 'px';
+    }
+    /* Measured after every chip has moved, so this is one reflow. */
+    for (i = 0; i < nodes.length; i++) {
+      n = nodes[i];
+      n.hw = (n.el.offsetWidth  * zoom / 2) / scale;
+      n.hh = (n.el.offsetHeight * zoom / 2) / scale;
+    }
+
+    var core = byId.orchestrator;
+    gl.echo.position.set(core.x, core.y, -1);
+    buildGeometry();
+  }
+
+  var layoutQueued = false;
+  function requestLayout() {
+    if (layoutQueued || !gl) return;
+    layoutQueued = true;
+    requestAnimationFrame(function () { layoutQueued = false; layout(); });
+  }
+
+  /* Stop the edge at the chip's box rather than at its centre, so the
+     lattice connects faces and the arrow heads stay visible. */
+  function trim(fx, fy, n) {
+    var m = (n.kind === 'operator') ? TRIM_MARGIN_OPERATOR : TRIM_MARGIN;
+    var hw = n.hw + m, hh = n.hh + m;
+    var dx = n.x - fx, dy = n.y - fy;
+    if (!dx && !dy) return [n.x, n.y];
+    var tx = dx ? hw / Math.abs(dx) : Infinity;
+    var ty = dy ? hh / Math.abs(dy) : Infinity;
+    var t = Math.min(tx, ty, 1);
+    return [n.x - dx * t, n.y - dy * t];
+  }
+
+  function pathFor(e) {
+    var p0 = trim(e.to.x, e.to.y, e.from);
+    var p1 = trim(e.from.x, e.from.y, e.to);
+    if (!e.bow) return [p0, p1];
+    var mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2;
+    var dx = p1[0] - p0[0], dy = p1[1] - p0[1];
+    var len = Math.sqrt(dx * dx + dy * dy) || 1;
+    var cx = mx - (dy / len) * e.bow, cy = my + (dx / len) * e.bow;
+    var pts = [];
+    for (var s = 0; s <= CURVE_SEGMENTS; s++) {
+      var u = s / CURVE_SEGMENTS, iu = 1 - u;
+      pts.push([iu * iu * p0[0] + 2 * iu * u * cx + u * u * p1[0],
+                iu * iu * p0[1] + 2 * iu * u * cy + u * u * p1[1]]);
+    }
+    return pts;
+  }
+
+  function pushArrow(out, from, tip) {
+    var dx = tip[0] - from[0], dy = tip[1] - from[1];
+    var len = Math.sqrt(dx * dx + dy * dy) || 1;
+    var ux = dx / len, uy = dy / len;
+    var bx = tip[0] - ux * ARROW_LENGTH, by = tip[1] - uy * ARROW_LENGTH;
+    var nx = -uy * ARROW_HALF_WIDTH, ny = ux * ARROW_HALF_WIDTH;
+    out.push(tip[0], tip[1], 0, bx + nx, by + ny, 0, bx - nx, by - ny, 0);
+  }
+
+  function setGeometry(obj, arr) {
+    var g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
+    if (obj.geometry) obj.geometry.dispose();
+    obj.geometry = g;
+  }
+
+  function buildGeometry() {
+    var seg = {}, head = {}, i, s, kind;
+    for (i = 0; i < KINDS.length; i++) { seg[KINDS[i]] = []; head[KINDS[i]] = []; }
+    packets = [];
+
+    for (i = 0; i < edges.length; i++) {
+      var e = edges[i];
+      var pts = pathFor(e);
+      e.pts = pts;
+      var acc = [0], total = 0;
+      for (s = 1; s < pts.length; s++) {
+        var dx = pts[s][0] - pts[s - 1][0], dy = pts[s][1] - pts[s - 1][1];
+        total += Math.sqrt(dx * dx + dy * dy);
+        acc.push(total);
+      }
+      e.acc = acc;
+      e.len = total;
+      for (s = 1; s < pts.length; s++) {
+        seg[e.kind].push(pts[s - 1][0], pts[s - 1][1], 0, pts[s][0], pts[s][1], 0);
+      }
+      if (e.arrow) pushArrow(head[e.kind], pts[pts.length - 2], pts[pts.length - 1]);
+      if (e.flow && total > 0) packets.push({ edge: e });
+    }
+
+    for (i = 0; i < KINDS.length; i++) {
+      kind = KINDS[i];
+      setGeometry(gl.lines[kind], seg[kind]);
+      setGeometry(gl.arrows[kind], head[kind]);
+    }
+
+    var pos = new Float32Array(packets.length * 3);
+    var col = new Float32Array(packets.length * 3);
+    for (i = 0; i < packets.length; i++) {
+      var c = gl.colors[packets[i].edge.kind];
+      col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+      /* Phase and rate come off the golden ratio: an even, repeatable
+         spread with no two packets locked in step, and no randomness. */
+      packets[i].phase = (i * GOLDEN_RATIO_FRAC) % 1;
+      packets[i].rate  = 1 + PACKET_SPEED_SPREAD * Math.cos(i * GOLDEN_ANGLE);
+    }
+    var pg = new THREE.BufferGeometry();
+    pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    pg.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    if (gl.points.geometry) gl.points.geometry.dispose();
+    gl.points.geometry = pg;
+    gl.geom = pg;
+    gl.pos = pos;
+  }
+
+  function sample(p, u) {
+    var e = p.edge, acc = e.acc, target = u * e.len, lo = 1;
+    while (lo < acc.length - 1 && acc[lo] < target) lo++;
+    var span = acc[lo] - acc[lo - 1] || 1;
+    var f = (target - acc[lo - 1]) / span;
+    var a = e.pts[lo - 1], b = e.pts[lo];
+    return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+  }
+
+  /* --- LOOP ------------------------------------------------------ */
+  function tick() {
+    gl.frame = requestAnimationFrame(tick);
+    var t = (Date.now() - t0) * 0.001;
+
+    gl.echo.rotation.y += BASE_ROTATION * 2.5;
+    gl.echo.rotation.x += BASE_ROTATION * 1.3;
+    var breath = (Math.sin(t * BASE_BREATH_HZ * 0.625) + 1) * 0.5;
+    var k = Math.pow(breath, 2.5);
+    gl.echo.scale.setScalar(1 + k * CORE_ECHO_SWELL);
+    gl.echoMat.opacity = CORE_ECHO_BASE_OPACITY + k * CORE_ECHO_GAIN;
+
+    var pos = gl.pos;
+    if (pos) {
+      for (var i = 0; i < packets.length; i++) {
+        var p = packets[i];
+        var u = (t * PACKET_SPEED_HZ * p.rate + p.phase) % 1;
+        var q = sample(p, u);
+        pos[i * 3] = q[0]; pos[i * 3 + 1] = q[1]; pos[i * 3 + 2] = 1;
+      }
+      gl.geom.attributes.position.needsUpdate = true;
+    }
+    gl.renderer.render(gl.scene, gl.camera);
+  }
+
+  var onScreen = true;
+  function startLoop() { if (gl && !gl.running) { gl.running = true; tick(); } }
+  function stopLoop() {
+    if (gl && gl.running) { gl.running = false; cancelAnimationFrame(gl.frame); }
+  }
+  function syncLoop() {
+    if (expanded && onScreen && !reduced() && ensureScene()) startLoop();
+    else stopLoop();
+  }
+
+  /* --- STATE ----------------------------------------------------- */
+  var mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  function reduced() { return !!(mq && mq.matches); }
+
+  var expanded = false, closeTimer = null;
+  var SUPPORTS_INERT = ('inert' in HTMLElement.prototype);
+
+  /* Everything that visually leaves must also leave the accessibility
+     tree, or a screen reader reads a page that is not on screen. The
+     hero graphic is deliberately excluded: it carries the toggle. */
+  function contentTargets() {
+    var out = [], i;
+    var fixed = ['.nav-bar', '.footer', '.hero-content'];
+    for (i = 0; i < fixed.length; i++) {
+      var el = document.querySelector(fixed[i]);
+      if (el) out.push(el);
+    }
+    var sections = document.querySelectorAll('main > .page-container > .section');
+    for (i = 0; i < sections.length; i++) {
+      if (!sections[i].classList.contains('hero')) out.push(sections[i]);
+    }
+    return out;
+  }
+
+  function setContentInert(on) {
+    var els = contentTargets();
+    for (var i = 0; i < els.length; i++) {
+      if (SUPPORTS_INERT) els[i].inert = on;
+      else if (on) els[i].setAttribute('aria-hidden', 'true');
+      else els[i].removeAttribute('aria-hidden');
+    }
+  }
+
+  function announce(next) {
+    toggle.setAttribute('aria-expanded', next ? 'true' : 'false');
+    nameEl.textContent = next
+      ? 'Collapse the agent ecosystem'
+      : 'Expand the agent ecosystem';
+  }
+
+  function setExpanded(next) {
+    if (next === expanded) return;
+    expanded = next;
+    announce(next);
+
+    if (next) {
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      panel.hidden = false;
+      setContentInert(true);
+      void panel.offsetWidth;                 /* commit before transition */
+      document.body.classList.add('ecosystem-open');
+      syncLoop();
+      requestLayout();
+      panel.focus();
+    } else {
+      document.body.classList.remove('ecosystem-open');
+      setContentInert(false);
+      stopLoop();
+      var finish = function () { panel.hidden = true; closeTimer = null; };
+      if (reduced()) finish();
+      else closeTimer = window.setTimeout(finish, COLLAPSE_MS);
+      toggle.focus();
+    }
+
+    document.dispatchEvent(new CustomEvent('agentlab:ecosystem', {
+      detail: { expanded: next }
+    }));
+  }
+
+  toggle.addEventListener('click', function () { setExpanded(!expanded); });
+
+  document.addEventListener('keydown', function (e) {
+    if (!expanded) return;
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      e.preventDefault();
+      setExpanded(false);
+    }
+  });
+
+  /* Live OS-level motion preference changes, no reload required. The
+     CSS media query swaps stage for static on its own; this only has
+     to stop or start the loop and re-fit the layout. */
+  if (mq) {
+    var onMotionChange = function () {
+      syncLoop();
+      if (expanded && !reduced()) requestLayout();
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onMotionChange);
+    else if (mq.addListener) mq.addListener(onMotionChange);
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stopLoop(); else syncLoop();
+  });
 })();
 </script>
 </body>

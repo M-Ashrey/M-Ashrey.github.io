@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>OJCP — The Open Standard for Agent-Consumable Job Feeds | The Agent Lab</title>
+<meta name="description" content="OJCP defines how AI agents discover, reason over, and act on job opportunities. Built on MCP. Interoperable with schema.org. Governed by an independent steering committee.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-12-ojcp-open-job-context-protocol/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="OJCP — The Open Standard for Agent-Consumable Job Feeds">
+<meta property="og:description" content="OJCP defines how AI agents discover, reason over, and act on job opportunities. Built on MCP. Interoperable with schema.org. Governed by an independent steering committee.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-12-ojcp-open-job-context-protocol/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-12-ojcp-open-job-context-protocol/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="OJCP — Open Job Context Protocol, the open standard for agent-consumable job feeds">
+<meta property="article:published_time" content="2026-08-12T00:00:00+02:00">
+<meta property="article:author" content="Ashrey">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Standards">
+<meta property="article:tag" content="OJCP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OJCP — The Open Standard for Agent-Consumable Job Feeds">
+<meta name="twitter:description" content="OJCP defines how AI agents discover, reason over, and act on job opportunities. Built on MCP. Interoperable with schema.org.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-12-ojcp-open-job-context-protocol/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "OJCP — The Open Standard for Agent-Consumable Job Feeds",
+  "description": "OJCP defines how AI agents discover, reason over, and act on job opportunities. Built on MCP. Interoperable with schema.org. Governed by an independent steering committee.",
+  "image": "https://theagentlab.site/blog/2026-08-12-ojcp-open-job-context-protocol/og.png",
+  "url": "https://theagentlab.site/blog/2026-08-12-ojcp-open-job-context-protocol/",
+  "datePublished": "2026-08-12T00:00:00+02:00",
+  "dateModified": "2026-08-12T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-12-ojcp-open-job-context-protocol/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #6b6760;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-1);
+}
+.nav-links a[aria-current="page"] {
+  color: var(--accent-bronze);
+  background: var(--bg-surface-1);
+}
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+.nav-cta:hover {
+  background: var(--accent-bronze-dim);
+  transform: translateY(-1px);
+}
+.nav-cta:active { transform: translateY(0); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+article {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 120px 0 80px;
+}
+
+.article-header {
+  margin-bottom: 48px;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.article-meta time {
+  color: var(--accent-bronze-dim);
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.article-dek {
+  font-size: 20px;
+  font-weight: 380;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+}
+
+.article-body {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 48px 0 20px;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 36px 0 16px;
+}
+
+.article-body p {
+  margin-bottom: 20px;
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid var(--border-accent);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.article-body a:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-bronze);
+}
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-surface-1);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+.article-body pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.article-body ul, .article-body ol {
+  margin: 16px 0 24px 24px;
+}
+.article-body li { margin-bottom: 8px; }
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+}
+
+.article-body .figure {
+  margin: 32px 0;
+}
+.article-body .figure img {
+  width: 100%;
+}
+.article-body .figure figcaption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 60px 48px 40px;
+  margin-top: 80px;
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-brand .wordmark {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--text-primary);
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  max-width: 280px;
+}
+
+.footer-links h4,
+.footer-social h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 20px;
+}
+
+.footer-links ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.footer-links a {
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+.footer-links a:hover { color: var(--accent-bronze); }
+
+.footer-social .social-links {
+  display: flex;
+  gap: 16px;
+}
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  transition: all 0.2s ease;
+}
+.footer-social a:hover {
+  border-color: var(--accent-bronze);
+  color: var(--accent-bronze);
+}
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 48px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+/* ===================================================================
+   CTA
+   =================================================================== */
+.article-cta {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.article-cta p {
+  font-size: 15px;
+  color: #888;
+  text-align: center;
+}
+
+.article-cta a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid var(--border-accent);
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .page-container, .page-narrow { padding: 0 24px; }
+  .site-footer { padding: 40px 24px 32px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+  .footer-brand { align-items: center; }
+  .footer-social .social-links { justify-content: center; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav-wordmark" aria-label="The Agent Lab — Home">The Agent Lab</a>
+  <div class="nav-links">
+    <a href="/blog/" aria-current="page">Blog</a>
+    <a href="/services/">Services</a>
+    <a href="/kits/">Kits</a>
+  </div>
+  <a href="https://ko-fi.com/ashrey122" class="nav-cta" target="_blank" rel="noopener">Support</a>
+</nav>
+
+<main id="main">
+<article>
+  <header class="article-header">
+    <div class="article-meta">
+      <time datetime="2026-08-12">2026-08-12</time>
+      <span aria-hidden="true">·</span>
+      <span>By Ashrey</span>
+    </div>
+    <h1 class="article-title">OJCP — The Open Standard for Agent-Consumable Job Feeds</h1>
+    <p class="article-dek">OJCP defines how AI agents discover, reason over, and act on job opportunities. Built on MCP. Interoperable with schema.org. Governed by an independent steering committee.</p>
+  </header>
+
+  <div class="article-body">
+    <p>A new open protocol launched this week that could fundamentally change how AI agents interact with the hiring market. <strong>OJCP (Open Job Context Protocol)</strong> is a v0.1 draft specification that defines a standard way for AI agents to discover, reason over, and act on job opportunities — without human operators manually copying job descriptions between systems.</p>
+
+    <h2>What OJCP Actually Is</h2>
+    <p>OJCP is not a job board. It's a protocol layer that sits between job data sources (ATS platforms, job boards, company career pages) and AI agents that want to consume that data. The spec defines:</p>
+    <ul>
+      <li><strong>Manifest files</strong> — a <code>.well-known/ojcp.json</code> that advertises an employer's job feed location and supported capabilities</li>
+      <li><strong>Job feed schema</strong> — a structured JSON format extending schema.org <code>JobPosting</code> with agent-specific fields (skills as structured entities, compensation ranges, remote policies, visa sponsorship signals)</li>
+      <li><strong>MCP tools</strong> — four standard tools (<code>search_jobs</code>, <code>get_job_detail</code>, <code>get_employer_context</code>, <code>begin_application</code>) that any compliant server implements</li>
+      <li><strong>Apply paths</strong> — standardized ways for agents to initiate applications, from simple "apply with profile" to multi-step verification flows</li>
+    </ul>
+
+    <p>The protocol is built on <strong>MCP (Model Context Protocol)</strong>, meaning any MCP-compatible agent (Claude Code, Codex, custom agents) can call OJCP tools natively without custom integration code. It also aligns with schema.org vocabulary so existing structured data on career pages can map cleanly into OJCP feeds.</p>
+
+    <h2>Why This Matters for Developers Building Agents</h2>
+    <p>If you're building an AI agent that helps users with career moves — whether that's a job-search assistant, an application autofiller, or a recruiting agent — OJCP eliminates the brittle scraping layer. Today, every agent builder writes their own Greenhouse parser, their own Lever scraper, their own LinkedIn HTML parser. OJCP replaces all of that with a single MCP tool interface.</p>
+
+    <p>The spec also solves the "context problem" for agents. A raw job posting lacks the employer context an agent needs to reason well: company size, tech stack, team structure, interview process, culture signals. OJCP's <code>get_employer_context</code> tool returns a structured <code>EmployerContext</code> object that agents can use to tailor applications, prepare candidates, or filter opportunities.</p>
+
+    <h2>Governance and Adoption</h2>
+    <p>OJCP is governed by an <a href="https://ojcp.dev/governance" target="_blank" rel="noopener">independent steering committee</a> — not a single vendor. The spec is CC BY 4.0, reference implementations are Apache 2.0. Founding members include Workday, CrossCountry, Recruitics, LoopCV, HiringCafe, AIApply, ScaleJobs, and Tink — a mix of ATS platforms, job boards, and AI hiring tools.</p>
+
+    <p>This governance model matters. If OJCP were owned by one ATS vendor, competing platforms would have no incentive to adopt. The independent committee and open license create a neutral layer where everyone benefits from interoperability.</p>
+
+    <h2>Current State: v0.1 Draft</h2>
+    <p>The spec is explicitly labeled v0.1 Draft. The <a href="https://spec.ojcp.dev/" target="_blank" rel="noopener">full specification</a> covers tools, schemas, apply paths, and security requirements. There's a <a href="https://ojcp.dev/#playground" target="_blank" rel="noopener">live playground</a> where you can execute MCP tools against a mock registry (Acme Corp, Globex, etc.) to see the request/response shapes.</p>
+
+    <p>Reference implementations are early. The GitHub org <a href="https://github.com/ojcp-org/ojcp" target="_blank" rel="noopener">ojcp-org</a> hosts schemas, examples, and a TypeScript SDK. Community discussions happen in GitHub Discussions — the steering committee is actively seeking implementer feedback before v1.0.</p>
+
+    <h2>What to Watch</h2>
+    <p>Three signals will determine whether OJCP becomes the de facto standard or stays a niche experiment:</p>
+    <ol>
+      <li><strong>ATS adoption</strong> — Will Greenhouse, Lever, Ashby, Workday publish <code>.well-known/ojcp.json</code> manifests? Without major ATS platforms, the feed coverage stays thin.</li>
+      <li><strong>Agent framework support</strong> — Will MCP client libraries (Python, TypeScript, Go) add first-class OJCP helpers? The protocol is only as useful as the ergonomics of calling it.</li>
+      <li><strong>Candidate privacy model</strong> — The spec includes <code>CandidateContext</code> for agents to share candidate data with employers. Getting the privacy/consent UX right is non-trivial and will face scrutiny.</li>
+    </ol>
+
+    <p>For now, OJCP is the most credible attempt yet at a universal "job feed for agents" standard. If you're building in the AI + hiring space, it's worth reading the spec and experimenting with the playground. The protocol design is clean, the governance is neutral, and the MCP foundation means integration cost is low for any agent already speaking MCP.</p>
+  </div>
+
+  <div class="article-cta">
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </div>
+</article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="wordmark">The Agent Lab</div>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav class="footer-links" aria-label="Site navigation">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/kits/">Kits</a></li>
+        <li><a href="/terms/">Terms</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="/refunds/">Refunds</a></li>
+      </ul>
+    </nav>
+    <div class="footer-social">
+      <h4>Connect</h4>
+      <div class="social-links">
+        <a href="https://github.com/M-Ashrey" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/mohamed-ashrey/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0 -2 -2 2 2 0 0 0 -2 2v7h-4v-7a6 6 0 0 1 6 -6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </a>
+        <a href="https://www.youtube.com/@TheAgentLab" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2H2a2 2 0 0 1 -2 -2V5a2 2 0 0 1 2 -2z"></path><polygon points="23 7 16 12 23 17 23 7"></polygon></svg>
+        </a>
+        <a href="https://ko-fi.com/ashrey122" target="_blank" rel="noopener" aria-label="Ko-fi">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-28a4 4 0 0 1 0 -8h1"></path><path d="M6 12h16"></path><path d="M6 16h10"></path></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>The Agent Lab — <a href="https://theagentlab.site/">theagentlab.site</a> — Built by Ashrey</p>
+  </div>
+</footer>
+</body>
+</html>

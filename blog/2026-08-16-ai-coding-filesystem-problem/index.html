@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>AI Coding Tools Forget Context Because They Don't Write to Disk, Not Because of Context Windows | The Agent Lab</title>
+<meta name="description" content="Every AI coding tool has the same top complaint: it forgot what we were doing. A developer tested six tools and found half write nothing to disk. The problem isn't context windows — it's persistence.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-16-ai-coding-filesystem-problem/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Coding Tools Forget Context Because They Don't Write to Disk, Not Because of Context Windows">
+<meta property="og:description" content="Every AI coding tool has the same top complaint: it forgot what we were doing. A developer tested six tools and found half write nothing to disk. The problem isn't context windows — it's persistence.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-16-ai-coding-filesystem-problem/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-16-ai-coding-filesystem-problem/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab, notes on AI agents, MCP and automation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Coding Tools Forget Context Because They Don't Write to Disk, Not Because of Context Windows">
+<meta name="twitter:description" content="Every AI coding tool has the same top complaint: it forgot what we were doing. A developer tested six tools and found half write nothing to disk. The problem isn't context windows — it's persistence.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-16-ai-coding-filesystem-problem/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "AI Coding Tools Forget Context Because They Don't Write to Disk, Not Because of Context Windows",
+  "description": "Every AI coding tool has the same top complaint: it forgot what we were doing. A developer tested six tools and found half write nothing to disk. The problem isn't context windows — it's persistence.",
+  "image": "https://theagentlab.site/blog/2026-08-16-ai-coding-filesystem-problem/og.png",
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-16-ai-coding-filesystem-problem/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #6b6760;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg-void);
+  background: var(--accent-bronze);
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+.nav-cta:hover { background: #d4a56b; box-shadow: var(--shadow-md); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-head {
+  padding: 100px 0 40px;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 20px;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 28ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.article-title em { font-style: italic; }
+
+.article-head .dek {
+  font-size: 17px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.article-meta time { color: var(--accent-bronze-dim); }
+
+.article-content {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 40px 0 80px;
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 48px 0 16px;
+}
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+  margin: 40px 0 12px;
+}
+
+.article-content p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+}
+
+.article-content a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.article-content a:hover { border-color: var(--accent-bronze); }
+
+.article-content ul, .article-content ol {
+  margin: 18px 0 18px 24px;
+  line-height: 1.75;
+}
+.article-content li { margin-bottom: 8px; color: var(--text-secondary); }
+.article-content li::marker { color: var(--accent-bronze-dim); }
+
+.article-content blockquote {
+  border-left: 3px solid var(--accent-bronze-dim);
+  padding-left: 24px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-content code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent-bronze);
+}
+
+.article-content pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+.article-content pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.fine {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text-tertiary);
+  max-width: var(--measure);
+  margin-top: 22px;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-foundation);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 64px 0 32px;
+}
+
+.footer-brand { flex: 1; min-width: 260px; }
+
+.footer-wordmark {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.footer-wordmark span { color: var(--accent-bronze); }
+
+.footer-line {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-tertiary);
+  max-width: 42ch;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 64px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 140px;
+}
+
+.footer-col .h {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 4px;
+}
+
+.footer-col a {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+.footer-col a:hover { color: var(--accent-bronze); }
+
+.footer-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.footer-copy a { color: var(--text-tertiary); }
+.footer-copy a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 1080px) {
+  .page-container, .page-narrow { padding: 0 32px; }
+  .nav-bar { padding: 0 32px; }
+  .nav-links { gap: 24px; }
+}
+
+@media (max-width: 720px) {
+  .page-container, .page-narrow { padding: 0 22px; }
+  .nav-bar { padding: 0 22px; }
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .article-head { padding: 64px 0 40px; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+  .footer-nav { gap: 32px; }
+  .footer-base { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav-bar">
+  <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="/kits/">Kits</a></li>
+    <li><a href="/services/">Services</a></li>
+    <li><a href="/ai/">AI Practice</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+  <a href="/services/" class="nav-cta">Book an Audit</a>
+</nav>
+
+<main id="main">
+<div class="page-narrow">
+
+  <header class="article-head">
+    <span class="eyebrow">Claude &middot; AI coding &middot; Developer tools</span>
+    <h1 class="article-title">AI Coding Tools Forget Context Because They Don't Write to Disk, Not Because of <em>Context Windows</em></h1>
+    <p class="dek">Every AI coding tool has the same top complaint: it forgot what we were doing. A developer tested six tools and found half write nothing to disk. The problem isn't context windows — it's persistence.</p>
+    <div class="article-meta">
+      <time datetime="2026-08-16">August 16, 2026</time>
+      <span>by Ashrey</span>
+    </div>
+  </header>
+
+  <article class="article-content">
+    <p>The complaint is everywhere. Open any thread about Cursor, Windsurf, Cline, Copilot, or Claude Code and the top reply is the same: <em>"It forgot what we were doing."</em></p>
+
+    <p>For months I assumed this was a context-window problem. The model runs out of tokens, the conversation history gets truncated, and the agent loses the plot. The fix seemed obvious: bigger context windows, better summarization, smarter retrieval.</p>
+
+    <p>Then I saw a post on r/SideProject by a developer who took the time to actually check what six different AI coding tools write to the filesystem during a session. The results reframed the problem entirely.</p>
+
+    <h2>Half the tools write nothing</h2>
+
+    <p>The test was simple: give each tool a multi-step task, then check what files it created or modified on disk — not in the chat, not in its internal memory, but on the actual filesystem.</p>
+
+    <p>Three of the six tools wrote <em>zero</em> files. They kept the entire plan, the context, the "memory" of what they were doing inside the conversation context. When that context filled up or the session reset, the plan vanished.</p>
+
+    <p>The other three tools wrote to disk. They created spec files, todo lists, progress markers — artifacts that persisted beyond the context window. Those tools didn't forget.</p>
+
+    <h2>The filesystem is the real context</h2>
+
+    <p>This shouldn't be surprising. The filesystem is the only durable, inspectable, shareable memory a developer has. Git works because commits are files. Make works because timestamps are on files. Every build system, every CI pipeline, every deployment tool relies on the filesystem as the source of truth.</p>
+
+    <p>An AI coding tool that doesn't write its plan to disk is treating the filesystem as a write-only target — it edits code but never records <em>why</em> or <em>what's next</em>. That's not an agent. That's a very fancy autocomplete with a chat sidebar.</p>
+
+    <h2>What the writing tools actually write</h2>
+
+    <p>The three tools that persisted state wrote different things:</p>
+
+    <ul>
+      <li><strong>Spec/plan files</strong> — a markdown file describing the task, the approach, the acceptance criteria</li>
+      <li><strong>Todo lists</strong> — checkbox-style progress trackers that update as work completes</li>
+      <li><strong>Context summaries</strong> — periodic checkpoints summarizing what was done, what's blocked, what's next</li>
+    </ul>
+
+    <p>None of this requires a new file format. It's markdown. It's plain text. The only requirement is that the tool <em>chooses</em> to write it and <em>reads</em> it at the start of each turn.</p>
+
+    <h2>Why this matters for MCP and agent infrastructure</h2>
+
+    <p>If you're building on MCP (Model Context Protocol), this insight changes how you design servers and clients.</p>
+
+    <p>An MCP server that exposes a "workspace memory" resource — a simple file the agent reads on initialization and writes before each tool call — solves the forgetting problem at the protocol level. The agent doesn't need a bigger context window. It needs a durable scratchpad.</p>
+
+    <p>This is also why the MCP filesystem server is one of the most important primitives in the ecosystem. It's not just "file access." It's <em>shared durable memory</em> between the human, the agent, and any other tool in the loop.</p>
+
+    <h2>The practical takeaway</h2>
+
+    <p>If you're evaluating AI coding tools today, don't ask about context window size. Ask:</p>
+
+    <ul>
+      <li>Does it write a plan to disk before it starts coding?</li>
+      <li>Does it update that plan as it works?</li>
+      <li>Can I read that plan myself, edit it, hand it to another tool?</li>
+    </ul>
+
+    <p>If the answer is no, the tool will forget. Not because the model is limited, but because the architecture treats memory as ephemeral chat history instead of durable filesystem state.</p>
+
+    <p>The fix isn't more tokens. It's <code>fs.writeFile</code>.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner page-container">
+    <div class="footer-brand">
+      <div class="footer-wordmark">The Agent <span>Lab</span></div>
+      <p class="footer-line">Automation infrastructure, designed and operated by Ashrey, Chief Architect. One operator commanding a real machine.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <div class="footer-col">
+        <span class="h">Products</span>
+        <a href="/kits/">Kits</a>
+        <a href="/kits/a09-mcp-audit/">MCP Audit Kit</a>
+        <a href="/kits/a01-kindle-ebooks/">Kindle Pipeline</a>
+      </div>
+      <div class="footer-col">
+        <span class="h">Work</span>
+        <a href="/services/">Services</a>
+        <a href="/ai/">AI Practice</a>
+        <a href="/blog/">Blog</a>
+      </div>
+      <div class="footer-col">
+        <span class="h">Open Source</span>
+        <a href="https://github.com/M-Ashrey">GitHub</a>
+        <a href="https://dev.to/m_ashrey122">dev.to</a>
+        <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-base page-container">
+    <span class="footer-copy">&copy; 2026 The Agent Lab</span>
+    <span class="footer-copy"><a href="/terms/">Terms</a> &middot; <a href="/refunds/">Refunds</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="mailto:m.ashrey122@gmail.com">Contact</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

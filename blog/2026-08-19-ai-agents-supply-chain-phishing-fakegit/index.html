@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>AI Agents Have a Supply-Chain Phishing Problem — FakeGit Campaign Dropped 800 Malicious MCP Servers | The Agent Lab</title>
+<meta name="description" content="Island security research found 7,600 malicious GitHub repos in the FakeGit campaign. Over 800 posed as agent skills or MCP servers. Attackers call it AgentBaiting — they publish convincing repos and wait for agents to discover them. Here's what developers building with MCP and AI agents need to know.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Agents Have a Supply-Chain Phishing Problem — FakeGit Campaign Dropped 800 Malicious MCP Servers">
+<meta property="og:description" content="Island security research found 7,600 malicious GitHub repos in the FakeGit campaign. Over 800 posed as agent skills or MCP servers. Attackers call it AgentBaiting — they publish convincing repos and wait for agents to discover them.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab, notes on AI agents, MCP and automation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Agents Have a Supply-Chain Phishing Problem — FakeGit Campaign Dropped 800 Malicious MCP Servers">
+<meta name="twitter:description" content="Island security research found 7,600 malicious GitHub repos in the FakeGit campaign. Over 800 posed as agent skills or MCP servers. Attackers call it AgentBaiting.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "AI Agents Have a Supply-Chain Phishing Problem — FakeGit Campaign Dropped 800 Malicious MCP Servers",
+  "description": "Island security research found 7,600 malicious GitHub repos in the FakeGit campaign. Over 800 posed as agent skills or MCP servers. Attackers call it AgentBaiting.",
+  "image": "https://theagentlab.site/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/og.png",
+  "datePublished": "2026-08-19",
+  "dateModified": "2026-08-19",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/"
+  }
+}
+</script>
+
+<style id="brand-core">
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #6b6760;
+  --text-ghost:     #3d3a36;
+
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  rgba(191, 149, 83, 0.15);
+  --accent-bronze-glow: rgba(191, 149, 83, 0.40);
+
+  --font-display: "DM Serif Display", Georgia, serif;
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --measure: 66ch;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm:  0 1px 2px  rgba(0,0,0,0.35);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.40);
+  --shadow-lg:  0 12px 32px rgba(0,0,0,0.50);
+  --transition-fast:  120ms ease;
+  --transition-base:  200ms ease;
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background:
+    radial-gradient(900px 500px at 90% -10%, rgba(191,149,83,0.06), transparent 60%),
+    radial-gradient(700px 400px at -10% 110%, rgba(191,149,83,0.04), transparent 55%),
+    var(--bg-void);
+}
+
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+a { color: var(--accent-bronze); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color var(--transition-fast), color var(--transition-fast); }
+a:hover { border-color: var(--accent-bronze); }
+::selection { background: var(--accent-bronze-dim); }
+
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.reveal { opacity: 1; }
+.js .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.js .reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .js .reveal { opacity: 1; transform: none; transition: none; } }
+
+.bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0 16px; border-bottom: 1px solid var(--border-default);
+  font-size: 14px;
+}
+.bar .mark { font-family: var(--font-display); font-weight: 400; font-size: 22px; letter-spacing: -0.02em; }
+.bar .mark i { font-style: normal; color: var(--accent-bronze); }
+.bar nav { display: flex; gap: 20px; align-items: center; }
+.bar nav a { color: var(--text-tertiary); font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: none; padding: 6px 0; }
+.bar nav a:hover { color: var(--accent-bronze); }
+.bar nav a.current { color: var(--text-primary); }
+
+.eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-bronze); }
+.lab { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; color: var(--accent-bronze); text-transform: uppercase; }
+
+.artHead { padding: 48px 0 8px; }
+.artHead .eyebrow { margin-bottom: 16px; display: block; }
+.artHead h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(32px, 5.5vw, 50px); line-height: 1.1; letter-spacing: -0.02em; max-width: 24ch; }
+.byline { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; color: var(--text-tertiary); font-size: 13px; font-family: var(--font-mono); }
+.byline .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-tertiary); display: inline-block; flex-shrink: 0; margin-top: 4px; }
+.dek { margin-top: 22px; color: var(--text-secondary); font-size: clamp(16px, 2.2vw, 19px); max-width: var(--measure); line-height: 1.6; }
+
+article.prose { padding: 36px 0 8px; max-width: var(--measure); }
+article.prose h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 3vw, 28px); letter-spacing: -0.015em; margin: 48px 0 18px; line-height: 1.25; }
+article.prose h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(18px, 2.4vw, 22px); letter-spacing: -0.01em; margin: 36px 0 14px; line-height: 1.3; color: var(--text-primary); }
+article.prose p { margin: 0 0 20px; font-size: 17px; color: var(--text-secondary); line-height: 1.8; }
+article.prose p.lede { font-size: 19px; color: var(--text-primary); font-weight: 400; }
+article.prose strong { color: var(--text-primary); font-weight: 600; }
+article.prose a { color: var(--accent-bronze); border-bottom: 1px solid rgba(191,149,83,0.35); }
+article.prose a:hover { border-color: var(--accent-bronze); }
+
+article.prose ul, article.prose ol { margin: 0 0 20px; padding-left: 24px; color: var(--text-secondary); font-size: 17px; line-height: 1.8; }
+article.prose li { margin-bottom: 10px; }
+article.prose li strong { color: var(--accent-bronze); }
+article.prose code { font-family: var(--font-mono); font-size: 0.92em; background: var(--bg-inset); padding: 2px 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); color: var(--accent-bronze); }
+article.prose pre { background: var(--bg-inset); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 20px; overflow-x: auto; margin: 24px 0; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.65; color: var(--text-secondary); }
+article.prose pre code { background: none; padding: 0; border: none; font-size: inherit; color: inherit; }
+article.prose blockquote { border-left: 3px solid var(--accent-bronze); padding-left: 20px; margin: 24px 0; color: var(--text-tertiary); font-style: italic; }
+
+.figure { margin: 32px 0; }
+.figure img { width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--border-default); background: var(--bg-surface-1); }
+.figure figcaption { margin-top: 10px; font-size: 13px; color: var(--text-tertiary); text-align: center; font-family: var(--font-mono); }
+
+.sources { margin-top: 48px; padding: 24px; border: 1px solid var(--border-default); border-radius: var(--radius-lg); background: var(--bg-surface-1); }
+.sources .lab { margin-bottom: 14px; display: block; }
+.sources ol { padding-left: 22px; margin: 0; font-size: 14px; color: var(--text-tertiary); line-height: 2; }
+.sources a { color: var(--text-tertiary); border-bottom: 1px solid var(--border-subtle); }
+.sources a:hover { color: var(--accent-bronze); border-color: var(--accent-bronze); }
+
+.ctaBlock { margin-top: 56px; border-radius: var(--radius-lg); border: 1px solid var(--border-default); background: linear-gradient(180deg, var(--bg-surface-1), var(--bg-foundation)); padding: 36px; }
+.ctaBlock .lab { margin-bottom: 12px; display: block; }
+.ctaBlock h3 { font-family: var(--font-display); font-weight: 400; font-size: 24px; letter-spacing: -0.01em; margin-bottom: 20px; }
+.ctaRow { display: flex; flex-direction: column; gap: 18px; }
+.ctaItem { padding: 18px 0; border-top: 1px solid var(--border-subtle); }
+.ctaItem:first-child { border-top: 0; padding-top: 0; }
+.ctaItem .k { font-weight: 600; font-size: 15.5px; color: var(--text-primary); }
+.ctaItem p { color: var(--text-secondary); font-size: 15px; margin-top: 6px; line-height: 1.6; }
+.ctaItem a.go { color: var(--accent-bronze); font-weight: 600; font-size: 15px; display: inline-block; margin-top: 10px; border-bottom: 1px solid rgba(191,149,83,0.4); }
+.ctaItem a.go:hover { border-color: var(--accent-bronze); }
+
+.backBottom { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border-default); }
+.backBottom a { color: var(--text-tertiary); font-size: 14.5px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+.backBottom a:hover { color: var(--accent-bronze); }
+
+footer.site { border-top: 1px solid var(--border-default); padding: 40px 0 80px; color: var(--text-ghost); font-size: 13px; line-height: 1.8; text-align: center; }
+footer.site a { color: var(--text-ghost); text-decoration: underline; text-underline-offset: 2px; }
+footer.site a:hover { color: var(--accent-bronze); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 16px; }
+  .bar nav { gap: 12px; }
+  .artHead h1 { max-width: none; }
+  article.prose { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <a class="mark" href="https://theagentlab.site/">The Agent <i>·</i> Lab</a>
+    <nav>
+      <a href="https://theagentlab.site/">Home</a>
+      <a href="https://theagentlab.site/ai/">AI practice</a>
+      <a class="current" href="/blog/">Blog</a>
+      <a href="/services/">Services</a>
+    </nav>
+  </div>
+
+  <main>
+  <header class="artHead reveal">
+    <span class="eyebrow">Security · MCP · AI agents</span>
+    <h1>AI Agents Have a Supply-Chain Phishing Problem</h1>
+    <div class="byline">
+      <span>2026-08-19</span>
+      <span class="dot"></span>
+      <span>Ashrey</span>
+    </div>
+    <p class="dek">Island security research found 7,600 malicious GitHub repositories in the FakeGit campaign. Over 800 posed as agent skills or MCP servers. Attackers call it AgentBaiting — they publish convincing repos and wait for agents to discover them. Here is what developers building with MCP and AI agents need to know.</p>
+  </header>
+
+  <article class="prose reveal">
+    <p class="lede">The threat model for AI agents shifted last week. Researchers at Island published their analysis of <a href="https://www.island.io/blog/agentbaiting-how-800-fake-ai-skills-and-mcp-servers-delivered-malware" target="_blank" rel="noopener">FakeGit</a>, a campaign that seeded roughly 7,600 malicious repositories on GitHub. More than 800 of those repositories masqueraded as legitimate agent skills or Model Context Protocol servers.</p>
+
+    <p>The attack vector has a name now: <strong>AgentBaiting</strong>. Instead of sending a developer a malicious link, attackers publish a convincing repository and wait for an AI agent to discover it. The README looks like normal documentation. The code structure follows conventions. But the implementation points to malware.</p>
+
+    <h2>How the campaign worked</h2>
+
+    <p>FakeGit was not a single repository. It was an industrial operation. Attackers created thousands of repositories with names like <code>mcp-server-aws</code>, <code>claude-skill-github</code>, <code>agent-toolkit-slack</code> — plausible names that developers or their agents would naturally search for.</p>
+
+    <p>The repositories included:</p>
+    <ul>
+      <li>Well-structured READMEs with installation instructions, usage examples, and configuration guides</li>
+      <li>Legitimate-looking <code>package.json</code> or <code>pyproject.toml</code> files with realistic dependencies</li>
+      <li>Entry points that executed obfuscated payloads on install or first run</li>
+      <li>Some repositories were also submitted to public MCP and skill catalogs, giving them an additional veneer of credibility</li>
+    </ul>
+
+    <p>In controlled tests, Island researchers found that <strong>Claude Code, Gemini, and ChatGPT all surfaced malicious campaign repositories without being given their URLs</strong>. The agents discovered these repos through normal search and discovery workflows.</p>
+
+    <h2>Why this matters for MCP and agent developers</h2>
+
+    <p>The Model Context Protocol ecosystem is young. The official registry at <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">modelcontextprotocol/servers</a> lists community servers, but there is no centralized, vetted distribution mechanism comparable to npm or PyPI. Discovery happens through GitHub search, community lists, and increasingly through the agents themselves.</p>
+
+    <p>Three factors make this especially dangerous for MCP:</p>
+
+    <ol>
+      <li><strong>Agents install and run code autonomously.</strong> When you ask Claude Code to "add GitHub integration," it may search for an MCP server, find one that looks legitimate, and propose installing it. The human review step is often a quick skim of the README.</li>
+      <li><strong>MCP servers run with your credentials.</strong> A compromised server has access to whatever tokens you configured — GitHub PATs, API keys, database credentials. The blast radius is your entire connected infrastructure.</li>
+      <li><strong>No trust signals exist in the protocol.</strong> An MCP server listing is discovery metadata, not a trust signal. The protocol does not include publisher verification, signature validation, or a reputation system.</li>
+    </ol>
+
+    <h2>The numbers that should change your workflow</h2>
+
+    <p>Island's analysis puts scale on the problem:</p>
+    <ul>
+      <li><strong>7,600+</strong> malicious repositories total in the FakeGit campaign</li>
+      <li><strong>800+</strong> specifically targeting AI agents and MCP</li>
+      <li><strong>14+ million</strong> GitHub Release downloads recorded across the campaign (includes automation and repeated requests, not unique infections)</li>
+      <li><strong>Multiple</strong> public catalogs contained campaign repositories</li>
+    </ul>
+
+    <p>The download count is inflated by automation, but the repository count is not. Eight hundred purpose-built traps for agent workflows is a meaningful surface area.</p>
+
+    <h2>Practical defenses you can implement today</h2>
+
+    <p>You do not need a security team to raise the bar. The researchers and the broader community converge on a short list:</p>
+
+    <h3>1. Use an approved capability catalog</h3>
+    <p>Maintain an internal allowlist of MCP servers and skills your team is permitted to use. Treat it like a package-lock file — reviewed, version-pinned, and updated deliberately. Do not let agents freely discover and install new capabilities in production workflows.</p>
+
+    <h3>2. Verify publishers independently</h3>
+    <p>Before adding a server to your catalog, confirm the publisher identity. Check the GitHub organization, look for verified badges, cross-reference with the official MCP organization or known vendors. A repository owned by a user created three weeks ago with two stars is not a publisher signal.</p>
+
+    <h3>3. Pin versions and lock dependencies</h3>
+    <p>Never run <code>latest</code> or unpinned references in production agent workflows. Pin to specific commit SHAs or tagged releases. Use dependency lock files. Treat MCP server installations with the same rigor you apply to production dependencies.</p>
+
+    <h3>4. Test new skills in a credential-free sandbox</h3>
+    <p>Before a new MCP server or skill touches your real credentials, run it in an isolated environment with no network access to your infrastructure. Verify its behavior — what files it reads, what network calls it makes, what commands it executes. Island's researchers did exactly this in their controlled tests.</p>
+
+    <h3>5. Treat registry listings as discovery, not trust</h3>
+    <p>A listing in a community catalog means someone submitted it. It does not mean anyone audited it. The FakeGit campaign proved that malicious repositories can and do appear in public catalogs.</p>
+
+    <h2>The structural problem</h2>
+
+    <p>AgentBaiting works because the current agent ecosystem optimizes for discovery speed over verification. Agents are designed to find tools, not evaluate them. The protocol layer (MCP) provides transport and capability negotiation — it does not provide supply-chain integrity.</p>
+
+    <p>This is not a flaw in MCP. It is a gap in the distribution layer that sits above it. The same gap exists for LangChain tools, CrewAI skills, OpenAI function definitions, and every other agent capability format.</p>
+
+    <p>Until a verification layer exists — signed packages, publisher attestation, reputation scoring, or a curated registry with admission controls — the burden falls on the developer. You are the gatekeeper.</p>
+
+    <h2>What to watch next</h2>
+
+    <p>Island's research notes that the FakeGit campaign is likely still active. The repositories they analyzed were created over several months. New ones appear regularly.</p>
+
+    <p>Expect to see:</p>
+    <ul>
+      <li>More sophisticated obfuscation — payloads that activate only in specific environments or after time delays</li>
+      <li>Typosquatting on popular MCP server names (e.g., <code>mcp-server-githhub</code>)</li>
+      <li>Compromised legitimate maintainer accounts used to publish malicious updates to previously trusted servers</li>
+      <li>Attacks targeting the agent's own configuration files to persist across sessions</li>
+    </ul>
+
+    <p>The mitigation is not to stop using agents or MCP. The mitigation is to treat agent-discovered code with the same skepticism you apply to a random npm package from an unknown maintainer — because that is effectively what it is.</p>
+
+    <div class="sources">
+      <span class="lab">Sources</span>
+      <ol>
+        <li><a href="https://www.island.io/blog/agentbaiting-how-800-fake-ai-skills-and-mcp-servers-delivered-malware" target="_blank" rel="noopener">Island Security Research — "AgentBaiting: How 800+ Fake AI Skills and MCP Servers Delivered Malware"</a></li>
+        <li><a href="https://www.reddit.com/r/PracticalAgenticDev/comments/1vsiir4/ai_agents_now_have_their_own_supplychain_phishing/" target="_blank" rel="noopener">Reddit discussion on r/PracticalAgenticDev</a></li>
+        <li><a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">Official MCP community servers list</a></li>
+      </ol>
+    </div>
+  </article>
+
+  <div class="ctaBlock reveal">
+    <span class="lab">The Agent Lab</span>
+    <h3>Building agents that ship</h3>
+    <div class="ctaRow">
+      <div class="ctaItem">
+        <div class="k">mcp-doctor</div>
+        <p>Validate your MCP servers before you deploy. Static analysis, runtime checks, and protocol compliance in one CLI.</p>
+        <a class="go" href="https://github.com/M-Ashrey/mcp-doctor" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
+      <div class="ctaItem">
+        <div class="k">MCP Security Audit</div>
+        <p>We review your agent stack — servers, skills, credential handling, and supply-chain posture — and deliver a hardening plan.</p>
+        <a class="go" href="https://theagentlab.site/services/" target="_blank" rel="noopener">Book an audit →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="backBottom reveal">
+    <a href="/blog/">← Back to all posts</a>
+  </div>
+
+  </main>
+
+  <footer class="site reveal">
+    <p>© 2026 The Agent Lab. Built by Ashrey.</p>
+    <p><a href="https://theagentlab.site/">theagentlab.site</a> · <a href="https://github.com/M-Ashrey">GitHub</a> · <a href="https://www.linkedin.com/in/mohamed-ashrey/">LinkedIn</a></p>
+  </footer>
+
+</div>
+
+<script>
+document.documentElement.classList.add('js');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

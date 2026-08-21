@@ -45,6 +45,10 @@ desktop.ini
 *~
 .idea/
 .vscode/
+# Local dev server config for the preview pane. Points at an absolute path on
+# one machine and a port on one machine, so it is useless to anyone else and
+# would only ever conflict.
+.claude/launch.json
 
 # --- python bytecode ---------------------------------------------------------
 # The build scripts under assets/ are stdlib Python and are meant to be read.

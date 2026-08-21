@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
-<title>AI Automation That Runs | The Agent Lab</title>
-<meta name="description" content="AI agents installed in production for SMBs: lead response, support, and operations automation. Priced on outcomes, proven in shipped code, not slideware or demos.">
+<title>Who We Build For | AI Quoting Engines For Trades | The Agent Lab</title>
+<meta name="description" content="We build live AI quoting engines for plumbers, HVAC, roofing, electrical and remodelling contractors. Wired to your suppliers, loaded with your labor rates, quoting in ninety seconds instead of three days.">
 <meta name="author" content="Ashrey">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -16,17 +16,17 @@
 <meta name="theme-color" content="#09090b">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="AI Automation That Runs | The Agent Lab">
-<meta property="og:description" content="AI agents installed in production for SMBs: lead response, support, and ops automation. Priced on outcomes, proven in shipped code.">
+<meta property="og:title" content="Who We Build For | AI Quoting Engines For Trades | The Agent Lab">
+<meta property="og:description" content="Live AI quoting engines for plumbers, HVAC, roofers and electricians. Wired to your suppliers, loaded with your rates, quoting in ninety seconds.">
 <meta property="og:url" content="https://theagentlab.site/ai/">
 <meta property="og:site_name" content="The Agent Lab">
 <meta property="og:image" content="https://theagentlab.site/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The Agent Lab">
+<meta property="og:image:alt" content="The Agent Lab, AI quoting engines for home service contractors">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI Automation That Runs | The Agent Lab">
-<meta name="twitter:description" content="AI agents installed in production for SMBs: lead response, support, and ops automation. Priced on outcomes, proven in shipped code.">
+<meta name="twitter:title" content="Who We Build For | AI Quoting Engines For Trades | The Agent Lab">
+<meta name="twitter:description" content="Live AI quoting engines for plumbers, HVAC, roofers and electricians. Wired to your suppliers, loaded with your rates, quoting in ninety seconds.">
 <meta name="twitter:image" content="https://theagentlab.site/assets/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,14 +37,14 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "The Agent Lab - AI Automation",
+  "name": "AI Quoting Engine",
   "url": "https://theagentlab.site/ai/",
-  "description": "AI agent automation practice for small and midsize businesses: lead-response agents, AI front desks, support bots, and ops or reporting automation, installed into production workflows and priced on outcomes.",
+  "description": "Live AI quoting engines for home service contractors. Supplier API integration, a labor rate matrix built from your own bids, and automated job intake, so a customer gets a real priced quote in ninety seconds instead of waiting three days for a manual estimate.",
   "provider": {
     "@type": "Organization",
     "name": "The Agent Lab",
     "url": "https://theagentlab.site/",
-    "sameAs": ["https://github.com/M-Ashrey", "https://dev.to/m_ashrey122"]
+    "sameAs": ["https://www.linkedin.com/in/mohamed-ashrey/", "https://github.com/M-Ashrey", "https://dev.to/m_ashrey122", "https://www.youtube.com/@TheAgentLab"]
   },
   "areaServed": "Remote",
   "email": "m.ashrey122@gmail.com"
@@ -1212,12 +1212,29 @@ code, .mono {
 }
 
 .spec {
-  flex: 1 1 130px;
+  flex: 1 1 200px;
   background: var(--bg-surface-1);
   padding: 20px 24px;
 }
 
+/* Two rows in a row are one table, not two slabs. A single .spec-row with
+   eight cells in it wraps on min-content instead of on the basis, which is how
+   you end up with seven across and one orphan, so long spec sets are authored
+   as consecutive rows and stitched back together here. */
+.spec-row + .spec-row {
+  margin-top: 2px;
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.spec-row:has(+ .spec-row) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .spec .k {
+  display: block;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
@@ -1226,7 +1243,11 @@ code, .mono {
   color: var(--text-tertiary);
 }
 
+/* Authored as spans, so both halves need to be told they are blocks. Without
+   this the mono label runs into the serif value on one line and the 6px
+   margin below is silently dropped. */
 .spec .v {
+  display: block;
   font-family: var(--font-display);
   font-size: 24px;
   color: var(--text-primary);
@@ -1432,6 +1453,228 @@ code, .mono {
 .offer .go { margin-top: auto; }
 
 /* ===================================================================
+   PRE-LAUNCH BADGE
+   The site sells nothing right now. That state is stated on the surface
+   rather than implied by a missing button, because a visitor who hunts
+   for a checkout that was quietly removed reads it as breakage.
+   Clay, not bronze: this is a status, not an invitation.
+   =================================================================== */
+.prelaunch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-clay);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  box-shadow: var(--shadow-xs);
+  margin-bottom: 18px;
+}
+
+.prelaunch::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-clay);
+  flex-shrink: 0;
+}
+
+/* ===================================================================
+   VERSUS GRID (old way against the engine)
+   Two columns that must not read as balanced. The left column is the
+   status quo and is deliberately dimmer and unshadowed; the right one
+   carries the bronze edge and the elevation. Physicality is the
+   argument, so the column that wins is the column with mass.
+   =================================================================== */
+.versus {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 36px 0 0;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.versus-col { background: var(--bg-surface-1); padding: 40px 34px; }
+
+.versus-col.them { background: var(--bg-inset); }
+
+.versus-col.us {
+  background: var(--bg-surface-2);
+  border-top: 2px solid var(--accent-bronze);
+}
+
+.versus-col .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 14px;
+}
+
+.versus-col.us .lab { color: var(--accent-bronze-dim); }
+
+.versus-col h3 {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.versus-col.us h3 { color: var(--text-primary); }
+
+.versus-col ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+
+.versus-col li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-tertiary);
+}
+
+.versus-col.us li { color: var(--text-secondary); }
+
+.versus-col li::before {
+  content: "\00d7";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent-clay);
+}
+
+.versus-col.us li::before {
+  content: "\2192";
+  color: var(--accent-bronze);
+}
+
+.versus-col li strong { color: var(--text-primary); font-weight: 550; }
+
+/* ===================================================================
+   PARTNER SLAB (the agency revenue-share block)
+   A full-bleed band, heavier than any card on the page, because this is
+   the one section written for a peer rather than a customer. The split
+   puts the argument on the left and the arithmetic on the right, since
+   an agency owner reads the number first and the pitch second.
+   =================================================================== */
+.partner {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 2px;
+  margin: 36px 0 0;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-monolith);
+}
+
+.partner-body { background: var(--bg-surface-1); padding: 52px 48px; }
+
+.partner-body .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 18px;
+}
+
+.partner-body h2 {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.partner-body h2 em { font-style: italic; color: var(--accent-bronze); }
+
+.partner-body p {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 16px;
+}
+
+.partner-body p:last-of-type { margin-bottom: 28px; }
+.partner-body strong { color: var(--text-primary); font-weight: 550; }
+
+.partner-math {
+  background: var(--bg-inset);
+  padding: 52px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.partner-math .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.partner-math .row:last-child { border-bottom: 0; }
+
+.partner-math .k {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.partner-math .v {
+  font-family: var(--font-display);
+  font-size: 27px;
+  line-height: 1;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.partner-math .row.total .k { color: var(--accent-bronze-dim); }
+.partner-math .row.total .v { color: var(--accent-bronze); font-size: 34px; }
+
+/* This line carries the whole argument to an agency owner, thirty thousand on
+   ten clients, and it was set in ghost at 10px, which measures 1.73 to 1
+   against the inset. Nobody was reading it. Tertiary at 11px clears 3.5 and
+   keeps the line quiet without hiding it. */
+.partner-math .note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-top: 22px;
+}
+
+/* ===================================================================
    METRICS
    =================================================================== */
 .metric-grid {
@@ -1511,6 +1754,15 @@ code, .mono {
   color: var(--text-tertiary);
   max-width: var(--measure);
   margin-top: 22px;
+}
+
+/* Sign-off line at the end of a post. Two bespoke posts were drawing this
+   with an inline hr and a hardcoded #888, which is exactly what the brand
+   checker grades against, so the rule lives here instead. */
+.fine.endnote {
+  margin-top: 34px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 /* ===================================================================
@@ -1768,6 +2020,22 @@ code, .mono {
 .field-input::placeholder { color: var(--text-tertiary); }
 .field-input:focus { border-color: var(--accent-bronze); }
 
+/* A native select would draw the OS control here, which on Windows means a
+   white box with a blue caret sitting inside a black page. Appearance is
+   stripped and the caret redrawn as an inline SVG in bronze so the field
+   matches the text inputs beside it. */
+select.field-input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23bf9553' stroke-width='1.5'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 11px 8px;
+  cursor: pointer;
+}
+select.field-input option { background: var(--bg-surface-1); color: var(--text-primary); }
+
 .field-label {
   display: block;
   font-family: var(--font-mono);
@@ -1893,6 +2161,34 @@ code, .mono {
 
 .footer-copy a { color: var(--text-ghost); transition: color 0.25s ease; }
 .footer-copy a:hover { color: var(--accent-bronze); }
+
+/* --- social row ----------------------------------------------------- */
+/* Icons are drawn inside the 24-unit viewBox with real padding. The
+   previous set was authored with geometry that ran off canvas (a 24-wide
+   rect starting at x=2, an h-28 run in a 24 box), so two of four marks
+   rendered clipped. Every path here closes inside 2..22. */
+.footer-social { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  background: var(--bg-surface-1);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.footer-social a:hover {
+  color: var(--accent-bronze);
+  border-color: var(--border-accent);
+  background: var(--bg-surface-2);
+}
+
+.footer-social svg { width: 17px; height: 17px; display: block; }
 
 /* ===================================================================
    AGENT ECOSYSTEM
@@ -2448,6 +2744,10 @@ body.ecosystem-open .eco-legend {
   .hero-graphic { max-width: 460px; margin: 0 auto; }
   .product-slab-inner { grid-template-columns: 1fr; }
   .card-grid, .pricing-grid { grid-template-columns: 1fr; }
+  .versus { grid-template-columns: 1fr; }
+  .partner { grid-template-columns: 1fr; }
+  .partner-body, .partner-math { padding: 36px 30px; }
+  .partner-body h2 { font-size: 31px; }
 }
 
 @media (max-width: 720px) {
@@ -2464,6 +2764,21 @@ body.ecosystem-open .eco-legend {
   .closing { padding: 34px 28px; }
   .buy-slab { padding: 30px 26px; }
   .footer-nav { gap: 32px; }
+  .versus-col { padding: 32px 26px; }
+  .partner-body h2 { font-size: 27px; }
+  /* Both display sizes clamp on vw, but their floors were set for a laptop.
+     At 360px the 56px floor turned four authored hero lines into six wrapped
+     ones, which puts a two word orphan under the line it belongs to. The
+     breaks are the copy, so the type gives way instead. */
+  .hero-headline { font-size: 37px; line-height: 1.1; }
+  .article-title { font-size: 34px; line-height: 1.14; }
+  /* Four columns at 28px of side padding have a min content width near 500px.
+     The container clipped that to 360 and the right hand columns were simply
+     gone on a phone, no scrollbar, no hint. Tighten the cells and let what is
+     left scroll. */
+  .data-table-container { overflow-x: auto; }
+  .data-table-header { padding: 16px 18px; }
+  thead th, tbody td { padding-left: 18px; padding-right: 18px; }
   .eco-head { top: 18px; left: 20px; }
   .eco-head-title { font-size: 20px; }
   .eco-head-sub { display: none; }
@@ -2511,32 +2826,32 @@ body.ecosystem-open .eco-legend {
 <nav class="nav-bar">
   <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
   <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
     <li><a href="/kits/">Kits</a></li>
-    <li><a href="/services/">Services</a></li>
-    <li><a href="/ai/">AI Practice</a></li>
     <li><a href="/blog/">Blog</a></li>
   </ul>
-  <a href="/services/" class="nav-cta">Book an Audit</a>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
 </nav>
 
 <main id="main">
 <div class="page-container">
 
   <header class="article-head">
-    <span class="eyebrow">AI agents &middot; MCP integrations</span>
-    <h1 class="article-title">Automation that <em>runs in production</em>, not another demo.</h1>
-    <p class="dek">The lab installs AI agents onto the workflows your team already runs, answering, qualifying and acting on real work. <strong>Live in about ten days</strong>, priced on an outcome you already budget for.</p>
+    <span class="eyebrow">Who We Build For</span>
+    <h1 class="article-title">Trades that price work <em>on site</em>, by hand, for free.</h1>
+    <p class="dek">Plumbing, HVAC, roofing, electrical and remodelling. If a licensed person is driving to a house to produce a number that a customer might not even read, that is the work we automate. <strong>Ninety seconds instead of three days</strong>, on your rates, from your suppliers.</p>
     <div class="article-actions">
-      <a class="btn-primary" href="https://ai-readiness-scorecard-theta.vercel.app" target="_blank" rel="noopener">Score your site free</a>
-      <a class="btn-secondary" href="#book">Book a 15 min teardown</a>
+      <a class="btn-primary" href="/services/">See the spec</a>
+      <a class="btn-secondary" href="/#partners">Agency partners</a>
       <a class="btn-ghost" href="#proof">See the code</a>
     </div>
-    <p class="fine">Every figure on this page is published industry data with a citation, or software you can open and inspect right now. No borrowed logos, no revenue promises.</p>
+    <p class="fine">Every figure on this page is published industry data with a citation, or software you can open and read right now. No borrowed logos and no revenue promises.</p>
   </header>
 
   <section class="section">
-    <div class="section-label">The Problem That Pays For Itself</div>
-    <h2 class="section-title">Nearly every inbound lead is won or lost in the first five minutes.</h2>
+    <div class="section-label">The Bottleneck</div>
+    <h2 class="section-title">The job is usually lost before anyone quotes it.</h2>
     <div class="metric-grid">
       <div class="metric">
         <div class="n">21x</div>
@@ -2553,132 +2868,118 @@ body.ecosystem-open .eco-legend {
         <div class="c">Contact rate and conversion: MIT and Dr James Oldroyd. Average response: Inman, 2025. 78% of buyers purchase from whoever responds first.</div>
       </div>
     </div>
-    <p class="fine">An AI lead response agent closes that gap to under a minute, every hour of every day. That single change is usually the highest ROI automation a business can make.</p>
+    <p class="fine">To be exact about it, this research measures lead response, not quote turnaround. We are treating a priced quote as the response, because for a contractor that is what the customer is actually waiting for. A callback with no number in it does not stop them phoning the next three shops.</p>
   </section>
 
   <section class="section">
-    <div class="section-label">Why Now</div>
-    <h2 class="section-title">The market already moved. The question is who captures it first.</h2>
-    <div class="metric-grid">
-      <div class="metric">
-        <div class="n">58%</div>
-        <div class="d">Of small firms now use generative AI, up from 40% a year earlier.</div>
-        <div class="c">U.S. Chamber of Commerce, 2025</div>
-      </div>
-      <div class="metric">
-        <div class="n cool">~46%</div>
-        <div class="d">Of SMBs already run AI chatbots or automated response tools.</div>
-        <div class="c">SMB AI adoption surveys, 2025</div>
-      </div>
-      <div class="metric">
-        <div class="n pos">80%</div>
-        <div class="d">Of common service issues projected to be resolved autonomously by agentic AI by 2029.</div>
-        <div class="c">Gartner, 2025</div>
-      </div>
+    <div class="section-label">The Other Half</div>
+    <h2 class="section-title">Then there are the hours you already paid for.</h2>
+    <p class="section-sub">Most shops we talk to put ten to fifteen hours a week into pricing jobs. A large share of that is a licensed estimator in a truck, on the road, producing a document for free. Some of those become work. Many of them were price shopping from the first phone call, and you found that out after the site visit.</p>
+    <div class="spec-row">
+      <div class="spec"><span class="k">What it costs now</span><span class="v">Drive time, estimator hours, three day turnaround</span></div>
+      <div class="spec"><span class="k">What the customer gets</span><span class="v">Nothing, until somebody finds a free evening</span></div>
+      <div class="spec"><span class="k">What the engine changes</span><span class="v">A real number, priced on your rates, in ninety seconds</span></div>
+      <div class="spec"><span class="k">Who still drives out</span><span class="v">The jobs that priced high enough to be worth the trip</span></div>
     </div>
-    <p class="fine">Directional industry benchmarks, shown to frame the opportunity, not results claimed by this practice.</p>
+    <p class="fine">The engine does not remove the site visit from complicated work. It removes the site visit from work that was never going to close.</p>
   </section>
 
   <section class="section">
-    <div class="section-label">Where It Pays Off</div>
-    <h2 class="section-title">Sharpest ROI where an automation touches revenue or a salaried headcount.</h2>
+    <div class="section-label">By Trade</div>
+    <h2 class="section-title">Where an engine prices cleanly, and what actually changes.</h2>
     <div class="data-table-container">
       <div class="data-table-header">
-        <span class="data-table-title">Sector map</span>
-        <span class="data-table-badge">Goals, not guarantees</span>
+        <span class="data-table-title">Trade map</span>
+        <span class="data-table-badge">Scoped per shop, not guaranteed</span>
       </div>
       <table>
         <thead>
           <tr>
-            <th scope="col">Sector</th>
-            <th scope="col">Where it leaks</th>
-            <th scope="col">The automation</th>
-            <th scope="col">Goal</th>
+            <th scope="col">Trade</th>
+            <th scope="col">Where the hours go</th>
+            <th scope="col">What the engine prices</th>
+            <th scope="col">What changes</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Real estate</td>
-            <td>Leads go cold in minutes and agents drown in admin.</td>
-            <td><strong>Lead response agent.</strong> Answers, qualifies and books every inbound lead in under a minute, then follows up on schedule.</td>
-            <td>Response time from hours to seconds, more leads worked with the same staff.</td>
+            <td>Plumbing</td>
+            <td>Repipes, water heaters and drain work all get quoted on site, one house at a time.</td>
+            <td><strong>Material from your distributor, labor from your matrix.</strong> Copper, PEX and fixtures priced live off Ferguson or whoever you buy from, hours set by job type and access.</td>
+            <td>Homeowner gets a number the same hour they ask. Your estimator only drives out when the job is worth it.</td>
           </tr>
           <tr>
-            <td>Clinics and local services</td>
-            <td>Missed calls, no shows, front desk underwater.</td>
-            <td><strong>AI front desk.</strong> Answers calls and messages around the clock, books and confirms appointments, sends reminders, escalates the rest to a human.</td>
-            <td>Fewer missed enquiries and no shows, measured against your current booking numbers.</td>
+            <td>HVAC</td>
+            <td>Replacement quotes wait on equipment pricing that moves and on load sizing.</td>
+            <td><strong>Equipment and install by tonnage and configuration.</strong> Unit cost pulled live, install hours from your own bids, your markup enforced as a rule.</td>
+            <td>Replacement quotes go out during the call instead of after the weekend, with your margin already in them.</td>
           </tr>
           <tr>
-            <td>E-commerce and DTC</td>
-            <td>Abandoned carts and a slow support queue.</td>
-            <td><strong>Recovery and support agent.</strong> Re-engages abandoned carts and resolves routine tickets, escalating edge cases with full context.</td>
-            <td>Recover a measurable share of lost carts and deflect routine support, scoped to your data.</td>
+            <td>Roofing</td>
+            <td>Square footage, tear off layers and material choice, worked out by hand per roof.</td>
+            <td><strong>Squares, layers, pitch and material.</strong> Shingle and underlayment pricing from ABC Supply or your supplier, labor scaled by pitch and access difficulty.</td>
+            <td>Intake collects what your estimator asks for, so the quote is priced before anybody climbs a ladder.</td>
           </tr>
           <tr>
-            <td>Agencies and ops teams</td>
-            <td>Manual reporting and reconciliation eat billable time.</td>
-            <td><strong>Reporting agent.</strong> Pulls from your tools, drafts the recurring report or reconciliation, and flags anomalies for review.</td>
-            <td>Reclaim recurring hours each week from work nobody should do by hand.</td>
+            <td>Electrical</td>
+            <td>Panel upgrades and rewires priced off a walkthrough that has to be scheduled.</td>
+            <td><strong>Panels, runs and fixture counts.</strong> Material live from your distributor, labor by circuit count and building age band.</td>
+            <td>Standard upgrades price themselves. Anything behind a wall gets flagged for a human instead of guessed at.</td>
           </tr>
           <tr>
-            <td>Law and professional firms</td>
-            <td>Contract review and intake eat billable hours.</td>
-            <td><strong>Clause review and intake agent.</strong> A retrieval grounded assistant that surfaces relevant clauses and structures new client intake for a human to approve.</td>
-            <td>Higher ticket, longer cycle, scoped carefully with human approval on every output.</td>
+            <td>Remodelling and GC</td>
+            <td>Multi-trade scopes assembled in a spreadsheet, every single time.</td>
+            <td><strong>The repeatable line items.</strong> Known assemblies price automatically, unknowns are flagged. This one is a partial fit and we will say so before we quote you.</td>
+            <td>The estimator starts from a priced draft instead of a blank sheet, and only argues with the unusual parts.</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="fine">Outcomes are stated as goals measured against your own numbers, never guaranteed. Exact ROI is established in the paid audit before any build.</p>
+    <p class="fine">Outcomes are stated as what the engine does, measured against your current turnaround, never as a revenue promise. Whether it fits your specific mix gets settled before anything is built.</p>
   </section>
 
-  <section class="section" id="offer">
-    <div class="section-label">What Gets Built</div>
-    <h2 class="section-title">Fixed scope, fixed price. You always know what you are getting.</h2>
-    <div class="offer-grid">
-      <div class="offer lead">
-        <div class="t">Start here</div>
-        <h3>AI Automation Audit</h3>
-        <div class="price">$250 to $500<small>Credited toward the build</small></div>
-        <p>A fixed fee teardown of your workflows. You leave with the top three automations ranked by hours saved, plus a fixed build quote. The fee is credited toward the build.</p>
-        <a class="btn-primary go" href="#book">Book the audit</a>
-      </div>
-      <div class="offer">
-        <div class="t">Core</div>
-        <h3>Lead Response Agent</h3>
-        <div class="price">$1,500 to $3,000<small>Plus $600 to $900 per month</small></div>
-        <p>Answers, qualifies and books every inbound lead in under sixty seconds, around the clock. Live in about ten days. Stop losing deals to slow follow up.</p>
-        <a class="btn-secondary go" href="#book">Scope a build</a>
-      </div>
-      <div class="offer">
-        <div class="t">Core</div>
-        <h3>Support FAQ Bot</h3>
-        <div class="price">$1,500 to $3,000<small>Plus $300 to $800 per month</small></div>
-        <p>Wired into your helpdesk. Resolves routine tickets automatically and escalates the rest with full context. Cut support load without hiring.</p>
-        <a class="btn-secondary go" href="#book">Scope a build</a>
-      </div>
+  <div class="limits">
+    <span class="lab">Where we are not a fit</span>
+    <p><strong>If your suppliers have no usable API, we will tell you.</strong> Some regional distributors have nothing to connect to. We can run off a rate sheet you maintain by hand, but that is a worse product and we price it as one.</p>
+    <p><strong>If most of your work is bespoke, this is not for you.</strong> Custom fabrication and structural repair with unknown conditions behind a wall do not price from a form. The engine will flag more jobs than it prices and you will not get your hours back.</p>
+    <p><strong>If you are not the one who sets pricing, we cannot build it.</strong> The matrix comes out of your real bids and your real margin floor. Somebody with authority over those numbers has to sit in two sessions with us.</p>
+  </div>
+
+  <section class="section">
+    <div class="section-label">One Price</div>
+    <h2 class="section-title">There is one product and one number.</h2>
+    <p class="section-sub">This is not a menu. Every contractor gets the same engine, wired to their own suppliers and loaded with their own rates. The full spec, the build timeline and the terms live on the engine page, which is the price authority for this site.</p>
+    <div class="spec-row">
+      <div class="spec"><span class="k">Direct install</span><span class="v">10,000 USD, one engine, one contractor</span></div>
+      <div class="spec"><span class="k">Agency share</span><span class="v">30 percent, or 3,000 USD per install</span></div>
+      <div class="spec"><span class="k">Operation</span><span class="v">Monthly, quoted per install</span></div>
+      <div class="spec"><span class="k">Build time</span><span class="v">Four to six weeks from signed scope</span></div>
+    </div>
+    <div class="hero-actions">
+      <a class="btn-primary" href="/services/">Read the full spec</a>
+      <a class="btn-secondary" href="#founding">Founding access</a>
     </div>
   </section>
 
   <section class="section">
-    <div class="section-label">How An Engagement Works</div>
-    <h2 class="section-title">Sell before build. You see the plan and the price before anything is built.</h2>
+    <div class="section-label">How You Find Out</div>
+    <h2 class="section-title">Four steps, and two of them are free.</h2>
     <div class="step-grid">
-      <div class="step"><div class="i">01</div><h4>Free teardown</h4><p>Fifteen minutes on one workflow. The lab names where the hours, or the leads, are leaking.</p></div>
-      <div class="step"><div class="i">02</div><h4>Paid mini audit</h4><p>Fixed fee, credited. Top three automations by ROI, plus a fixed build quote. No build yet.</p></div>
-      <div class="step"><div class="i">03</div><h4>Build the winner</h4><p>Scoped, fixed price, about ten days. Human in the loop with a visible off switch.</p></div>
-      <div class="step"><div class="i">04</div><h4>Retainer</h4><p>Monitoring, new intents, the next workflow. Month to month, no lock in.</p></div>
+      <div class="step"><div class="i">01</div><h4>Name the job</h4><p>Tell us the job you quote most and who you buy the material from. One email. No call and no discovery sequence.</p></div>
+      <div class="step"><div class="i">02</div><h4>We check the suppliers</h4><p>We look at whether your distributors expose pricing we can reach. If they do not, that is the end of it and we say so.</p></div>
+      <div class="step"><div class="i">03</div><h4>Spec and number</h4><p>You get the build scope, the timeline and the price in writing before anything is committed.</p></div>
+      <div class="step"><div class="i">04</div><h4>Build and shadow run</h4><p>Four to six weeks. The engine quotes live jobs beside your estimator until you stop disagreeing with it, then intake goes on your site.</p></div>
     </div>
     <div class="callout">
       <span class="lab">The guarantee</span>
-      <p>Every automation ships with a <strong>human in the loop approval path</strong> and a documented data handling policy. The lab guarantees the deliverable and the timeline, never a revenue number it cannot control.</p>
+      <p>Your margin floor is enforced inside the engine, not suggested to it, and anything it is unsure about routes to <strong>a human before it reaches the customer</strong>. We guarantee the deliverable and the timeline. We do not guarantee a revenue number, because we do not control whether your customers say yes.</p>
     </div>
   </section>
 
   <section class="section" id="proof">
     <div class="section-label">Proof Of Work</div>
     <h2 class="section-title">Do not take the claim. Open the code.</h2>
+    <p class="section-sub">The engine itself runs for the contractor who paid for it, so it is not public. The infrastructure work behind it is, and it has been for a while.</p>
     <ul class="proof-list">
       <li><a href="https://github.com/M-Ashrey/mcp-doctor" target="_blank" rel="noopener"><span class="nm">mcp-doctor</span><span class="ds">CLI health check and security audit for MCP servers, MIT</span></a></li>
       <li><a href="https://github.com/M-Ashrey/memory-mcp" target="_blank" rel="noopener"><span class="nm">memory-mcp</span><span class="ds">Persistent memory MCP server, listed on Glama</span></a></li>
@@ -2686,28 +2987,62 @@ body.ecosystem-open .eco-legend {
       <li><a href="https://github.com/M-Ashrey/claude-mcp-starter-kit" target="_blank" rel="noopener"><span class="nm">claude-mcp-starter-kit</span><span class="ds">Turn Claude into an autonomous operator</span></a></li>
       <li><a href="/blog/"><span class="nm">the blog</span><span class="ds">Cited technical analysis, published continuously</span></a></li>
     </ul>
-    <p class="fine">Credibility here is shipped, inspectable software and a working automation pipeline, not stock logos.</p>
+    <p class="fine">Integrating against a distributor API that was designed for a purchasing department, not a quoting engine, is the actual job. This is the kind of work it looks like.</p>
   </section>
 
   <section class="section">
-    <div class="section-label">Competitive Pressure</div>
-    <h2 class="section-title">An honest read on where you stand.</h2>
-    <div class="callout">
-      <span class="lab">How the comparison is built</span>
-      <p>Prepared per meeting with <strong>verified, public</strong> facts about your specific competitors: a rival live booking page, a published response time, a chatbot already on their site. <strong>Never populated with invented or unverified claims.</strong> The point is to show the real gap an automation closes, not to inflate a number.</p>
+    <div class="section-label">For Agencies</div>
+    <div class="closing">
+      <div>
+        <h2 class="section-title">You already run marketing for these shops. The install is worth 3,000 USD to you.</h2>
+        <p class="section-sub">You know their real problem is not traffic. You have watched good leads sit in an inbox for three days. White label the engine, put your name on it, place it with clients who already trust you. Thirty percent of the install and thirty percent of the monthly, with no developer on your payroll.</p>
+      </div>
+      <a class="btn-primary" href="/#partners">Review The Math</a>
+    </div>
+  </section>
+
+  <section class="section" id="founding">
+    <div class="section-label">Founding Access</div>
+    <div class="closing">
+      <div>
+        <span class="prelaunch">Pre-launch</span>
+        <h2 class="section-title">Nothing here is for sale on the site yet, and that is deliberate.</h2>
+        <p class="section-sub">Our payment processor rejected the domain because we sell services rather than digital goods. We are not rushing to a worse processor over it. The founding group is small, the terms are better, and the first builds happen with us in the room.</p>
+      </div>
+    </div>
+
+    <div class="waitlist">
+      <h3>Get founding access</h3>
+      <p>Contractors get the install spec and the timeline. Agencies get the partner terms and the margin sheet. One document, no sequence of nine emails.</p>
+      <form class="field-row" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="26c8992d-3a5e-4c52-ad73-20f25e4dac70">
+        <input type="hidden" name="subject" value="Founding access (who we build for page)">
+        <input type="hidden" name="from_name" value="founding access">
+        <input type="hidden" name="redirect" value="https://theagentlab.site/kits/thanks/">
+        <input type="checkbox" name="botcheck" class="visually-hidden">
+        <label for="ai-email" class="visually-hidden">Email</label>
+        <input id="ai-email" class="field-input" type="email" name="email" required placeholder="you@company.com" autocomplete="email">
+        <label for="ai-role" class="visually-hidden">Who you are</label>
+        <select id="ai-role" class="field-input" name="role" required>
+          <option value="">Who are you?</option>
+          <option value="Contractor">Contractor, I run the shop</option>
+          <option value="Agency">Agency, I have contractor clients</option>
+        </select>
+        <button type="submit" class="btn-primary">Send me the numbers</button>
+      </form>
     </div>
   </section>
 
   <section class="section" id="book">
-    <div class="section-label">Next Step</div>
+    <div class="section-label">Direct Line</div>
     <div class="closing">
       <div>
-        <h2 class="section-title">Book a free fifteen minute teardown.</h2>
-        <p class="section-sub">You leave with the single highest ROI automation for your business by hours saved, whether or not we ever work together.</p>
+        <h2 class="section-title">Tell us the job you quote most.</h2>
+        <p class="section-sub">Name the job and the suppliers you buy it from. We will tell you whether the engine can price it, usually the same day, and we will tell you when it cannot.</p>
       </div>
-      <a class="btn-primary" href="mailto:m.ashrey122@gmail.com?subject=AI%20automation%20teardown">Email to book</a>
+      <a class="btn-primary" href="mailto:m.ashrey122@gmail.com?subject=AI%20Quoting%20Engine">Email the lab</a>
     </div>
-    <p class="fine"><strong>Sources.</strong> Speed to lead: National Association of Realtors (2025), MIT and Dr James Oldroyd, Inman (2025), first responder advantage from lead response studies. Market: U.S. Chamber of Commerce Small Business AI report (2025), SMB AI adoption surveys (2025), Gartner customer service AI prediction (2025). Figures are directional industry benchmarks from published reports, not audited data or results of this practice.</p>
+    <p class="fine"><strong>Sources.</strong> Speed to lead: National Association of Realtors (2025), MIT and Dr James Oldroyd, Inman (2025). These figures measure inbound lead response, which we treat here as a proxy for quote turnaround. Quoting hours are what contractors have told us directly, not a published study. Figures are directional industry benchmarks from published reports, not audited data and not results claimed by this lab.</p>
   </section>
 
 </div>
@@ -2717,26 +3052,33 @@ body.ecosystem-open .eco-legend {
   <div class="footer-inner page-container">
     <div class="footer-brand">
       <div class="footer-wordmark">The Agent <span>Lab</span></div>
-      <p class="footer-line">Automation infrastructure, designed and operated by Ashrey, Chief Architect. One operator commanding a real machine.</p>
+      <p class="footer-line">An AI development lab building live quoting engines for home service contractors. Run by Ashrey, Co-Founder.</p>
+      <div class="footer-social">
+        <a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.1 7.5c-.2-.9-.9-1.6-1.8-1.8C17.5 5.3 12 5.3 12 5.3s-5.5 0-7.3.4c-.9.2-1.6.9-1.8 1.8C2.5 9.3 2.5 12 2.5 12s0 2.7.4 4.5c.2.9.9 1.6 1.8 1.8 1.8.4 7.3.4 7.3.4s5.5 0 7.3-.4c.9-.2 1.6-.9 1.8-1.8.4-1.8.4-4.5.4-4.5s0-2.7-.4-4.5zM10.2 15.3V8.7l5.4 3.3-5.4 3.3z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/mohamed-ashrey/" aria-label="LinkedIn" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.3 20.5H3V9.2h3.3v11.3zM4.6 7.8c-1.1 0-1.9-.9-1.9-1.9 0-1.1.9-1.9 1.9-1.9s1.9.9 1.9 1.9c0 1.1-.8 1.9-1.9 1.9zM21 20.5h-3.3v-5.9c0-1.5-.6-2.4-1.9-2.4-1 0-1.7.7-1.9 1.4-.1.3-.1.6-.1.9v6h-3.3s0-9.8 0-11.3h3.3v1.6c.4-.7 1.3-1.7 3.1-1.7 2.3 0 4 1.5 4 4.7v6.7z"/></svg>
+        </a>
+      </div>
     </div>
     <nav class="footer-nav" aria-label="Footer">
       <div class="footer-col">
-        <span class="h">Products</span>
-        <a href="/kits/">Kits</a>
-        <a href="/kits/a09-mcp-audit/">MCP Audit Kit</a>
-        <a href="/kits/a01-kindle-ebooks/">Kindle Pipeline</a>
+        <span class="h">The Engine</span>
+        <a href="/services/">What it does</a>
+        <a href="/ai/">Who we build for</a>
+        <a href="/#partners">Agency partners</a>
       </div>
       <div class="footer-col">
-        <span class="h">Work</span>
-        <a href="/services/">Services</a>
-        <a href="/ai/">AI Practice</a>
+        <span class="h">The Lab</span>
+        <a href="/kits/">Kits</a>
         <a href="/blog/">Blog</a>
+        <a href="/#founding">Founding access</a>
       </div>
       <div class="footer-col">
         <span class="h">Open Source</span>
         <a href="https://github.com/M-Ashrey">GitHub</a>
         <a href="https://dev.to/m_ashrey122">dev.to</a>
-        <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a>
       </div>
     </nav>
   </div>

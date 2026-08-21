@@ -1190,12 +1190,29 @@ code, .mono {
 }
 
 .spec {
-  flex: 1 1 130px;
+  flex: 1 1 200px;
   background: var(--bg-surface-1);
   padding: 20px 24px;
 }
 
+/* Two rows in a row are one table, not two slabs. A single .spec-row with
+   eight cells in it wraps on min-content instead of on the basis, which is how
+   you end up with seven across and one orphan, so long spec sets are authored
+   as consecutive rows and stitched back together here. */
+.spec-row + .spec-row {
+  margin-top: 2px;
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.spec-row:has(+ .spec-row) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .spec .k {
+  display: block;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
@@ -1204,7 +1221,11 @@ code, .mono {
   color: var(--text-tertiary);
 }
 
+/* Authored as spans, so both halves need to be told they are blocks. Without
+   this the mono label runs into the serif value on one line and the 6px
+   margin below is silently dropped. */
 .spec .v {
+  display: block;
   font-family: var(--font-display);
   font-size: 24px;
   color: var(--text-primary);
@@ -1410,6 +1431,228 @@ code, .mono {
 .offer .go { margin-top: auto; }
 
 /* ===================================================================
+   PRE-LAUNCH BADGE
+   The site sells nothing right now. That state is stated on the surface
+   rather than implied by a missing button, because a visitor who hunts
+   for a checkout that was quietly removed reads it as breakage.
+   Clay, not bronze: this is a status, not an invitation.
+   =================================================================== */
+.prelaunch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-clay);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  box-shadow: var(--shadow-xs);
+  margin-bottom: 18px;
+}
+
+.prelaunch::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-clay);
+  flex-shrink: 0;
+}
+
+/* ===================================================================
+   VERSUS GRID (old way against the engine)
+   Two columns that must not read as balanced. The left column is the
+   status quo and is deliberately dimmer and unshadowed; the right one
+   carries the bronze edge and the elevation. Physicality is the
+   argument, so the column that wins is the column with mass.
+   =================================================================== */
+.versus {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 36px 0 0;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.versus-col { background: var(--bg-surface-1); padding: 40px 34px; }
+
+.versus-col.them { background: var(--bg-inset); }
+
+.versus-col.us {
+  background: var(--bg-surface-2);
+  border-top: 2px solid var(--accent-bronze);
+}
+
+.versus-col .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 14px;
+}
+
+.versus-col.us .lab { color: var(--accent-bronze-dim); }
+
+.versus-col h3 {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.versus-col.us h3 { color: var(--text-primary); }
+
+.versus-col ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+
+.versus-col li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-tertiary);
+}
+
+.versus-col.us li { color: var(--text-secondary); }
+
+.versus-col li::before {
+  content: "\00d7";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent-clay);
+}
+
+.versus-col.us li::before {
+  content: "\2192";
+  color: var(--accent-bronze);
+}
+
+.versus-col li strong { color: var(--text-primary); font-weight: 550; }
+
+/* ===================================================================
+   PARTNER SLAB (the agency revenue-share block)
+   A full-bleed band, heavier than any card on the page, because this is
+   the one section written for a peer rather than a customer. The split
+   puts the argument on the left and the arithmetic on the right, since
+   an agency owner reads the number first and the pitch second.
+   =================================================================== */
+.partner {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 2px;
+  margin: 36px 0 0;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-monolith);
+}
+
+.partner-body { background: var(--bg-surface-1); padding: 52px 48px; }
+
+.partner-body .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 18px;
+}
+
+.partner-body h2 {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.partner-body h2 em { font-style: italic; color: var(--accent-bronze); }
+
+.partner-body p {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 16px;
+}
+
+.partner-body p:last-of-type { margin-bottom: 28px; }
+.partner-body strong { color: var(--text-primary); font-weight: 550; }
+
+.partner-math {
+  background: var(--bg-inset);
+  padding: 52px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.partner-math .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.partner-math .row:last-child { border-bottom: 0; }
+
+.partner-math .k {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.partner-math .v {
+  font-family: var(--font-display);
+  font-size: 27px;
+  line-height: 1;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.partner-math .row.total .k { color: var(--accent-bronze-dim); }
+.partner-math .row.total .v { color: var(--accent-bronze); font-size: 34px; }
+
+/* This line carries the whole argument to an agency owner, thirty thousand on
+   ten clients, and it was set in ghost at 10px, which measures 1.73 to 1
+   against the inset. Nobody was reading it. Tertiary at 11px clears 3.5 and
+   keeps the line quiet without hiding it. */
+.partner-math .note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-top: 22px;
+}
+
+/* ===================================================================
    METRICS
    =================================================================== */
 .metric-grid {
@@ -1489,6 +1732,15 @@ code, .mono {
   color: var(--text-tertiary);
   max-width: var(--measure);
   margin-top: 22px;
+}
+
+/* Sign-off line at the end of a post. Two bespoke posts were drawing this
+   with an inline hr and a hardcoded #888, which is exactly what the brand
+   checker grades against, so the rule lives here instead. */
+.fine.endnote {
+  margin-top: 34px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 /* ===================================================================
@@ -1746,6 +1998,22 @@ code, .mono {
 .field-input::placeholder { color: var(--text-tertiary); }
 .field-input:focus { border-color: var(--accent-bronze); }
 
+/* A native select would draw the OS control here, which on Windows means a
+   white box with a blue caret sitting inside a black page. Appearance is
+   stripped and the caret redrawn as an inline SVG in bronze so the field
+   matches the text inputs beside it. */
+select.field-input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23bf9553' stroke-width='1.5'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 11px 8px;
+  cursor: pointer;
+}
+select.field-input option { background: var(--bg-surface-1); color: var(--text-primary); }
+
 .field-label {
   display: block;
   font-family: var(--font-mono);
@@ -1871,6 +2139,34 @@ code, .mono {
 
 .footer-copy a { color: var(--text-ghost); transition: color 0.25s ease; }
 .footer-copy a:hover { color: var(--accent-bronze); }
+
+/* --- social row ----------------------------------------------------- */
+/* Icons are drawn inside the 24-unit viewBox with real padding. The
+   previous set was authored with geometry that ran off canvas (a 24-wide
+   rect starting at x=2, an h-28 run in a 24 box), so two of four marks
+   rendered clipped. Every path here closes inside 2..22. */
+.footer-social { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  background: var(--bg-surface-1);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.footer-social a:hover {
+  color: var(--accent-bronze);
+  border-color: var(--border-accent);
+  background: var(--bg-surface-2);
+}
+
+.footer-social svg { width: 17px; height: 17px; display: block; }
 
 /* ===================================================================
    AGENT ECOSYSTEM
@@ -2426,6 +2722,10 @@ body.ecosystem-open .eco-legend {
   .hero-graphic { max-width: 460px; margin: 0 auto; }
   .product-slab-inner { grid-template-columns: 1fr; }
   .card-grid, .pricing-grid { grid-template-columns: 1fr; }
+  .versus { grid-template-columns: 1fr; }
+  .partner { grid-template-columns: 1fr; }
+  .partner-body, .partner-math { padding: 36px 30px; }
+  .partner-body h2 { font-size: 31px; }
 }
 
 @media (max-width: 720px) {
@@ -2442,6 +2742,21 @@ body.ecosystem-open .eco-legend {
   .closing { padding: 34px 28px; }
   .buy-slab { padding: 30px 26px; }
   .footer-nav { gap: 32px; }
+  .versus-col { padding: 32px 26px; }
+  .partner-body h2 { font-size: 27px; }
+  /* Both display sizes clamp on vw, but their floors were set for a laptop.
+     At 360px the 56px floor turned four authored hero lines into six wrapped
+     ones, which puts a two word orphan under the line it belongs to. The
+     breaks are the copy, so the type gives way instead. */
+  .hero-headline { font-size: 37px; line-height: 1.1; }
+  .article-title { font-size: 34px; line-height: 1.14; }
+  /* Four columns at 28px of side padding have a min content width near 500px.
+     The container clipped that to 360 and the right hand columns were simply
+     gone on a phone, no scrollbar, no hint. Tighten the cells and let what is
+     left scroll. */
+  .data-table-container { overflow-x: auto; }
+  .data-table-header { padding: 16px 18px; }
+  thead th, tbody td { padding-left: 18px; padding-right: 18px; }
   .eco-head { top: 18px; left: 20px; }
   .eco-head-title { font-size: 20px; }
   .eco-head-sub { display: none; }
@@ -2489,12 +2804,12 @@ body.ecosystem-open .eco-legend {
 <nav class="nav-bar">
   <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
   <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
     <li><a href="/kits/">Kits</a></li>
-    <li><a href="/services/">Services</a></li>
-    <li><a href="/ai/">AI Practice</a></li>
     <li><a href="/blog/">Blog</a></li>
   </ul>
-  <a href="/services/" class="nav-cta">Book an Audit</a>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
 </nav>
 
 <main id="main">
@@ -2536,12 +2851,12 @@ body.ecosystem-open .eco-legend {
           </tr>
           <tr>
             <td>Name, email, billing country, payment details</td>
-            <td>You buy something</td>
-            <td>Collected and held by <strong>Paddle</strong> as merchant of record, inside their checkout. The lab receives your email address and country in order to deliver the file and account for the sale. <strong>Your card number is never received here.</strong></td>
+            <td>You buy something, which is not possible right now</td>
+            <td>There is no checkout on this site at the moment, so none of this is currently collected. When sales reopen it will be collected and held by a merchant of record inside their own checkout, and this row will name them. The lab would receive your email address and country in order to deliver the file and account for the sale. <strong>Your card number is never received here.</strong></td>
           </tr>
           <tr>
             <td>Your email address, again</td>
-            <td>Immediately after a purchase</td>
+            <td>Immediately after a purchase, or when a waitlist link is sent</td>
             <td>Passed to <a class="link" href="https://resend.com/" rel="noopener">Resend</a>, the service that sends your download email. Nothing else travels with it.</td>
           </tr>
           <tr>
@@ -2560,18 +2875,17 @@ body.ecosystem-open .eco-legend {
         <li><strong>GitHub Pages</strong> hosts this site, so GitHub receives your IP address as part of serving it.</li>
         <li><strong>Google Fonts</strong> serves the three typefaces on every page, which means Google receives your IP address when the font files load.</li>
         <li><strong>Cloudflare</strong> serves the three.js library used by the graphic on the home page, from its public CDN, so it receives your IP address on that page only.</li>
-        <li><strong>Paddle</strong> loads its checkout script on kit pages only. Paddle sets its own cookies when you open a checkout, governed by their privacy notice rather than this one.</li>
       </ul>
       <p>That is the complete list. There is no Google Analytics, no Meta pixel, no session recording, no heatmap tool, no A/B testing script and no consent banner, because there is nothing to consent to.</p>
 
       <h2>How long things are kept</h2>
-      <p>Purchase records are kept as long as tax and accounting rules require, which is a Paddle obligation as much as ours. Waitlist emails are kept until the kit launches and you have been told, then deleted. Support emails stay in the inbox unless you ask for deletion.</p>
+      <p>Purchase records are kept as long as tax and accounting rules require, which is an obligation on the merchant of record as much as on us. Waitlist emails are kept until the thing you asked about is available and you have been told, then deleted. Support emails stay in the inbox unless you ask for deletion.</p>
 
       <h2>What will never happen</h2>
       <p>Selling your data. Renting it. Passing it to an advertiser. Adding you to a mailing list you did not ask for. Using your email for anything other than the specific thing you gave it for.</p>
 
       <h2>Your rights</h2>
-      <p>Email <a href="mailto:m.ashrey122@gmail.com">m.ashrey122@gmail.com</a> and ask to see what is held, correct it, or delete it, and it gets done. If you are in the UK, EU or another jurisdiction with data protection law, you have those rights formally and you will not be made to cite the statute to exercise them. For data Paddle holds as merchant of record, their privacy notice and their processes apply, and you will be pointed to the right place if you ask.</p>
+      <p>Email <a href="mailto:m.ashrey122@gmail.com">m.ashrey122@gmail.com</a> and ask to see what is held, correct it, or delete it, and it gets done. If you are in the UK, EU or another jurisdiction with data protection law, you have those rights formally and you will not be made to cite the statute to exercise them. For data a merchant of record holds from a past sale, their privacy notice and their processes apply, and you will be pointed to the right place if you ask.</p>
 
       <h2>Children</h2>
       <p>These products are sold to adults. Nothing is knowingly collected from anyone under 16.</p>
@@ -2596,26 +2910,33 @@ body.ecosystem-open .eco-legend {
   <div class="footer-inner page-container">
     <div class="footer-brand">
       <div class="footer-wordmark">The Agent <span>Lab</span></div>
-      <p class="footer-line">Automation infrastructure, designed and operated by Ashrey, Chief Architect. One operator commanding a real machine.</p>
+      <p class="footer-line">An AI development lab building live quoting engines for home service contractors. Run by Ashrey, Co-Founder.</p>
+      <div class="footer-social">
+        <a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.1 7.5c-.2-.9-.9-1.6-1.8-1.8C17.5 5.3 12 5.3 12 5.3s-5.5 0-7.3.4c-.9.2-1.6.9-1.8 1.8C2.5 9.3 2.5 12 2.5 12s0 2.7.4 4.5c.2.9.9 1.6 1.8 1.8 1.8.4 7.3.4 7.3.4s5.5 0 7.3-.4c.9-.2 1.6-.9 1.8-1.8.4-1.8.4-4.5.4-4.5s0-2.7-.4-4.5zM10.2 15.3V8.7l5.4 3.3-5.4 3.3z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/mohamed-ashrey/" aria-label="LinkedIn" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.3 20.5H3V9.2h3.3v11.3zM4.6 7.8c-1.1 0-1.9-.9-1.9-1.9 0-1.1.9-1.9 1.9-1.9s1.9.9 1.9 1.9c0 1.1-.8 1.9-1.9 1.9zM21 20.5h-3.3v-5.9c0-1.5-.6-2.4-1.9-2.4-1 0-1.7.7-1.9 1.4-.1.3-.1.6-.1.9v6h-3.3s0-9.8 0-11.3h3.3v1.6c.4-.7 1.3-1.7 3.1-1.7 2.3 0 4 1.5 4 4.7v6.7z"/></svg>
+        </a>
+      </div>
     </div>
     <nav class="footer-nav" aria-label="Footer">
       <div class="footer-col">
-        <span class="h">Products</span>
-        <a href="/kits/">Kits</a>
-        <a href="/kits/a09-mcp-audit/">MCP Audit Kit</a>
-        <a href="/kits/a01-kindle-ebooks/">Kindle Pipeline</a>
+        <span class="h">The Engine</span>
+        <a href="/services/">What it does</a>
+        <a href="/ai/">Who we build for</a>
+        <a href="/#partners">Agency partners</a>
       </div>
       <div class="footer-col">
-        <span class="h">Work</span>
-        <a href="/services/">Services</a>
-        <a href="/ai/">AI Practice</a>
+        <span class="h">The Lab</span>
+        <a href="/kits/">Kits</a>
         <a href="/blog/">Blog</a>
+        <a href="/#founding">Founding access</a>
       </div>
       <div class="footer-col">
         <span class="h">Open Source</span>
         <a href="https://github.com/M-Ashrey">GitHub</a>
         <a href="https://dev.to/m_ashrey122">dev.to</a>
-        <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a>
       </div>
     </nav>
   </div>

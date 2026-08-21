@@ -1209,12 +1209,29 @@ code, .mono {
 }
 
 .spec {
-  flex: 1 1 130px;
+  flex: 1 1 200px;
   background: var(--bg-surface-1);
   padding: 20px 24px;
 }
 
+/* Two rows in a row are one table, not two slabs. A single .spec-row with
+   eight cells in it wraps on min-content instead of on the basis, which is how
+   you end up with seven across and one orphan, so long spec sets are authored
+   as consecutive rows and stitched back together here. */
+.spec-row + .spec-row {
+  margin-top: 2px;
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.spec-row:has(+ .spec-row) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .spec .k {
+  display: block;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
@@ -1223,7 +1240,11 @@ code, .mono {
   color: var(--text-tertiary);
 }
 
+/* Authored as spans, so both halves need to be told they are blocks. Without
+   this the mono label runs into the serif value on one line and the 6px
+   margin below is silently dropped. */
 .spec .v {
+  display: block;
   font-family: var(--font-display);
   font-size: 24px;
   color: var(--text-primary);
@@ -1429,6 +1450,228 @@ code, .mono {
 .offer .go { margin-top: auto; }
 
 /* ===================================================================
+   PRE-LAUNCH BADGE
+   The site sells nothing right now. That state is stated on the surface
+   rather than implied by a missing button, because a visitor who hunts
+   for a checkout that was quietly removed reads it as breakage.
+   Clay, not bronze: this is a status, not an invitation.
+   =================================================================== */
+.prelaunch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-clay);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  box-shadow: var(--shadow-xs);
+  margin-bottom: 18px;
+}
+
+.prelaunch::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-clay);
+  flex-shrink: 0;
+}
+
+/* ===================================================================
+   VERSUS GRID (old way against the engine)
+   Two columns that must not read as balanced. The left column is the
+   status quo and is deliberately dimmer and unshadowed; the right one
+   carries the bronze edge and the elevation. Physicality is the
+   argument, so the column that wins is the column with mass.
+   =================================================================== */
+.versus {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 36px 0 0;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.versus-col { background: var(--bg-surface-1); padding: 40px 34px; }
+
+.versus-col.them { background: var(--bg-inset); }
+
+.versus-col.us {
+  background: var(--bg-surface-2);
+  border-top: 2px solid var(--accent-bronze);
+}
+
+.versus-col .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 14px;
+}
+
+.versus-col.us .lab { color: var(--accent-bronze-dim); }
+
+.versus-col h3 {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.versus-col.us h3 { color: var(--text-primary); }
+
+.versus-col ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+
+.versus-col li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-tertiary);
+}
+
+.versus-col.us li { color: var(--text-secondary); }
+
+.versus-col li::before {
+  content: "\00d7";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent-clay);
+}
+
+.versus-col.us li::before {
+  content: "\2192";
+  color: var(--accent-bronze);
+}
+
+.versus-col li strong { color: var(--text-primary); font-weight: 550; }
+
+/* ===================================================================
+   PARTNER SLAB (the agency revenue-share block)
+   A full-bleed band, heavier than any card on the page, because this is
+   the one section written for a peer rather than a customer. The split
+   puts the argument on the left and the arithmetic on the right, since
+   an agency owner reads the number first and the pitch second.
+   =================================================================== */
+.partner {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 2px;
+  margin: 36px 0 0;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-monolith);
+}
+
+.partner-body { background: var(--bg-surface-1); padding: 52px 48px; }
+
+.partner-body .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 18px;
+}
+
+.partner-body h2 {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.partner-body h2 em { font-style: italic; color: var(--accent-bronze); }
+
+.partner-body p {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 16px;
+}
+
+.partner-body p:last-of-type { margin-bottom: 28px; }
+.partner-body strong { color: var(--text-primary); font-weight: 550; }
+
+.partner-math {
+  background: var(--bg-inset);
+  padding: 52px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.partner-math .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.partner-math .row:last-child { border-bottom: 0; }
+
+.partner-math .k {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.partner-math .v {
+  font-family: var(--font-display);
+  font-size: 27px;
+  line-height: 1;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.partner-math .row.total .k { color: var(--accent-bronze-dim); }
+.partner-math .row.total .v { color: var(--accent-bronze); font-size: 34px; }
+
+/* This line carries the whole argument to an agency owner, thirty thousand on
+   ten clients, and it was set in ghost at 10px, which measures 1.73 to 1
+   against the inset. Nobody was reading it. Tertiary at 11px clears 3.5 and
+   keeps the line quiet without hiding it. */
+.partner-math .note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-top: 22px;
+}
+
+/* ===================================================================
    METRICS
    =================================================================== */
 .metric-grid {
@@ -1508,6 +1751,15 @@ code, .mono {
   color: var(--text-tertiary);
   max-width: var(--measure);
   margin-top: 22px;
+}
+
+/* Sign-off line at the end of a post. Two bespoke posts were drawing this
+   with an inline hr and a hardcoded #888, which is exactly what the brand
+   checker grades against, so the rule lives here instead. */
+.fine.endnote {
+  margin-top: 34px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 /* ===================================================================
@@ -1765,6 +2017,22 @@ code, .mono {
 .field-input::placeholder { color: var(--text-tertiary); }
 .field-input:focus { border-color: var(--accent-bronze); }
 
+/* A native select would draw the OS control here, which on Windows means a
+   white box with a blue caret sitting inside a black page. Appearance is
+   stripped and the caret redrawn as an inline SVG in bronze so the field
+   matches the text inputs beside it. */
+select.field-input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23bf9553' stroke-width='1.5'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 11px 8px;
+  cursor: pointer;
+}
+select.field-input option { background: var(--bg-surface-1); color: var(--text-primary); }
+
 .field-label {
   display: block;
   font-family: var(--font-mono);
@@ -1890,6 +2158,34 @@ code, .mono {
 
 .footer-copy a { color: var(--text-ghost); transition: color 0.25s ease; }
 .footer-copy a:hover { color: var(--accent-bronze); }
+
+/* --- social row ----------------------------------------------------- */
+/* Icons are drawn inside the 24-unit viewBox with real padding. The
+   previous set was authored with geometry that ran off canvas (a 24-wide
+   rect starting at x=2, an h-28 run in a 24 box), so two of four marks
+   rendered clipped. Every path here closes inside 2..22. */
+.footer-social { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  background: var(--bg-surface-1);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.footer-social a:hover {
+  color: var(--accent-bronze);
+  border-color: var(--border-accent);
+  background: var(--bg-surface-2);
+}
+
+.footer-social svg { width: 17px; height: 17px; display: block; }
 
 /* ===================================================================
    AGENT ECOSYSTEM
@@ -2445,6 +2741,10 @@ body.ecosystem-open .eco-legend {
   .hero-graphic { max-width: 460px; margin: 0 auto; }
   .product-slab-inner { grid-template-columns: 1fr; }
   .card-grid, .pricing-grid { grid-template-columns: 1fr; }
+  .versus { grid-template-columns: 1fr; }
+  .partner { grid-template-columns: 1fr; }
+  .partner-body, .partner-math { padding: 36px 30px; }
+  .partner-body h2 { font-size: 31px; }
 }
 
 @media (max-width: 720px) {
@@ -2461,6 +2761,21 @@ body.ecosystem-open .eco-legend {
   .closing { padding: 34px 28px; }
   .buy-slab { padding: 30px 26px; }
   .footer-nav { gap: 32px; }
+  .versus-col { padding: 32px 26px; }
+  .partner-body h2 { font-size: 27px; }
+  /* Both display sizes clamp on vw, but their floors were set for a laptop.
+     At 360px the 56px floor turned four authored hero lines into six wrapped
+     ones, which puts a two word orphan under the line it belongs to. The
+     breaks are the copy, so the type gives way instead. */
+  .hero-headline { font-size: 37px; line-height: 1.1; }
+  .article-title { font-size: 34px; line-height: 1.14; }
+  /* Four columns at 28px of side padding have a min content width near 500px.
+     The container clipped that to 360 and the right hand columns were simply
+     gone on a phone, no scrollbar, no hint. Tighten the cells and let what is
+     left scroll. */
+  .data-table-container { overflow-x: auto; }
+  .data-table-header { padding: 16px 18px; }
+  thead th, tbody td { padding-left: 18px; padding-right: 18px; }
   .eco-head { top: 18px; left: 20px; }
   .eco-head-title { font-size: 20px; }
   .eco-head-sub { display: none; }
@@ -2508,12 +2823,12 @@ body.ecosystem-open .eco-legend {
 <nav class="nav-bar">
   <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
   <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
     <li><a href="/kits/">Kits</a></li>
-    <li><a href="/services/">Services</a></li>
-    <li><a href="/ai/">AI Practice</a></li>
     <li><a href="/blog/">Blog</a></li>
   </ul>
-  <a href="/services/" class="nav-cta">Book an Audit</a>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
 </nav>
 
 <main id="main">
@@ -2529,24 +2844,24 @@ body.ecosystem-open .eco-legend {
     <div class="section-label">Archive</div>
     <ul class="post-list">
 <!-- POSTS:START -->
-
 <li class="post"><a href="/blog/2026-08-21-anthropic-ipo-agent-ecosystem/"><span class="post-date">August 21, 2026</span><span class="post-title">Anthropic's IPO Moment: What a $75B Filing Means for the Agent Stack</span><span class="post-dek">Bloomberg reports Anthropic is preparing a public offering that could rival SpaceX's $75B debut. For developers building on Claude, MCP, and the open agent ecosystem, this isn't just a financial milestone — it's a structural signal.</span></a></li>
-<li class="post"><a href="/blog/2026-08-20-opus-5-benchmark-trap/"><span class="post-date">August 20, 2026</span><span class="post-title">Opus 5's Benchmark Trap: Why the &quot;Best&quot; Model Feels Worse to Use</span><span class="post-dek">Opus 5 scores higher on benchmarks but feels worse for daily coding. The reason: benchmarks reward bold assumptions; real engineering punishes them.</span></a></li>
-<li class="post"><a href="/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/"><span class="post-date">August 19, 2026</span><span class="post-title">AI Agents Have a Supply-Chain Phishing Problem — FakeGit Campaign Dropped 800 Malicious MCP Servers</span><span class="post-dek">Island research found 7,600 malicious GitHub repos. 800+ posed as MCP servers and agent skills. Agents call it AgentBaiting.</span></a></li>
-<li class="post"><a href="/blog/2026-08-16-ai-coding-filesystem-problem/"><span class="post-date">August 16, 2026</span><span class="post-title">AI Coding Tools Forget Context Because They Don't Write to Disk, Not Because of Context Windows</span><span class="post-dek">Every AI coding tool has the same top complaint: it forgot what we were doing. A developer tested six tools and found half write nothing to disk. The problem isn't context windows — it's persistence.</span></a></li>
-<li class="post"><a href="/blog/2026-08-13-managed-agents-multiagent/"><span class="post-date">August 13, 2026</span><span class="post-title">Claude Managed Agents Gets Multi-Agent Orchestration</span><span class="post-dek">Four August platform releases give agent builders session budgets, advisor models, GitHub-backed skills, and inference geo control — the primitives for running agent fleets in production.</span></a></li>
-<li class="post"><a href="/blog/2026-08-13-claude-code-auto-mode-default/"><span class="post-date">August 13, 2026</span><span class="post-title">Claude Code Auto Mode Goes Default Tomorrow — What Developers Need to Know</span><span class="post-dek">Starting August 14, auto mode becomes the default permission mode for new Claude Code sessions. Here's what changes, what risks remain, and how to prepare your workflow.</span></a></li>
 <li class="post"><a href="/blog/2026-08-12-ojcp-open-job-context-protocol/"><span class="post-date">August 12, 2026</span><span class="post-title">OJCP — The Open Standard for Agent-Consumable Job Feeds</span><span class="post-dek">OJCP defines how AI agents discover, reason over, and act on job opportunities. Built on MCP. Interoperable with schema.org. Governed by an independent steering committee.</span></a></li>
-<li class="post"><a href="/blog/2026-08-10-comos-federation/"><span class="post-date">August 10, 2026</span><span class="post-title">ComOS Federation: One MCP Gateway for Every AI Commerce Store</span><span class="post-dek">How ComOS Federation uses MCP to unify AI commerce with a single gateway.</span></a></li><li class="post"><a href="/blog/2026-08-08-claude-code-sessions-talk/"><span class="post-date">August 8, 2026</span><span class="post-title">Claude Code Sessions Can Now Talk to Each Other. Here's Why That Matters.</span><span class="post-dek">Cross-session messaging just landed. Sessions can now discover, message, and coordinate with each other across machines. This is the first step toward treating Claude Code as a networked agent runtime instead of isolated chat windows.</span></a></li>
-<li class="post"><a href="/blog/2026-08-06-cloudflare-os-open-platform-agents/"><span class="post-date">August 6, 2026</span><span class="post-title">Cloudflare OS Is an Open Platform for Agents. That Changes Everything.</span><span class="post-dek">Cloudflare OS combines agent chat, sandboxed gadgets, and a Gatekeeper security framework into one open-source platform — built on a decade-old architecture that suddenly makes sense with AI. Here's what it means for developers building on Claude, MCP, and the agent ecosystem.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html"><span class="post-date">July 29, 2026</span><span class="post-title">OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think</span><span class="post-dek">OpenAI's response from API provider to enterprise agent platform signals a fundamental change in how AI will be deployed. Here's what it means for developers building with Claude, MCP, and the open ecosystem.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html"><span class="post-date">July 29, 2026</span><span class="post-title">AI Coding Agents Are Siloing Your Team</span><span class="post-dek">Stanford and GitHub data show agents create lone wolves, not better teams.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html"><span class="post-date">July 28, 2026</span><span class="post-title">robots.txt vs noindex: the Claude chats lesson</span><span class="post-dek">Shared Claude chats got indexed by Google despite a robots.txt Disallow rule — because crawling is not indexing.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html"><span class="post-date">July 27, 2026</span><span class="post-title">CLAUDE.md is advice. Hooks enforce it.</span><span class="post-dek">Claude Code's PreToolUse hooks block writes before they happen — here's why they matter more than any CLAUDE.md instruction.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html"><span class="post-date">July 26, 2026</span><span class="post-title">The 80% Rule: Context Engineering for Claude 5</span><span class="post-dek">Anthropic deleted 80% of Claude Code’s system prompt for Opus 5 with no loss. Here’s what changed.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 25, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">A VM escape in Claude Cowork reaches SSH keys and cloud credentials on the host. The CVE is just the entry point — the structural argument applies to every sandboxed agent.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"><span class="post-date">July 25, 2026</span><span class="post-title">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</span><span class="post-dek">The biggest spec update since launch drops Tuesday — sessions gone, init handshake removed, and three features start a 12-month deprecation clock.</span></a></li>
-<li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Three quiet API changes matter more than the benchmark charts — and this week's MCP security research sharpens the takeaway.</span></a></li>
+<li class="post"><a href="/blog/2026-08-10-comos-federation/"><span class="post-date">August 10, 2026</span><span class="post-title">ComOS Federation: One MCP Gateway for Every AI Commerce Store</span><span class="post-dek">ComOS Federation is a multi-tenant MCP gateway that replaces per-platform commerce integrations with a single connection. What it does, how the virtual context routing works, and what it costs you to adopt.</span></a></li>
+<li class="post"><a href="/blog/2026-08-08-claude-code-sessions-talk/"><span class="post-date">August 8, 2026</span><span class="post-title">Claude Code Sessions Can Now Talk to Each Other. Here's Why That Matters.</span><span class="post-dek">Claude Code shipped cross-session messaging. Sessions can now discover, message, and coordinate with each other across machines. This isn't just convenience - it's the foundation for treating Claude Code as a networked agent runtime instead of isolated chat windows.</span></a></li>
+<li class="post"><a href="/blog/2026-08-06-cloudflare-os-open-platform-agents/"><span class="post-date">August 6, 2026</span><span class="post-title">Cloudflare OS Is an Open Platform for Agents. That Changes Everything.</span><span class="post-dek">Cloudflare OS launched as an open-source platform combining agent chat, sandboxed app development, and a Gatekeeper security framework. Built on Kenton Varda's Sandstorm architecture and deeply infused with AI, it's the most ambitious bet on agent-native infrastructure yet - and it changes how developers should think about building agent products.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-08-04-qwen38-max-24t-open-weight-agent-coding.html"><span class="post-date">August 4, 2026</span><span class="post-title">Qwen3.8-Max Is a 2.4T-Parameter Open-Weight Agent. This Changes the Game for Builders.</span><span class="post-dek">Alibaba launched Qwen3.8-Max: a 2.4T open-weight MoE model with million-token context that ran a coding agent autonomously for 16 days. The ground shifts.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-08-04-kindle-70-percent-royalty-ceiling-12-99.html"><span class="post-date">August 4, 2026</span><span class="post-title">Amazon raised the Kindle 70% royalty ceiling to $12.99, and almost nobody noticed</span><span class="post-dek">On 7 July 2026 Amazon moved the Kindle 70% royalty band to $12.99, its first change since 2007. Almost every guide and calculator still says $9.99.</span></a></li>
+<li class="post"><a href="/blog/2026-08-02-mcp-tasks-and-apps-agent-infrastructure/"><span class="post-date">August 2, 2026</span><span class="post-title">What Tasks and MCP Apps Actually Change for Agent Infrastructure</span><span class="post-dek">The MCP 2026-07-28 spec shipped two official extensions - Tasks and MCP Apps - that transform the protocol from a tool wire format into an agent runtime. Here's what each one changes for developers shipping production MCP servers today.</span></a></li>
+<li class="post"><a href="/blog/2026-08-01-claude-code-builtin-browser/"><span class="post-date">August 1, 2026</span><span class="post-title">Claude Code now has its own browser. That changes how you ship.</span><span class="post-dek">Claude Code's built-in browser (Week 28) isn't just convenience - it removes the biggest friction in agentic development workflows. Here's how the sandboxed in-app browser and the Chrome extension serve different needs, and why the combination matters.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-31-mcp-2026-07-28-shipped-codemod-migration.html"><span class="post-date">July 31, 2026</span><span class="post-title">MCP 2026-07-28 has shipped. Here's what your migration actually looks like.</span><span class="post-dek">The biggest MCP revision in 20 months shipped July 28. The SDK betas, codemod, and migration guide are real now. Here is what the migration actually looks like.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-29-openai-presence-enterprise-agent-platform-shift.html"><span class="post-date">July 29, 2026</span><span class="post-title">OpenAI Presence: Why the Enterprise Agent Platform Shift Matters More Than You Think</span><span class="post-dek">OpenAI's move from API provider to enterprise agent platform signals a fundamental shift in how AI will be deployed. What it means for builders on Claude and MCP.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-29-ai-coding-agents-silo-teams.html"><span class="post-date">July 29, 2026</span><span class="post-title">AI Coding Agents Are Siloing Your Team</span><span class="post-dek">Two new studies converge on one finding: AI coding agents turn developers into lone wolves. CooperBench and a 25,264-PR analysis reveal the cost nobody planned for.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-28-robots-txt-vs-noindex-claude-chats.html"><span class="post-date">July 28, 2026</span><span class="post-title">robots.txt vs noindex: the Claude chats lesson</span><span class="post-dek">Shared Claude chats got indexed by Google despite a robots.txt Disallow rule. The reason is a lesson every developer should know: crawling is not indexing.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-27-claude-code-pretooluse-hooks-enforcement.html"><span class="post-date">July 27, 2026</span><span class="post-title">CLAUDE.md is advice. Hooks enforce it.</span><span class="post-dek">Claude Code PreToolUse hooks run before every tool call and can block it entirely. That matters more than any CLAUDE.md instruction once the context window fills up.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-26-context-engineering-claude-5-unhobbling.html"><span class="post-date">July 26, 2026</span><span class="post-title">The 80% rule: context engineering for Claude 5</span><span class="post-dek">Anthropic deleted over 80% of Claude Code's system prompt for Opus 5 and their coding evals did not move. The explanation matters more than the headline number.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-25-sharedroot-claude-cowork-sandbox-escape.html"><span class="post-date">July 25, 2026</span><span class="post-title">SharedRoot: what a Cowork sandbox escape teaches us about AI agent security</span><span class="post-dek">Accomplish AI found a VM escape letting an untrusted Cowork session read SSH keys and cloud credentials from the host Mac. The CVE is just the entry point.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-25-mcp-goes-stateless-july-28.html"><span class="post-date">July 25, 2026</span><span class="post-title">MCP goes stateless on July 28. Here's what breaks and what gets cheaper.</span><span class="post-dek">The biggest MCP spec update since launch ships Tuesday - sessions disappear, the init handshake is gone, and three features get a 12-month deprecation clock.</span></a></li>
+<li class="post"><a href="/blog/posts/2026-07-24-claude-opus-5-what-matters-for-agent-builders.html"><span class="post-date">July 24, 2026</span><span class="post-title">Claude Opus 5 just shipped. Here's what actually matters if you're building agents.</span><span class="post-dek">Claude Opus 5 shipped today. Three quiet API changes matter more than the benchmark charts for developers building agents on Claude and MCP infrastructure right now.</span></a></li>
 <!-- POSTS:END -->
 </ul>
   </section>
@@ -2558,26 +2873,33 @@ body.ecosystem-open .eco-legend {
   <div class="footer-inner page-container">
     <div class="footer-brand">
       <div class="footer-wordmark">The Agent <span>Lab</span></div>
-      <p class="footer-line">Automation infrastructure, designed and operated by Ashrey, Chief Architect. One operator commanding a real machine.</p>
+      <p class="footer-line">An AI development lab building live quoting engines for home service contractors. Run by Ashrey, Co-Founder.</p>
+      <div class="footer-social">
+        <a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.1 7.5c-.2-.9-.9-1.6-1.8-1.8C17.5 5.3 12 5.3 12 5.3s-5.5 0-7.3.4c-.9.2-1.6.9-1.8 1.8C2.5 9.3 2.5 12 2.5 12s0 2.7.4 4.5c.2.9.9 1.6 1.8 1.8 1.8.4 7.3.4 7.3.4s5.5 0 7.3-.4c.9-.2 1.6-.9 1.8-1.8.4-1.8.4-4.5.4-4.5s0-2.7-.4-4.5zM10.2 15.3V8.7l5.4 3.3-5.4 3.3z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/mohamed-ashrey/" aria-label="LinkedIn" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.3 20.5H3V9.2h3.3v11.3zM4.6 7.8c-1.1 0-1.9-.9-1.9-1.9 0-1.1.9-1.9 1.9-1.9s1.9.9 1.9 1.9c0 1.1-.8 1.9-1.9 1.9zM21 20.5h-3.3v-5.9c0-1.5-.6-2.4-1.9-2.4-1 0-1.7.7-1.9 1.4-.1.3-.1.6-.1.9v6h-3.3s0-9.8 0-11.3h3.3v1.6c.4-.7 1.3-1.7 3.1-1.7 2.3 0 4 1.5 4 4.7v6.7z"/></svg>
+        </a>
+      </div>
     </div>
     <nav class="footer-nav" aria-label="Footer">
       <div class="footer-col">
-        <span class="h">Products</span>
-        <a href="/kits/">Kits</a>
-        <a href="/kits/a09-mcp-audit/">MCP Audit Kit</a>
-        <a href="/kits/a01-kindle-ebooks/">Kindle Pipeline</a>
+        <span class="h">The Engine</span>
+        <a href="/services/">What it does</a>
+        <a href="/ai/">Who we build for</a>
+        <a href="/#partners">Agency partners</a>
       </div>
       <div class="footer-col">
-        <span class="h">Work</span>
-        <a href="/services/">Services</a>
-        <a href="/ai/">AI Practice</a>
+        <span class="h">The Lab</span>
+        <a href="/kits/">Kits</a>
         <a href="/blog/">Blog</a>
+        <a href="/#founding">Founding access</a>
       </div>
       <div class="footer-col">
         <span class="h">Open Source</span>
         <a href="https://github.com/M-Ashrey">GitHub</a>
         <a href="https://dev.to/m_ashrey122">dev.to</a>
-        <a href="https://github.com/sponsors/M-Ashrey">Sponsor</a>
       </div>
     </nav>
   </div>

@@ -1008,6 +1008,23 @@ tbody td:first-child { color: var(--text-primary); font-weight: 500; }
   margin-bottom: 32px;
 }
 
+/* The byline used by the posts written after the article head was introduced.
+   It is a different thing from .updated, which sits above the title as a
+   revision stamp. This sits under the dek and closes the head with a rule.
+
+   It lived in five separate page stylesheets until it was promoted here. */
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
 .article-actions {
   display: flex;
   gap: 16px;
@@ -1759,6 +1776,16 @@ code, .mono {
   margin-top: 34px;
   padding-top: 20px;
   border-top: 1px solid var(--border-subtle);
+}
+
+/* .fine carries one class, so `.prose > p` above outranks it on specificity and
+   wins the size and the colour. Every note on a post rendered at body size in
+   body colour, and the rule above it was the only thing still marking it as
+   fine print. Outside the prose the same class renders correctly, which is why
+   it took fourteen posts to notice. */
+.prose > p.fine {
+  font-size: 13.5px;
+  color: var(--text-tertiary);
 }
 
 /* ===================================================================
@@ -2916,8 +2943,7 @@ body.ecosystem-open .eco-legend {
 
 <p>If you're building on Claude Code, the in-app browser + Chrome extension pairing isn't a nice-to-have. It's what lets you build, verify, test, and ship without breaking the loop. That's not a model feature. It's the difference between "AI can write this code" and "AI can you this work end-to-end."</p>
 
-<hr>
-<p>Everything the lab builds in public stays in public. The source is on <a href="https://github.com/M-Ashrey">GitHub</a>, and the current build is a <a href="https://theagentlab.site/">live AI quoting engine</a> for home service contractors.</p>
+<p class="fine endnote">Everything the lab builds in public stays in public. The source is on <a href="https://github.com/M-Ashrey">GitHub</a>, and the current build is a <a href="/services/">live AI quoting engine</a> for home service contractors.</p>
 
     
 
@@ -2935,9 +2961,7 @@ body.ecosystem-open .eco-legend {
       </ol>
     </div>
 
-    <div class="backBottom">
-      <a href="/blog/">&larr; Back to all posts</a>
-    </div>
+    <div class="backBottom"><a href="/blog/">&larr; All posts</a></div>
   </article>
 
 </div>

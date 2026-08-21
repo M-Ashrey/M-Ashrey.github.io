@@ -1002,6 +1002,23 @@ tbody td:first-child { color: var(--text-primary); font-weight: 500; }
   margin-bottom: 32px;
 }
 
+/* The byline used by the posts written after the article head was introduced.
+   It is a different thing from .updated, which sits above the title as a
+   revision stamp. This sits under the dek and closes the head with a rule.
+
+   It lived in five separate page stylesheets until it was promoted here. */
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
 .article-actions {
   display: flex;
   gap: 16px;
@@ -1753,6 +1770,16 @@ code, .mono {
   margin-top: 34px;
   padding-top: 20px;
   border-top: 1px solid var(--border-subtle);
+}
+
+/* .fine carries one class, so `.prose > p` above outranks it on specificity and
+   wins the size and the colour. Every note on a post rendered at body size in
+   body colour, and the rule above it was the only thing still marking it as
+   fine print. Outside the prose the same class renders correctly, which is why
+   it took fourteen posts to notice. */
+.prose > p.fine {
+  font-size: 13.5px;
+  color: var(--text-tertiary);
 }
 
 /* ===================================================================
@@ -2892,7 +2919,7 @@ body.ecosystem-open .eco-legend {
 
 <p>A gateway in the middle is a gateway you now depend on. Everything you gain in integration cost you pay back in a single point of failure and in latency on every call. That trade is usually worth it when you are talking to five platforms and clearly not worth it when you are talking to one. Count your backends before you adopt it.</p>
 
-<div class="backBottom"><a href="/blog/">Back to the blog</a></div>
+    <div class="backBottom"><a href="/blog/">&larr; All posts</a></div>
   </article>
 
 </div>

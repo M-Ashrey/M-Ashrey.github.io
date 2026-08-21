@@ -1031,6 +1031,23 @@ tbody td:first-child { color: var(--text-primary); font-weight: 500; }
   margin-bottom: 32px;
 }
 
+/* The byline used by the posts written after the article head was introduced.
+   It is a different thing from .updated, which sits above the title as a
+   revision stamp. This sits under the dek and closes the head with a rule.
+
+   It lived in five separate page stylesheets until it was promoted here. */
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
 .article-actions {
   display: flex;
   gap: 16px;
@@ -1782,6 +1799,16 @@ code, .mono {
   margin-top: 34px;
   padding-top: 20px;
   border-top: 1px solid var(--border-subtle);
+}
+
+/* .fine carries one class, so `.prose > p` above outranks it on specificity and
+   wins the size and the colour. Every note on a post rendered at body size in
+   body colour, and the rule above it was the only thing still marking it as
+   fine print. Outside the prose the same class renders correctly, which is why
+   it took fourteen posts to notice. */
+.prose > p.fine {
+  font-size: 13.5px;
+  color: var(--text-tertiary);
 }
 
 /* ===================================================================
@@ -2861,13 +2888,12 @@ body.ecosystem-open .eco-legend {
     <h1 class="article-title">Anthropic's IPO Moment: What a $75B Filing Means for the Agent Stack</h1>
     <p class="dek">Bloomberg reports Anthropic is preparing a public offering that could rival SpaceX's $75B debut. For developers building on Claude, MCP, and the open agent ecosystem, this isn't just a financial milestone — it's a structural signal.</p>
     <div class="article-meta">
-      <span>August 21, 2026</span>
-      <span>&middot;</span>
+      <time datetime="2026-08-21">August 21, 2026</time>
       <span>By Ashrey</span>
     </div>
   </header>
 
-  <article class="article-body">
+  <article class="prose">
     <p>Bloomberg reported this week that Anthropic is preparing for a public offering that could rival SpaceX's $75 billion debut — the largest in history. The five-year-old company plans to file as early as late August. For developers building on Claude, MCP, and the open agent ecosystem, this isn't just a financial milestone. It's a structural signal.</p>
 
     <h2>Why This Matters Now</h2>
@@ -2919,6 +2945,8 @@ body.ecosystem-open .eco-legend {
     <p>Build for the open standard. Keep your exits clear. And remember: the best agent stack is the one you can move off of.</p>
 
     <p class="fine endnote">Written by Ashrey, Co-Founder of The Agent Lab. We build live AI quoting engines for home service contractors, and we write up the infrastructure work along the way. <a href="/services/">The engine spec is here</a>.</p>
+
+    <div class="backBottom"><a href="/blog/">&larr; All posts</a></div>
   </article>
 
 </div>

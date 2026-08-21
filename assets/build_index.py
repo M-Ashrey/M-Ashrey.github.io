@@ -41,7 +41,12 @@ MONTHS = {
     "09": "September", "10": "October", "11": "November", "12": "December",
 }
 
+# Most posts carry the brand shell and its .article-title heading. Two of the
+# August posts were hand authored with a bare <h1> and no brand CSS at all, and
+# a generator that walks the tree should read what is there rather than insist
+# on a class. Falls back to the first <h1> of any kind.
 H1 = re.compile(r'<h1 class="article-title">(.*?)</h1>', re.S)
+H1_ANY = re.compile(r"<h1(?:\s[^>]*)?>(.*?)</h1>", re.S)
 DESC = re.compile(r'<meta name="description" content="([^"]*)"')
 TAGS = re.compile(r"<[^>]+>")
 
@@ -81,7 +86,7 @@ def collect() -> list[dict]:
             sys.exit(f"no date prefix on {rel}")
         y, mo, d = m.groups()
 
-        h1 = H1.search(body)
+        h1 = H1.search(body) or H1_ANY.search(body)
         desc = DESC.search(body)
         if not h1 or not desc:
             sys.exit(f"missing h1 or description in {rel}")

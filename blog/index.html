@@ -1009,6 +1009,23 @@ tbody td:first-child { color: var(--text-primary); font-weight: 500; }
   margin-bottom: 32px;
 }
 
+/* The byline used by the posts written after the article head was introduced.
+   It is a different thing from .updated, which sits above the title as a
+   revision stamp. This sits under the dek and closes the head with a rule.
+
+   It lived in five separate page stylesheets until it was promoted here. */
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
 .article-actions {
   display: flex;
   gap: 16px;
@@ -1760,6 +1777,16 @@ code, .mono {
   margin-top: 34px;
   padding-top: 20px;
   border-top: 1px solid var(--border-subtle);
+}
+
+/* .fine carries one class, so `.prose > p` above outranks it on specificity and
+   wins the size and the colour. Every note on a post rendered at body size in
+   body colour, and the rule above it was the only thing still marking it as
+   fine print. Outside the prose the same class renders correctly, which is why
+   it took fourteen posts to notice. */
+.prose > p.fine {
+  font-size: 13.5px;
+  color: var(--text-tertiary);
 }
 
 /* ===================================================================
@@ -2845,6 +2872,11 @@ body.ecosystem-open .eco-legend {
     <ul class="post-list">
 <!-- POSTS:START -->
 <li class="post"><a href="/blog/2026-08-21-anthropic-ipo-agent-ecosystem/"><span class="post-date">August 21, 2026</span><span class="post-title">Anthropic's IPO Moment: What a $75B Filing Means for the Agent Stack</span><span class="post-dek">Bloomberg reports Anthropic is preparing a public offering that could rival SpaceX's $75B debut. For developers building on Claude, MCP, and the open agent ecosystem, this isn't just a financial milestone — it's a structural signal.</span></a></li>
+<li class="post"><a href="/blog/2026-08-20-opus-5-benchmark-trap/"><span class="post-date">August 20, 2026</span><span class="post-title">Opus 5's Benchmark Trap: Why the &quot;Best&quot; Model Feels Worse to Use</span><span class="post-dek">Opus 5 scores higher on benchmarks but feels worse for daily coding. The reason: benchmarks reward bold assumptions; real engineering punishes them. Here's why and what to do about it.</span></a></li>
+<li class="post"><a href="/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/"><span class="post-date">August 19, 2026</span><span class="post-title">AI Agents Have a Supply-Chain Phishing Problem</span><span class="post-dek">Island security research found 7,600 malicious GitHub repos in the FakeGit campaign. Over 800 posed as agent skills or MCP servers. Attackers call it AgentBaiting — they publish convincing repos and wait for agents to discover them. Here's what developers building with MCP and AI agents need to know.</span></a></li>
+<li class="post"><a href="/blog/2026-08-16-ai-coding-filesystem-problem/"><span class="post-date">August 16, 2026</span><span class="post-title">AI Coding Tools Forget Context Because They Don't Write to Disk, Not Because of Context Windows</span><span class="post-dek">Every AI coding tool has the same top complaint: it forgot what we were doing. A developer tested six tools and found half write nothing to disk. The problem isn't context windows — it's persistence.</span></a></li>
+<li class="post"><a href="/blog/2026-08-13-managed-agents-multiagent/"><span class="post-date">August 13, 2026</span><span class="post-title">Claude Managed Agents Gets Multi-Agent Orchestration</span><span class="post-dek">Four August platform releases give agent builders session budgets, advisor models, GitHub-backed skills, and inference geo control — the primitives for running agent fleets in production.</span></a></li>
+<li class="post"><a href="/blog/2026-08-13-claude-code-auto-mode-default/"><span class="post-date">August 13, 2026</span><span class="post-title">Claude Code Auto Mode Goes Default Tomorrow — What Developers Need to Know</span><span class="post-dek">Starting August 14, auto mode becomes the default permission mode for new Claude Code sessions. Here's what changes, what risks remain, and how to prepare your workflow.</span></a></li>
 <li class="post"><a href="/blog/2026-08-12-ojcp-open-job-context-protocol/"><span class="post-date">August 12, 2026</span><span class="post-title">OJCP — The Open Standard for Agent-Consumable Job Feeds</span><span class="post-dek">OJCP defines how AI agents discover, reason over, and act on job opportunities. Built on MCP. Interoperable with schema.org. Governed by an independent steering committee.</span></a></li>
 <li class="post"><a href="/blog/2026-08-10-comos-federation/"><span class="post-date">August 10, 2026</span><span class="post-title">ComOS Federation: One MCP Gateway for Every AI Commerce Store</span><span class="post-dek">ComOS Federation is a multi-tenant MCP gateway that replaces per-platform commerce integrations with a single connection. What it does, how the virtual context routing works, and what it costs you to adopt.</span></a></li>
 <li class="post"><a href="/blog/2026-08-08-claude-code-sessions-talk/"><span class="post-date">August 8, 2026</span><span class="post-title">Claude Code Sessions Can Now Talk to Each Other. Here's Why That Matters.</span><span class="post-dek">Claude Code shipped cross-session messaging. Sessions can now discover, message, and coordinate with each other across machines. This isn't just convenience - it's the foundation for treating Claude Code as a networked agent runtime instead of isolated chat windows.</span></a></li>

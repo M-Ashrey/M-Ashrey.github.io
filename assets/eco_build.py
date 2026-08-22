@@ -356,82 +356,104 @@ def operator_arc(cx, cy, rx, ry, a0_deg, a1_deg, count, spread):
 OPERATOR_COUNT = 16
 OPERATOR_GOLDEN_SPREAD = 0.025
 
-PROD_KIDS = [("demand-gate", "SUPPLIER PULL"), ("design", "RATE MATRIX"),
-             ("asset-delegation", "MARGIN GATE"), ("qa-return", "QUOTE RETURN")]
-MKT_KIDS = [("publish", "LEAD CAPTURE"), ("outreach", "FOLLOW UP"), ("copy", "SCOPE FORM")]
-POLLERS = [("steering", "STEERING"), ("heavy", "HEAVY"), ("mid", "MID"),
-           ("fast", "FAST"), ("judgment", "JUDGMENT")]
+# The live pulls. These are the reason a quote can be trusted the same
+# hour it is asked for, so they get their own rank and their own colour.
+FEEDS = [("feed-price", "PRICE BOOK"), ("feed-stock", "STOCK LEVEL"),
+         ("feed-lead", "LEAD TIME"), ("feed-freight", "FREIGHT"),
+         ("feed-tax", "TAX RULES")]
 
-CORE_NOTE = "ROUTING + PRICE GATE"
-PROD_NOTE = "LIVE PRICING PATH"
-MKT_NOTE = "JOB INTAKE + REQUESTS"
+# The numbers the shop owns. Supplier cost alone is a list price, not a
+# quote. These three are what make the number theirs.
+ENGINE_NOTE = "SUPPLIER COST + YOUR RATES"
 
 
 # ==========================================================================
 # WIDE LAYOUT  (design box 1240 x 700)
+#
+# One job, read left to right. A lead arrives, it becomes a scope sheet,
+# the engine prices it, the margin gate clears it, the quote leaves. The
+# live supplier pulls drop in from above. The shop's own numbers come up
+# from below. Every quote that goes out lands in the history field, and the
+# field calibrates the engine, which is what closes the loop.
 # ==========================================================================
+
+WIDE_SPINE_Y = 300.0
+WIDE_FEED_Y = 96.0
+WIDE_FEED_X0 = 310.0         # the rack sits over the engine, not the whole box
+WIDE_FEED_SPAN = 620.0
+
+# The history field. A shallow wide sweep, not a deep bowl. Sixteen priced
+# jobs read as a ledger the engine sits over. A bowl put the two outer jobs
+# up beside the shop inputs, which made four unrelated glyphs look like one
+# cluster. The field is held clear of the bottom left, because the legend
+# plate is painted over that corner by the DOM and is not in this geometry.
+WIDE_OPS_CY = 500.0
+WIDE_OPS_RX = 470.0
+WIDE_OPS_RY = 62.0
+WIDE_OPS_LABEL_Y = 620.0
+
 
 def build_wide():
     b = Builder(1240, 700, tall=False)
-    b.add("orchestrator", "ORCHESTRATOR", CORE_NOTE, "core", 620, 330, "below")
-    b.add("production", "PRICING ENGINE", PROD_NOTE, "hub", 330, 150, "below")
-    b.add("marketing", "JOB INTAKE", MKT_NOTE, "hub", 910, 150, "below")
 
-    b.add("demand-gate", "SUPPLIER PULL", "", "leaf", 140, 56, "above")
-    b.add("design", "RATE MATRIX", "", "leaf", 330, 34, "above")
-    b.add("asset-delegation", "MARGIN GATE", "", "leaf", 520, 56, "above")
-    b.add("qa-return", "QUOTE RETURN", "", "leaf", 400, 262, "below")
-    b.add("publish", "LEAD CAPTURE", "", "leaf", 720, 56, "above")
-    b.add("outreach", "FOLLOW UP", "", "leaf", 910, 34, "above")
-    b.add("copy", "SCOPE FORM", "", "leaf", 1100, 56, "above")
+    # The spine. The core is the only glyph on the middle band that carries a
+    # note, because it is the only station that needs two facts stated.
+    b.add("engine", "PRICING ENGINE", ENGINE_NOTE, "core",
+          620, WIDE_SPINE_Y, "below")
+    b.add("lead", "LEAD IN", "", "leaf", 90, WIDE_SPINE_Y, "above")
+    b.add("scope", "SCOPE SHEET", "", "hub", 290, WIDE_SPINE_Y, "above")
+    b.add("gate", "MARGIN GATE", "", "hub", 950, WIDE_SPINE_Y, "above")
+    b.add("quote", "QUOTE OUT", "", "leaf", 1150, WIDE_SPINE_Y, "above")
 
-    rack = [(215, 372), (190, 424), (178, 476), (190, 528), (215, 580)]
-    for (pid, plabel), (px, py) in zip(POLLERS, rack):
-        b.add(pid, plabel, "", "poller", px, py, "left")
+    b.add("grp-feeds", "LIVE SUPPLIER FEEDS", "", "group", 620, 30, "center")
+    frow = pack_row([lab for _, lab in FEEDS], LABEL_FS["poller"],
+                    LABEL_TRACK["poller"], WIDE_FEED_SPAN, 0.0, 14.0)
+    for (fid, lab), fx in zip(FEEDS, frow):
+        b.add(fid, lab, "", "poller", WIDE_FEED_X0 + fx, WIDE_FEED_Y, "above")
 
-    ops = operator_arc(620, 310, 430, 340, 152, 28, OPERATOR_COUNT,
-                       OPERATOR_GOLDEN_SPREAD)
+    # The shop's numbers. Rate card and labor hours sit level, one either side
+    # of the core, because they are the same kind of fact. They come in wide
+    # and shallow on purpose: anything rising steeply into the core would pass
+    # under the note plate, and a line that vanishes under type reads as a
+    # line that stops. Markup rules hangs off the gate instead, because that
+    # is the station the rules are tested at.
+    b.add("rate-card", "RATE CARD", "", "leaf", 320, 372, "below")
+    b.add("labor", "LABOR HOURS", "", "leaf", 920, 372, "below")
+    b.add("markup", "MARKUP RULES", "", "leaf", 1120, 400, "below")
+
+    ops = operator_arc(620, WIDE_OPS_CY, WIDE_OPS_RX, WIDE_OPS_RY, 180, 0,
+                       OPERATOR_COUNT, OPERATOR_GOLDEN_SPREAD)
     for i, (ox, oy) in enumerate(ops):
         b.add("op-%d" % i, "", "", "operator", ox, oy, "none")
+    b.add("grp-history", "PRICED JOB HISTORY", "", "group", 620,
+          WIDE_OPS_LABEL_Y, "center")
 
-    b.add("grp-pollers", "INBOUND POLLERS", "", "group", 150, 316, "center")
-    b.add("grp-operators", "TERMINAL OPERATORS", "", "group", 620, 690, "center")
+    b.link("delegate", ["lead", "scope"], 0, arrow=True, flow=True)
+    b.link("delegate", ["scope", "engine"], 0, arrow=True, flow=True)
+    b.link("delegate", ["engine", "gate"], 0, arrow=True, flow=True)
+    b.link("qagate", ["gate", "quote"], 0, arrow=True, flow=True)
 
-    b.link("delegate", ["orchestrator", "production"], 0, flow=True)
-    b.link("delegate", ["orchestrator", "marketing"], 0, flow=True)
-    for kid, _ in PROD_KIDS:
-        b.link("delegate", ["production", kid], 1)
-    for kid, _ in MKT_KIDS:
-        b.link("delegate", ["marketing", kid], 1)
+    for fid, _ in FEEDS:
+        b.link("inbound", ["engine", fid], 1, flow=True, direction=-1)
+    b.link("inbound", ["engine", "rate-card"], 1, flow=True, direction=-1)
+    b.link("inbound", ["engine", "labor"], 1, flow=True, direction=-1)
+    b.link("inbound", ["gate", "markup"], 1, flow=True, direction=-1)
 
-    b.link("qagate", ["qa-return", "orchestrator"], 2, arrow=True, flow=True,
-           bowed=-40)
-
-    for pid, _ in POLLERS:
-        b.link("inbound", ["orchestrator", pid], 1, flow=True, direction=-1,
-               arrow=False)
-
-    # Delegation reaches the operator field through one trunk per loop, into
-    # the two ends of the arc. Sixteen duplicate lines said the same thing.
-    b.link("delegate", ["production", "op-0"], 1, arrow=True, flow=True)
-    b.link("delegate", ["marketing", "op-15"], 1, arrow=True, flow=True)
-
-    # Evidence returns on two branches, one per half of the field.
-    b.link("evidence", ["orchestrator", "op-2"], 2, flow=True, direction=-1)
-    b.link("evidence", ["orchestrator", "op-13"], 2, flow=True, direction=-1)
-
-    # Lateral chatter is the arc itself, drawn once.
+    # One trunk down into the field, one calibration line back up. Sixteen
+    # duplicate lines said the same thing and read as noise.
+    b.link("delegate", ["gate", "op-15"], 1, arrow=True, flow=True)
+    b.link("evidence", ["engine", "op-0"], 2, flow=True, direction=-1)
     b.link("lateral", ["op-%d" % i for i in range(OPERATOR_COUNT)], 2)
 
-    fix_inbound_arrows(b)
+    fix_return_arrows(b)
     return b.data()
 
 
-def fix_inbound_arrows(b):
+def fix_return_arrows(b):
     """Inbound and evidence edges are stored core-outward so the reveal grows
     from the core, but the arrow belongs at the core end and points into it."""
     for e in b.edges:
-        if e["kind"] in ("inbound",) and "arrow" not in e:
+        if e["kind"] in ("inbound", "evidence") and "arrow" not in e:
             pts = [(p[0], p[1]) for p in e["pts"]]
             tri = arrow_tri([pts[1], pts[0]], b.tall)
             e["arrow"] = [[round(v, 1) for v in p] for p in tri]
@@ -440,35 +462,41 @@ def fix_inbound_arrows(b):
 # ==========================================================================
 # TALL LAYOUT  (design box 322 x 640)
 #
-# A phone has no room for two label columns on one baseline, so the
-# marketing rows are offset by half the production step. No production
-# label and no marketing label ever share a horizontal band, which makes
-# the two columns safe whatever the label text grows to. The step and the
-# offset are chosen against the plate height, not by eye.
+# The same pipeline stood on end. A phone has no room for two label columns
+# on one baseline, so there is only one column. Every station sits on a
+# single spine near the right edge and every label hangs off it to the left,
+# which keeps the spine itself clear of type from top to bottom. The core
+# note is dropped here: at this width it would push the plate off the box,
+# and the sentence it carries is already in the copy beside the figure. The
+# supplier feeds move to a rank on the right at the engine's own height and
+# give up their names, because five slate spheres under one group label say
+# enough on a phone and the names are in the text alternative.
 # ==========================================================================
 
 TALL_BOX_W = 322.0
 TALL_BOX_H = 640.0
 TALL_CX = TALL_BOX_W / 2.0
 
-TALL_COL_L = 84.0            # production column
-TALL_COL_R = 238.0           # marketing column, mirrored about TALL_CX
-TALL_ROW_STEP = 52.0         # one production row to the next
-TALL_ROW_OFFSET = 26.0       # marketing rides the half step between them
-TALL_ROW_TOP = 320.0         # first production row
+TALL_SPINE_X = 190.0         # right of centre, so labels hang left with room
+TALL_FEED_X = 288.0          # feed rank, clear of every plate on the spine
+TALL_FEED_Y0 = 224.0
+TALL_FEED_STEP = 28.0
 
-TALL_RETURN_X = 6.0          # QA return runs up the left gutter
-TALL_EVIDENCE_X = 312.0      # evidence runs down the right gutter
-TALL_GUTTER_Y = 126.0        # the height both gutters cross at
-TALL_POLLER_Y = 64.0
-TALL_CORE_Y = 150.0
-TALL_HUB_Y = 258.0
-TALL_OPS_LABEL_Y = 520.0
-TALL_OPS_Y = 558.0
-TALL_OPS_RISE = 16.0
+TALL_RETURN_X = 52.0         # calibration runs up the left gutter
+TALL_RETURN_Y = 340.0        # and turns in below the core plate, not through it
+TALL_OPS_Y = 572.0
+TALL_OPS_LABEL_Y = 626.0
+TALL_OPS_RISE = 14.0
 TALL_OPS_X0 = 26.0
 TALL_OPS_SPAN = 270.0
-TALL_MARGIN = 4.0
+
+# Row pitch is set against the plate height, not by eye. Hub rows get the
+# wider berth because their plates are the widest on the spine.
+TALL_ROWS = [("lead", "LEAD IN", "leaf", 80.0),
+             ("scope", "SCOPE SHEET", "hub", 160.0),
+             ("engine", "PRICING ENGINE", "core", 280.0),
+             ("gate", "MARGIN GATE", "hub", 400.0),
+             ("quote", "QUOTE OUT", "leaf", 470.0)]
 
 
 def pack_row(labels, fs, track, box_w, margin, min_gap):
@@ -481,7 +509,7 @@ def pack_row(labels, fs, track, box_w, margin, min_gap):
     span = box_w - 2 * margin
     gap = (span - total) / float(len(labels) - 1)
     if gap < min_gap:
-        sys.stderr.write("eco_build: poller row does not fit, gap %.1f\n" % gap)
+        sys.stderr.write("eco_build: label row does not fit, gap %.1f\n" % gap)
         sys.exit(1)
     out, x = [], margin
     for w in widths:
@@ -492,31 +520,14 @@ def pack_row(labels, fs, track, box_w, margin, min_gap):
 
 def build_tall():
     b = Builder(TALL_BOX_W, TALL_BOX_H, tall=True)
-    b.add("grp-pollers", "INBOUND POLLERS", "", "group", TALL_CX, 14, "center")
-    prow = pack_row([lab for _, lab in POLLERS], LABEL_FS["poller"],
-                    LABEL_TRACK["poller"], TALL_BOX_W, TALL_MARGIN,
-                    LABEL_MIN_CLEARANCE)
-    for (pid, plabel), px in zip(POLLERS, prow):
-        b.add(pid, plabel, "", "poller", px, TALL_POLLER_Y, "above")
+    for nid, lab, kind, y in TALL_ROWS:
+        b.add(nid, lab, "", kind, TALL_SPINE_X, y, "left")
 
-    b.add("orchestrator", "ORCHESTRATOR", CORE_NOTE, "core",
-          TALL_CX, TALL_CORE_Y, "below")
-    b.add("production", "PRICING ENGINE", "", "hub",
-          TALL_COL_L, TALL_HUB_Y, "below")
-    b.add("marketing", "JOB INTAKE", "", "hub",
-          TALL_COL_R, TALL_HUB_Y, "below")
+    b.add("grp-feeds", "SUPPLIER FEEDS", "", "group", 262, 190, "center")
+    for i, (fid, _) in enumerate(FEEDS):
+        b.add(fid, "", "", "poller", TALL_FEED_X,
+              TALL_FEED_Y0 + i * TALL_FEED_STEP, "none")
 
-    prod_order = ["demand-gate", "design", "qa-return", "asset-delegation"]
-    prod_label = dict(PROD_KIDS)
-    for i, nid in enumerate(prod_order):
-        b.add(nid, prod_label[nid], "", "leaf", TALL_COL_L,
-              TALL_ROW_TOP + i * TALL_ROW_STEP, "right")
-    for i, (nid, lab) in enumerate(MKT_KIDS):
-        b.add(nid, lab, "", "leaf", TALL_COL_R,
-              TALL_ROW_TOP + TALL_ROW_OFFSET + i * TALL_ROW_STEP, "left")
-
-    b.add("grp-operators", "TERMINAL OPERATORS", "", "group",
-          TALL_CX, TALL_OPS_LABEL_Y, "center")
     ops = []
     for i in range(OPERATOR_COUNT):
         t = (i + 0.5) / OPERATOR_COUNT
@@ -525,37 +536,28 @@ def build_tall():
                     TALL_OPS_Y + TALL_OPS_RISE * math.sin(math.pi * t) * k))
     for i, (ox, oy) in enumerate(ops):
         b.add("op-%d" % i, "", "", "operator", ox, oy, "none")
+    b.add("grp-history", "PRICED JOB HISTORY", "", "group",
+          TALL_CX, TALL_OPS_LABEL_Y, "center")
 
-    cr = radius("core", True)
-    prod_last = TALL_ROW_TOP + (len(prod_order) - 1) * TALL_ROW_STEP
-    mkt_last = TALL_ROW_TOP + TALL_ROW_OFFSET + (len(MKT_KIDS) - 1) * TALL_ROW_STEP
-    trunk_y = TALL_OPS_Y - 2.0
+    b.link("delegate", ["lead", "scope"], 0, arrow=True, flow=True)
+    b.link("delegate", ["scope", "engine"], 0, arrow=True, flow=True)
+    b.link("delegate", ["engine", "gate"], 0, arrow=True, flow=True)
+    b.link("qagate", ["gate", "quote"], 0, arrow=True, flow=True)
 
-    b.link("delegate", ["orchestrator", (TALL_CX - cr, TALL_CORE_Y),
-                        (TALL_COL_L, TALL_CORE_Y), "production"], 0, flow=True)
-    b.link("delegate", ["orchestrator", (TALL_CX + cr, TALL_CORE_Y),
-                        (TALL_COL_R, TALL_CORE_Y), "marketing"], 0, flow=True)
+    for fid, _ in FEEDS:
+        b.link("inbound", ["engine", fid], 1, flow=True, direction=-1)
 
-    b.link("delegate", ["production"] + prod_order +
-           [(TALL_OPS_X0 + 8, trunk_y)], 1, arrow=True, flow=True)
-    b.link("delegate", ["marketing"] + [nid for nid, _ in MKT_KIDS] +
-           [(TALL_OPS_X0 + TALL_OPS_SPAN - 8, trunk_y)], 1, arrow=True, flow=True)
-
-    b.link("qagate", ["qa-return", (TALL_RETURN_X, TALL_ROW_TOP + 2 * TALL_ROW_STEP),
-                      (TALL_RETURN_X, TALL_GUTTER_Y),
-                      (TALL_CX - cr, TALL_GUTTER_Y)], 2, arrow=True, flow=True)
-    b.link("evidence", ["orchestrator", (TALL_CX + cr, TALL_GUTTER_Y),
-                        (TALL_EVIDENCE_X, TALL_GUTTER_Y),
-                        (TALL_EVIDENCE_X, TALL_OPS_Y - 4), "op-15"], 2,
+    # The trunk clears the quote plate on the right. The calibration return
+    # is gutter routed on the left, because a straight line from the field to
+    # the core would have to cross two plates on the way.
+    b.link("delegate", ["gate", "op-15"], 1, arrow=True, flow=True)
+    b.link("evidence", ["engine", (TALL_RETURN_X, TALL_RETURN_Y),
+                        (TALL_RETURN_X, TALL_OPS_Y), "op-0"], 2,
            flow=True, direction=-1)
-
-    for pid, _ in POLLERS:
-        b.link("inbound", ["orchestrator", pid], 1, flow=True, direction=-1)
 
     b.link("lateral", ["op-%d" % i for i in range(OPERATOR_COUNT)], 2)
 
-    assert prod_last > mkt_last          # production is the longer line
-    fix_inbound_arrows(b)
+    fix_return_arrows(b)
     return b.data()
 
 
@@ -631,10 +633,34 @@ def _gap(a, b):
     return max(dx, dy)
 
 
+def _seg_hits_rect(p0, p1, rect):
+    """True if segment p0->p1 enters rect. Liang Barsky, clipped in place."""
+    x0, y0, x1, y1 = rect
+    t0, t1 = 0.0, 1.0
+    dx, dy = p1[0] - p0[0], p1[1] - p0[1]
+    for num_, den in ((x0 - p0[0], dx), (p0[0] - x1, -dx),
+                      (y0 - p0[1], dy), (p0[1] - y1, -dy)):
+        if den == 0:
+            if num_ > 0:
+                return False
+            continue
+        t = num_ / den
+        if den > 0:
+            if t > t1:
+                return False
+            t0 = max(t0, t)
+        else:
+            if t < t0:
+                return False
+            t1 = min(t1, t)
+    return t0 <= t1
+
+
 def assert_no_label_collisions(layout, name):
     """Type is the layer a reader actually reads, so nothing is allowed to
-    touch it. Checks every label plate against every other plate and against
-    every glyph silhouette."""
+    touch it. Checks every label plate against every other plate, against
+    every glyph silhouette, and against every drawn edge. A line that runs
+    under a plate reads as a broken line, which is why edges count too."""
     bad = []
     rects = _plate_rects(layout)
     for i in range(len(rects)):
@@ -654,6 +680,15 @@ def assert_no_label_collisions(layout, name):
             if d < LABEL_MIN_CLEARANCE:
                 bad.append("%s: label %s and glyph %s clear by only %.1f"
                            % (name, rid, n["id"], d))
+    for rid, x0, y0, x1, y1 in rects:
+        grown = (x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0)
+        for e in layout["edges"]:
+            pts = e["pts"]
+            for k in range(len(pts) - 1):
+                if _seg_hits_rect(pts[k], pts[k + 1], grown):
+                    bad.append("%s: %s edge runs under label %s"
+                               % (name, e["kind"], rid))
+                    break
     if bad:
         sys.stderr.write("eco_build: label collision\n  " +
                          "\n  ".join(bad) + "\n")

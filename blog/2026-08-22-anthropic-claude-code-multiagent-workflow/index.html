@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Anthropic Engineers Actually Use Claude Code: The Multi-Agent Workflow Nobody Talks About | The Agent Lab</title>
+<meta name="description" content="Anthropic engineers run a hierarchy of specialized agents — leads, PMs, ICs — driving 8-10 parallel projects with 30-50 prompts/day. Here's what their workflow reveals about using Claude Code as a multi-agent runtime.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-22-anthropic-claude-code-multiagent-workflow/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="How Anthropic Engineers Actually Use Claude Code: The Multi-Agent Workflow Nobody Talks About">
+<meta property="og:description" content="Anthropic engineers run a hierarchy of specialized agents — leads, PMs, ICs — driving 8-10 parallel projects with 30-50 prompts/day. Here's what their workflow reveals about using Claude Code as a multi-agent runtime.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-22-anthropic-claude-code-multiagent-workflow/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-22-anthropic-claude-code-multiagent-workflow/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How Anthropic Engineers Actually Use Claude Code: The Multi-Agent Workflow Nobody Talks About">
+<meta property="article:published_time" content="2026-08-22T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="Blog">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Multi-Agent">
+<meta property="article:tag" content="Anthropic">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Anthropic Engineers Actually Use Claude Code: The Multi-Agent Workflow Nobody Talks About">
+<meta name="twitter:description" content="Anthropic engineers run a hierarchy of specialized agents — leads, PMs, ICs — driving 8-10 parallel projects with 30-50 prompts/day. Here's what their workflow reveals about using Claude Code as a multi-agent runtime.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-22-anthropic-claude-code-multiagent-workflow/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "How Anthropic Engineers Actually Use Claude Code: The Multi-Agent Workflow Nobody Talks About",
+  "description": "Anthropic engineers run a hierarchy of specialized agents — leads, PMs, ICs — driving 8-10 parallel projects with 30-50 prompts/day. Here's what their workflow reveals about using Claude Code as a multi-agent runtime.",
+  "image": "https://theagentlab.site/blog/2026-08-22-anthropic-claude-code-multiagent-workflow/og.png",
+  "datePublished": "2026-08-22T00:00:00+02:00",
+  "dateModified": "2026-08-22T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-22-anthropic-claude-code-multiagent-workflow/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* ===================================================================
+   NAVIGATION
+   =================================================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 16px 48px;
+}
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.nav-cta:hover { background: var(--accent-copper); transform: translateY(-1px); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 120px 0 60px;
+  text-align: center;
+}
+.article-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+.article-meta time { color: var(--accent-bronze); }
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  max-width: 800px;
+  margin: 0 auto 24px;
+}
+.article-dek {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.article-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px 120px;
+}
+.article-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1.25;
+  color: var(--text-primary);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 48px 0 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+}
+.article-content h2:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+.article-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.3;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 32px 0 12px;
+}
+.article-content p {
+  margin: 16px 0;
+  line-height: 1.7;
+}
+.article-content a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+.article-content a:hover { border-color: var(--accent-bronze); }
+.article-content strong { color: var(--text-primary); font-weight: 600; }
+.article-content ul, .article-content ol { margin: 16px 0; padding-left: 24px; }
+.article-content li { margin: 8px 0; line-height: 1.7; }
+.article-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+.article-content pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+.article-content pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.article-content blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 24px;
+  margin: 24px 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.article-footer {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.article-tags a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  color: var(--text-tertiary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.article-tags a:hover { border-color: var(--accent-bronze); color: var(--accent-bronze); }
+.article-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.article-author a { color: var(--accent-bronze); }
+
+/* CTA */
+.article-cta {
+  margin: 2.5rem 0 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #222;
+}
+.article-cta p {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+}
+.article-cta a { color: var(--accent-bronze); }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.footer {
+  background: var(--bg-foundation);
+  border-top: 1px solid var(--border-subtle);
+  padding: 60px 48px;
+  margin-top: 80px;
+}
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 48px;
+}
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.footer-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.15s ease;
+}
+.footer-links a:hover { color: var(--accent-bronze); }
+.footer-copyright {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+  margin-top: 40px;
+  width: 100%;
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 768px) {
+  .nav { padding: 12px 24px; }
+  .nav-links { display: none; }
+  .page-container, .page-narrow { padding: 0 24px; }
+  .article-header { padding: 80px 0 40px; }
+  .article-content { padding: 0 16px 80px; }
+  .footer { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand" aria-label="The Agent Lab home">The Agent Lab</a>
+    <div class="nav-links">
+      <a href="/blog/">Blog</a>
+      <a href="/services/">Services</a>
+      <a href="/kits/">Kits</a>
+    </div>
+    <a href="https://ko-fi.com/ashrey122" class="nav-cta" target="_blank" rel="noopener">Support</a>
+  </div>
+</nav>
+
+<main id="main" class="page-narrow">
+  <header class="article-header">
+    <div class="article-meta">
+      <time datetime="2026-08-22">August 22, 2026</time>
+      <span aria-hidden="true">·</span>
+      <span>10 min read</span>
+    </div>
+    <h1 class="article-title">How Anthropic Engineers Actually Use Claude Code: The Multi-Agent Workflow Nobody Talks About</h1>
+    <p class="article-dek">Anthropic engineers run a hierarchy of specialized agents — leads, PMs, ICs — driving 8-10 parallel projects with 30-50 prompts/day. Here's what their workflow reveals about using Claude Code as a multi-agent runtime.</p>
+  </header>
+
+  <article class="article-content">
+    <p>An Ask HN thread from today revealed something striking: the engineers who build Claude Code don't use it the way most developers do. They run a hierarchy of specialized agents — leads, project managers, individual contributors — each with distinct roles, communicating through a structured protocol. The result: 30-50 prompts per day driving 8-10 parallel projects with agents that run autonomously for 2-3 days at a time.</p>
+
+    <p>This isn't a hypothetical architecture. It's how Daisy, an engineer on the Claude Code team, describes her daily driver in an internal email that made its way to Hacker News. The gap between this workflow and what most developers experience is wide, and understanding it changes how you should think about building with AI coding tools.</p>
+
+    <h2>The Architecture: Leads, PMs, and ICs</h2>
+
+    <p>Daisy's setup runs two lead agents that "keep each other accountable and restart the other if either fails." These leads delegate to tech lead or PM agents for the 8-10 projects running concurrently. Each project spins up 5-10 IC agents — generalists or specialists depending on the problem.</p>
+
+    <p>The interaction breakdown: 60% with the leads, 35% with project leads, 5% when something goes off the rails. All communication happens through the SendMessage tool, meaning agents talk to agents directly without human mediation for the majority of the work.</p>
+
+    <p>Contrast this with the typical developer workflow described in the same thread: create a session, plan in plan mode, implement, open a new session to review the PR, feed findings back, iterate for 3 rounds, then run E2E tests. That's a linear, human-in-the-loop process. Anthropic's internal workflow is a parallel, agent-native system.</p>
+
+    <h2>Why This Matters for Developers</h2>
+
+    <p>The implication isn't that you should copy this exact org chart. It's that the tool you're using was designed for a multi-agent, long-horizon, delegated workflow — not the single-session, human-reviewed loop most people fall into.</p>
+
+    <p>Claude Code's SendMessage tool, its session management, its ability to spawn sub-agents — these aren't convenience features. They're the primitives of the workflow the builders themselves use. When you treat Claude Code as a fancy autocomplete or a single-shot code generator, you're using a distributed system as a REPL.</p>
+
+    <h2>The Verification Gap</h2>
+
+    <p>The thread's author feels their workflow "is not automated enough" and their "verification loops are still too manual." They read every report and have a general sense of PR quality without reading the code. This is the tension: human review doesn't scale, but blind trust fails.</p>
+
+    <p>Anthropic's answer is structural: the leads review the ICs, the PMs review the leads, and the human only engages the 5% that goes off rails. The verification is distributed across the agent hierarchy, not concentrated in the human.</p>
+
+    <h2>What You Can Adopt Today</h2>
+
+    <p>You don't need 20 agents to start shifting toward this model. Three practical shifts:</p>
+
+    <h3>1. Delegate review to a separate agent</h3>
+    <p>Instead of reading the diff yourself, spawn a reviewer agent with a strict rubric. Feed it the PR, get structured findings, then feed those back to the implementer. This is exactly what the thread author does manually — automate the loop.</p>
+
+    <h3>2. Run parallel sessions for parallel work</h3>
+    <p>If you're building a frontend feature and a backend API, don't sequence them in one session. Spawn two sessions with a shared spec, let them run, then integrate. The leads in Daisy's workflow don't wait for one project to finish before starting the next.</p>
+
+    <h3>3. Define "off rails" explicitly</h3>
+    <p>The 5% escalation rate only works because the system knows what normal looks like. Write down what constitutes an escalation: test failures beyond a threshold, security findings, architecture deviations. Let the agents handle the rest.</p>
+
+    <h2>The Skill Layer Is the Leverage</h2>
+
+    <p>Notice what Daisy's workflow depends on: "specialized agents instead of just the general-purpose one." The difference between a generalist IC and a specialist is the skill — the prompt, the tools, the context, the constraints you bake in.</p>
+
+    <p>This is where the leverage lives. Not in prompting better, but in encoding your domain knowledge into reusable agent definitions that can be composed. The leads don't need to know React; they need to know how to delegate to a React specialist and verify its output.</p>
+
+    <h2>The Real Takeaway</h2>
+
+    <p>The Anthropic engineers aren't using a different tool. They're using the same Claude Code you have, but they're using it as a multi-agent runtime instead of a chat interface. The primitives are all there: SendMessage, sub-agents, session persistence, skill definitions.</p>
+
+    <p>The question isn't whether this workflow works — it's what's stopping you from adopting it. The tooling is ready. The patterns are proven. The only missing piece is treating your AI coding assistant as a platform for agent orchestration rather than a conversational coding partner.</p>
+
+    <div class="article-cta">
+      <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+      <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+    </div>
+  </article>
+
+  <footer class="article-footer">
+    <div class="article-tags">
+      <a href="/blog/tags/claude-code/">Claude Code</a>
+      <a href="/blog/tags/ai-agents/">AI Agents</a>
+      <a href="/blog/tags/multi-agent/">Multi-Agent</a>
+      <a href="/blog/tags/anthropic/">Anthropic</a>
+    </div>
+    <div class="article-author">
+      <span>By</span>
+      <a href="https://theagentlab.site/" rel="author">Ashrey</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://theagentlab.site/blog/">The Agent Lab Blog</a>
+    </div>
+  </footer>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-brand">The Agent Lab</div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="/blog/">Blog</a>
+      <a href="/services/">Services</a>
+      <a href="/kits/">Kits</a>
+      <a href="https://github.com/M-Ashrey" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://www.linkedin.com/in/mohamed-ashrey/" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+    <p class="footer-copyright">© 2026 The Agent Lab. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

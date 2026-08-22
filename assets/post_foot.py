@@ -24,16 +24,14 @@ https://theagentlab.site/, an absolute link to the site's own root, which sent
 the reader to the landing page rather than the engine spec. It is /services/ now
 and it stays a relative route, so it works the same on a local server.
 
-Two exceptions, both deliberate:
-
-  blog/2026-08-13-claude-code-auto-mode-default and
-  blog/2026-08-13-managed-agents-multiagent carry no brand-core block, so
-  `.fine` and `.backBottom` would resolve to nothing there. They get the link
-  fix only. They need rebuilding onto the shell before they can take the rest.
+One exception, deliberate:
 
   blog/2026-08-21-anthropic-ipo-agent-ecosystem writes its own closing note
   rather than the shared one. Only its back link is missing, so that is all this
   adds.
+
+  The two 2026-08-13 posts once carried no brand-core block and took the link
+  fix only. They are on the shell now, so they take the full shape like the rest.
 
 Idempotent. Reruns find nothing to do.
 
@@ -86,11 +84,9 @@ LINK_NEW = '<a href="/services/">live AI quoting engine</a>'
 CLOSE = "\n  </article>"
 INDENT = "    "
 
-# Posts that are not on the shell. See the docstring.
-BESPOKE = (
-    "blog/2026-08-13-claude-code-auto-mode-default/index.html",
-    "blog/2026-08-13-managed-agents-multiagent/index.html",
-)
+# Posts that are not on the shell. See the docstring. Both 2026-08-13 posts have
+# since been rebuilt onto the shell, so this is now empty.
+BESPOKE: tuple[str, ...] = ()
 
 
 def posts() -> list[Path]:

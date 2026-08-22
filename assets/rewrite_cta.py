@@ -132,9 +132,9 @@ def row(heading: str, lead: str, indent: str) -> str:
         (
             "If you sell to contractors already",
             "Agencies and dev shops white label the engine and put their own "
-            "name on it. The install is 10,000 USD and the partner keeps 30 "
-            "percent of it, plus 30 percent of the monthly. No developer on "
-            "the payroll.",
+            "name on it. Installs start from 8,000 USD and the partner keeps 30 "
+            "percent of the install and 30 percent of the monthly. No developer "
+            "on the payroll.",
             ("/#partners", "Review the math"),
         ),
     ]

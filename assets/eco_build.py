@@ -356,15 +356,15 @@ def operator_arc(cx, cy, rx, ry, a0_deg, a1_deg, count, spread):
 OPERATOR_COUNT = 16
 OPERATOR_GOLDEN_SPREAD = 0.025
 
-PROD_KIDS = [("demand-gate", "DEMAND GATE"), ("design", "DESIGN"),
-             ("asset-delegation", "ASSET DELEGATION"), ("qa-return", "QA RETURN")]
-MKT_KIDS = [("publish", "PUBLISH"), ("outreach", "OUTREACH"), ("copy", "COPY")]
+PROD_KIDS = [("demand-gate", "SUPPLIER PULL"), ("design", "RATE MATRIX"),
+             ("asset-delegation", "MARGIN GATE"), ("qa-return", "QUOTE RETURN")]
+MKT_KIDS = [("publish", "LEAD CAPTURE"), ("outreach", "FOLLOW UP"), ("copy", "SCOPE FORM")]
 POLLERS = [("steering", "STEERING"), ("heavy", "HEAVY"), ("mid", "MID"),
            ("fast", "FAST"), ("judgment", "JUDGMENT")]
 
-CORE_NOTE = "ROUTING + QA GATE"
-PROD_NOTE = "KIT PRODUCTION LINE"
-MKT_NOTE = "PUBLISHING + DISTRIBUTION"
+CORE_NOTE = "ROUTING + PRICE GATE"
+PROD_NOTE = "LIVE PRICING PATH"
+MKT_NOTE = "JOB INTAKE + REQUESTS"
 
 
 # ==========================================================================
@@ -374,16 +374,16 @@ MKT_NOTE = "PUBLISHING + DISTRIBUTION"
 def build_wide():
     b = Builder(1240, 700, tall=False)
     b.add("orchestrator", "ORCHESTRATOR", CORE_NOTE, "core", 620, 330, "below")
-    b.add("production", "PRODUCTION LOOP", PROD_NOTE, "hub", 330, 150, "below")
-    b.add("marketing", "MARKETING LOOP", MKT_NOTE, "hub", 910, 150, "below")
+    b.add("production", "PRICING ENGINE", PROD_NOTE, "hub", 330, 150, "below")
+    b.add("marketing", "JOB INTAKE", MKT_NOTE, "hub", 910, 150, "below")
 
-    b.add("demand-gate", "DEMAND GATE", "", "leaf", 140, 56, "above")
-    b.add("design", "DESIGN", "", "leaf", 330, 34, "above")
-    b.add("asset-delegation", "ASSET DELEGATION", "", "leaf", 520, 56, "above")
-    b.add("qa-return", "QA RETURN", "", "leaf", 400, 262, "below")
-    b.add("publish", "PUBLISH", "", "leaf", 720, 56, "above")
-    b.add("outreach", "OUTREACH", "", "leaf", 910, 34, "above")
-    b.add("copy", "COPY", "", "leaf", 1100, 56, "above")
+    b.add("demand-gate", "SUPPLIER PULL", "", "leaf", 140, 56, "above")
+    b.add("design", "RATE MATRIX", "", "leaf", 330, 34, "above")
+    b.add("asset-delegation", "MARGIN GATE", "", "leaf", 520, 56, "above")
+    b.add("qa-return", "QUOTE RETURN", "", "leaf", 400, 262, "below")
+    b.add("publish", "LEAD CAPTURE", "", "leaf", 720, 56, "above")
+    b.add("outreach", "FOLLOW UP", "", "leaf", 910, 34, "above")
+    b.add("copy", "SCOPE FORM", "", "leaf", 1100, 56, "above")
 
     rack = [(215, 372), (190, 424), (178, 476), (190, 528), (215, 580)]
     for (pid, plabel), (px, py) in zip(POLLERS, rack):
@@ -501,9 +501,9 @@ def build_tall():
 
     b.add("orchestrator", "ORCHESTRATOR", CORE_NOTE, "core",
           TALL_CX, TALL_CORE_Y, "below")
-    b.add("production", "PRODUCTION LOOP", "", "hub",
+    b.add("production", "PRICING ENGINE", "", "hub",
           TALL_COL_L, TALL_HUB_Y, "below")
-    b.add("marketing", "MARKETING LOOP", "", "hub",
+    b.add("marketing", "JOB INTAKE", "", "hub",
           TALL_COL_R, TALL_HUB_Y, "below")
 
     prod_order = ["demand-gate", "design", "qa-return", "asset-delegation"]

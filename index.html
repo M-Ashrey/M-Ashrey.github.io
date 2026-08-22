@@ -3602,7 +3602,16 @@ var ECO_LAYOUT = {"wide":{"box":[1240.0,700.0],"glyph":{"core":104,"hub":52,"lea
   var GOLDEN_RATIO_FRAC   = 0.6180339887498949;
   var PACKET_SPEED_HZ     = 0.15;
   var PACKET_SPEED_SPREAD = 0.26;
-  var PACKET_SIZE_PX      = 3.4;
+  /* A packet is a tick riding the line, not a block parked on it. WebGL
+     draws every one of these edges at its one device pixel minimum however
+     wide the material asks for, so the packet is the only half of the pair
+     whose weight we control and it has to stay near that hairline.
+     Compensating for the pixel ratio by its square root rather than in full
+     is what holds that pair together: a full compensation keeps the packet
+     the same physical size while the line it rides halves, which is how a
+     2.2px tick came to read as a block on a phone. Half compensation gives
+     up a little sharpness on high density screens to keep the ratio. */
+  var PACKET_SIZE_PX      = 2.2;
   var PACKET_OPACITY      = 0.9;
 
   /* Edges are structure, not foreground. They read as the frame the
@@ -3931,7 +3940,7 @@ var ECO_LAYOUT = {"wide":{"box":[1240.0,700.0],"glyph":{"core":104,"hub":52,"lea
     var cam = gl.camera;
     cam.left = 0; cam.right = viewW; cam.top = 0; cam.bottom = viewH;
     cam.updateProjectionMatrix();
-    gl.packetMat.size = PACKET_SIZE_PX * gl.renderer.getPixelRatio();
+    gl.packetMat.size = PACKET_SIZE_PX * Math.sqrt(gl.renderer.getPixelRatio());
     buildGeometry();
     /* The core slot moves when the stage does, so the object in flight
        follows it rather than drifting off its own diagram. */

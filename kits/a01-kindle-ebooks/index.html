@@ -2790,8 +2790,8 @@ body.ecosystem-open .eco-legend {
   .eco-head { top: 18px; left: 20px; }
   .eco-head-title { font-size: 20px; }
   .eco-head-sub { display: none; }
-  .ecosystem-stage { inset: 78px 20px 122px; }
-  .ecosystem-static { inset: 74px 16px 118px; }
+  .ecosystem-stage { inset: 78px 20px 146px; }
+  .ecosystem-static { inset: 74px 16px 142px; }
   /* The portrait plan is a different composition, not a squashed one.
      This breakpoint is mirrored by TALL_MAX_WIDTH_PX in the script. */
   .eco-svg--wide { display: none; }
@@ -2808,9 +2808,12 @@ body.ecosystem-open .eco-legend {
   .eco-legend-row { font-size: 9px; letter-spacing: 0.06em; gap: 8px; }
   .eco-legend-key { width: 14px; }
   /* Top right belongs to the heading on a narrow screen, so the control
-     stacks above the legend instead. */
+     stacks above the legend instead. The legend wraps to three rows at
+     360px and stands 77px tall off a 14px offset, so 72px put the control
+     straight through its first row. The clearance is measured from the
+     wrapped worst case, and the stage reserve above grew to match. */
   body.ecosystem-open .ecosystem-toggle,
-  body.eco-collapsing .ecosystem-toggle { top: auto; bottom: 72px; right: 16px; }
+  body.eco-collapsing .ecosystem-toggle { top: auto; bottom: 100px; right: 16px; }
 }
 
 /* A zeroed duration is not an instant swap if a delay survives it. The

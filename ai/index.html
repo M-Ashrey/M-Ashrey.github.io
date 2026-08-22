@@ -17,7 +17,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Who We Build For | AI Quoting Engines For Trades | The Agent Lab">
-<meta property="og:description" content="Live AI quoting engines for plumbers, HVAC, roofers and electricians. Wired to your suppliers, loaded with your rates, quoting in ninety seconds.">
+<meta property="og:description" content="Live AI quoting engines for home service contractors, any trade that still prices jobs by hand. Wired to your suppliers, loaded with your rates, quoting in ninety seconds.">
 <meta property="og:url" content="https://theagentlab.site/ai/">
 <meta property="og:site_name" content="The Agent Lab">
 <meta property="og:image" content="https://theagentlab.site/assets/og-image.png">
@@ -26,7 +26,7 @@
 <meta property="og:image:alt" content="The Agent Lab, AI quoting engines for home service contractors">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Who We Build For | AI Quoting Engines For Trades | The Agent Lab">
-<meta name="twitter:description" content="Live AI quoting engines for plumbers, HVAC, roofers and electricians. Wired to your suppliers, loaded with your rates, quoting in ninety seconds.">
+<meta name="twitter:description" content="Live AI quoting engines for home service contractors, any trade that still prices jobs by hand. Wired to your suppliers, loaded with your rates, quoting in ninety seconds.">
 <meta name="twitter:image" content="https://theagentlab.site/assets/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2809,8 +2809,8 @@ body.ecosystem-open .eco-legend {
   .eco-head { top: 18px; left: 20px; }
   .eco-head-title { font-size: 20px; }
   .eco-head-sub { display: none; }
-  .ecosystem-stage { inset: 78px 20px 122px; }
-  .ecosystem-static { inset: 74px 16px 118px; }
+  .ecosystem-stage { inset: 78px 20px 146px; }
+  .ecosystem-static { inset: 74px 16px 142px; }
   /* The portrait plan is a different composition, not a squashed one.
      This breakpoint is mirrored by TALL_MAX_WIDTH_PX in the script. */
   .eco-svg--wide { display: none; }
@@ -2827,9 +2827,12 @@ body.ecosystem-open .eco-legend {
   .eco-legend-row { font-size: 9px; letter-spacing: 0.06em; gap: 8px; }
   .eco-legend-key { width: 14px; }
   /* Top right belongs to the heading on a narrow screen, so the control
-     stacks above the legend instead. */
+     stacks above the legend instead. The legend wraps to three rows at
+     360px and stands 77px tall off a 14px offset, so 72px put the control
+     straight through its first row. The clearance is measured from the
+     wrapped worst case, and the stage reserve above grew to match. */
   body.ecosystem-open .ecosystem-toggle,
-  body.eco-collapsing .ecosystem-toggle { top: auto; bottom: 72px; right: 16px; }
+  body.eco-collapsing .ecosystem-toggle { top: auto; bottom: 100px; right: 16px; }
 }
 
 /* A zeroed duration is not an instant swap if a delay survives it. The
@@ -2867,7 +2870,7 @@ body.ecosystem-open .eco-legend {
   <header class="article-head">
     <span class="eyebrow">Who We Build For</span>
     <h1 class="article-title">Trades that price work <em>on site</em>, by hand, for free.</h1>
-    <p class="dek">Plumbing, HVAC, roofing, electrical and remodelling. If a licensed person is driving to a house to produce a number that a customer might not even read, that is the work we automate. <strong>Ninety seconds instead of three days</strong>, on your rates, from your suppliers.</p>
+    <p class="dek">Plumbing, HVAC, roofing, electrical and remodelling are the obvious ones. Painters and every other trade count too. If somebody is driving to a house to produce a number that a customer might not even read, that is the work we automate. <strong>Ninety seconds instead of three days</strong>, on your rates, from your suppliers.</p>
     <div class="article-actions">
       <a class="btn-primary" href="/services/">See the spec</a>
       <a class="btn-secondary" href="/#partners">Agency partners</a>
@@ -2962,7 +2965,7 @@ body.ecosystem-open .eco-legend {
         </tbody>
       </table>
     </div>
-    <p class="fine">Outcomes are stated as what the engine does, measured against your current turnaround, never as a revenue promise. Whether it fits your specific mix gets settled before anything is built.</p>
+    <p class="fine">These five are examples, not a list of who qualifies. Painters, landscapers, flooring, concrete, anyone who prices jobs by hand fits the same way. Outcomes are stated as what the engine does, measured against your current turnaround, never as a revenue promise. Whether it fits your specific mix gets settled before anything is built.</p>
   </section>
 
   <div class="limits">

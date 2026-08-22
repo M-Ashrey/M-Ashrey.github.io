@@ -2813,8 +2813,8 @@ body.ecosystem-open .eco-legend {
   .eco-head { top: 18px; left: 20px; }
   .eco-head-title { font-size: 20px; }
   .eco-head-sub { display: none; }
-  .ecosystem-stage { inset: 78px 20px 122px; }
-  .ecosystem-static { inset: 74px 16px 118px; }
+  .ecosystem-stage { inset: 78px 20px 146px; }
+  .ecosystem-static { inset: 74px 16px 142px; }
   /* The portrait plan is a different composition, not a squashed one.
      This breakpoint is mirrored by TALL_MAX_WIDTH_PX in the script. */
   .eco-svg--wide { display: none; }
@@ -2831,9 +2831,12 @@ body.ecosystem-open .eco-legend {
   .eco-legend-row { font-size: 9px; letter-spacing: 0.06em; gap: 8px; }
   .eco-legend-key { width: 14px; }
   /* Top right belongs to the heading on a narrow screen, so the control
-     stacks above the legend instead. */
+     stacks above the legend instead. The legend wraps to three rows at
+     360px and stands 77px tall off a 14px offset, so 72px put the control
+     straight through its first row. The clearance is measured from the
+     wrapped worst case, and the stage reserve above grew to match. */
   body.ecosystem-open .ecosystem-toggle,
-  body.eco-collapsing .ecosystem-toggle { top: auto; bottom: 72px; right: 16px; }
+  body.eco-collapsing .ecosystem-toggle { top: auto; bottom: 100px; right: 16px; }
 }
 
 /* A zeroed duration is not an instant swap if a delay survives it. The
@@ -2881,9 +2884,9 @@ body.ecosystem-open .eco-legend {
       <div class="hero-content">
         <div class="hero-eyebrow">AI Development Lab</div>
         <h1 class="hero-headline">Your quotes take<br>three days.<br>Ours take<br><em>ninety seconds</em>.</h1>
-        <div class="hero-standfirst">Live AI quoting engines for plumbers, HVAC and roofers.</div>
+        <div class="hero-standfirst">Live AI quoting engines for home service contractors. Any trade that still prices jobs by hand.</div>
         <div class="hero-body">
-          <p>We plug straight into your supplier APIs, Ferguson and ABC Supply among them, and pull real material pricing at the moment a customer asks. Your labor rates and your markups are loaded in as a <strong>custom matrix</strong>, so the number that comes out is the number you would have written yourself. It just arrives while the homeowner is still on the page.</p>
+          <p>We plug straight into the supplier APIs you already buy from, and pull real material pricing at the moment a customer asks. Your labor rates and your markups are loaded in as a <strong>custom matrix</strong>, so the number that comes out is the number you would have written yourself. It just arrives while the homeowner is still on the page.</p>
         </div>
         <div class="hero-actions">
           <a href="#engine" class="btn-primary">See The Live Engine</a>
@@ -3070,7 +3073,7 @@ body.ecosystem-open .eco-legend {
       <div class="partner-body">
         <span class="lab">Marketing Agency Owners</span>
         <h2>You have the contractors.<br>You are missing the <em>product</em>.</h2>
-        <p>You already run ads, sites and lead gen for plumbers, roofers and HVAC companies. You already know their real problem is not traffic. It is that a good lead sits in an inbox for three days while somebody finds time to price it.</p>
+        <p>You already run ads, sites and lead gen for home service contractors. Plumbers, roofers, painters, whoever is on your roster. You already know their real problem is not traffic. It is that a good lead sits in an inbox for three days while somebody finds time to price it.</p>
         <p>We built the thing that fixes it. You put your name on it.</p>
         <p>We do the supplier integration, the labor matrix and the support. You place it with clients who already trust you, at a price they will pay because it pays for itself. <strong>Thirty percent of every install, and thirty percent of the monthly.</strong> No developer on your payroll and no product to maintain.</p>
         <div class="hero-actions">

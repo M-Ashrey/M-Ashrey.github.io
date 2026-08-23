@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>MCP Roadmap Update: Five Priority Areas for the Next Spec Release | The Agent Lab</title>
+<meta name="description" content="The Model Context Protocol published an updated roadmap covering agentic messaging primitives, HTTP transport unification, agent identity, improved primitives, and SDK developer experience. What developers need to know.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-23-mcp-roadmap-update/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP Roadmap Update: Five Priority Areas for the Next Spec Release">
+<meta property="og:description" content="The Model Context Protocol published an updated roadmap covering agentic messaging primitives, HTTP transport unification, agent identity, improved primitives, and SDK developer experience. What developers need to know.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-23-mcp-roadmap-update/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-23-mcp-roadmap-update/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MCP Roadmap Update - The Agent Lab">
+<meta property="article:published_time" content="2026-08-23T00:00:00+02:00">
+<meta property="article:author" content="Ashrey">
+<meta property="article:section" content="Blog">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="Model Context Protocol">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Protocol">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP Roadmap Update: Five Priority Areas for the Next Spec Release">
+<meta name="twitter:description" content="The Model Context Protocol published an updated roadmap covering agentic messaging primitives, HTTP transport unification, agent identity, improved primitives, and SDK developer experience. What developers need to know.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-23-mcp-roadmap-update/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MCP Roadmap Update: Five Priority Areas for the Next Spec Release",
+  "description": "The Model Context Protocol published an updated roadmap covering agentic messaging primitives, HTTP transport unification, agent identity, improved primitives, and SDK developer experience. What developers need to know.",
+  "datePublished": "2026-08-23T00:00:00+02:00",
+  "dateModified": "2026-08-23T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-23-mcp-roadmap-update/"
+  },
+  "image": "https://theagentlab.site/blog/2026-08-23-mcp-roadmap-update/og.png",
+  "keywords": "MCP, Model Context Protocol, AI agents, protocol, roadmap"
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 450;
+  color: var(--text-tertiary);
+  letter-spacing: 0.01em;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg-void);
+  background: var(--accent-bronze);
+  padding: 8px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-cta:hover {
+  filter: brightness(1.08);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===================================================================
+   BUTTONS
+   =================================================================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg-void);
+  background: var(--accent-bronze);
+  padding: 14px 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.btn-primary[disabled] {
+  opacity: 0.5;
+  cursor: progress;
+  transform: none;
+  filter: none;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  background: var(--bg-surface-1);
+  padding: 14px 32px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-surface-2);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===================================================================
+   ARTICLE / BLOG POST
+   =================================================================== */
+.article-header {
+  padding: 80px 0 48px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 48px;
+}
+
+.article-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 64px);
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 24px;
+  max-width: 34ch;
+}
+
+.article-dek {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 32px;
+}
+
+.article-content {
+  max-width: var(--measure);
+  font-size: 17px;
+  font-weight: 380;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 48px 0 16px;
+  line-height: 1.2;
+}
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+  margin: 40px 0 12px;
+  line-height: 1.3;
+}
+
+.article-content p {
+  margin-bottom: 20px;
+}
+
+.article-content a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.article-content a:hover {
+  color: var(--text-primary);
+}
+
+.article-content ul, .article-content ol {
+  margin: 20px 0;
+  padding-left: 24px;
+}
+
+.article-content li {
+  margin-bottom: 8px;
+}
+
+.article-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-bronze);
+}
+
+.article-content pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  overflow-x: auto;
+  margin: 24px 0;
+  line-height: 1.6;
+}
+
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.article-content blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.article-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.article-tag:hover {
+  color: var(--accent-bronze);
+  border-color: var(--accent-bronze);
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  padding: 64px 0 32px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 80px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-brand p {
+  font-size: 15px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-tertiary);
+  margin-top: 16px;
+  max-width: 280px;
+}
+
+.footer-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links a {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+.footer-bottom {
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copyright {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-ghost);
+}
+
+.footer-social {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-default);
+  border-radius: 50%;
+  color: var(--text-tertiary);
+  transition: all 0.2s ease;
+}
+
+.footer-social a:hover {
+  border-color: var(--accent-bronze);
+  color: var(--accent-bronze);
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 768px) {
+  .page-container, .page-narrow, .nav-bar { padding: 0 24px; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-graphic { aspect-ratio: 1; max-width: 320px; margin: 0 auto; }
+  .section { padding: 80px 0; }
+  .section-title { font-size: 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .article-title { max-width: none; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav-wordmark" aria-label="The Agent Lab home">THE <span>AGENT</span> LAB</a>
+  <ul class="nav-links">
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/services/">Services</a></li>
+    <li><a href="/kits/">Kits</a></li>
+  </ul>
+  <a href="https://ko-fi.com/ashrey122" class="nav-cta" target="_blank" rel="noopener noreferrer">Support</a>
+</nav>
+
+<main id="main-content">
+  <article class="page-narrow">
+    <header class="article-header">
+      <div class="article-meta">
+        <time datetime="2026-08-23">August 23, 2026</time>
+        <span>By Ashrey</span>
+      </div>
+      <h1 class="article-title">MCP Roadmap Update: Five Priority Areas for the Next Spec Release</h1>
+      <p class="article-dek">The Model Context Protocol published an updated roadmap covering agentic messaging primitives, HTTP transport unification, agent identity, improved primitives, and SDK developer experience. What developers building on MCP need to know.</p>
+    </header>
+
+    <div class="article-content">
+      <p>On August 22, the Model Context Protocol team published an updated roadmap covering the next specification release and beyond. The post, authored by lead maintainers David Soria Parra and Den Delimarsky, organizes work into five priority areas. Each area has designated Core Maintainers and one or more Working Groups behind it.</p>
+
+      <p>The roadmap is notable for what it signals: several items that appeared on the horizon in the previous roadmap have graduated to active priorities. Server-initiated events, result type improvements, and agent identity have matured enough to command dedicated maintainer attention. For developers building MCP servers or clients, these are the workstreams that will shape the protocol over the coming months.</p>
+
+      <h2 id="agentic-messaging-primitives">Agentic messaging primitives</h2>
+      <p>Modern agentic workloads no longer fit the standard request-and-response pattern. Loops run for longer, servers push streamed results, and there is a clear need to steer work mid-flight. MCP has been growing to meet these requirements, introducing Tasks, subscriptions/listen, and progress notifications.</p>
+
+      <p>The roadmap calls out three concrete threads here. First, server-initiated events via webhooks and channels so clients are not left polling for results. Second, a composition review across the Agents, Transports, and Triggers & Events Working Groups to ensure these primitives work well together. Third, maturing the Tasks extension (SEP-2663) so it can move into the specification proper.</p>
+
+      <p>For developers, the practical takeaway is that if you are building long-running agent workflows today, the primitives you need — tasks, streaming, progress — are converging but not yet stabilized. The Tasks extension is the one to watch; once it lands in the spec, it becomes the standard way to represent multi-step, interruptible work.</p>
+
+      <h2 id="http-transport-unification">HTTP-native transport unification and hardening</h2>
+      <p>With the 2026-07-28 release, a remote MCP server is now no different from any other HTTP workload. This makes it straightforward to host and operate MCP servers on any infrastructure that developers already use for APIs and services — Kubernetes, Cloudflare Workers, Vercel, Fly.io, or a plain VPS.</p>
+
+      <p>The roadmap indicates the team wants to stretch this approach to cover other deployment modes, including local servers speaking Streamable HTTP over stdio. Unifying on one transport simplifies both server and client development: instead of maintaining separate code paths for stdio, SSE, and HTTP, you target one transport that works everywhere.</p>
+
+      <p>If you are deploying MCP servers today, the HTTP-native path is the blessed one. The stdio transport is not going away (local-first tooling depends on it), but new investment goes into making Streamable HTTP over stdio a first-class option for local development too.</p>
+
+      <h2 id="agent-identity">Agent identity and enterprise-ready security</h2>
+      <p>MCP authorization today is built around a person approving access in a browser. That works for interactive clients, but more and more callers are agents running as cloud workloads with their own identity, acting on behalf of a user who is not present, or delegating narrower authority to sub-agents.</p>
+
+      <p>The roadmap outlines a standards-based approach rather than pasted API keys and long-lived tokens. Three pillars: finalizing Demonstrating Proof of Possession (DPoP, RFC 9449) and driving its adoption; defining an opinionated path for agent identity and delegation through Workload Identity Federation, the ID-JAG grant behind Enterprise-Managed Authorization, and standard token exchange; and continuing engagement with the IETF OAuth and WIMSE working groups so the underlying standards evolve with the building blocks agent identity needs.</p>
+
+      <p>For server developers, this means the authentication story is moving toward workload identity and short-lived, bound credentials. If you are building an MCP server that needs to serve both interactive users and autonomous agents, plan for a token exchange flow rather than a single long-lived bearer token.</p>
+
+      <h2 id="improved-primitives">Improved primitives</h2>
+      <p>Tool calling is the part of MCP most developers touch first, and it has held up well. Where it falls short is result handling. A tools/call response can carry the same output in more than one form, and a server developer today has no way to know which form a given client will put in front of the model. The roadmap aims to standardize on one clear contract.</p>
+
+      <p>The second challenge is scale. Connecting to a server with a hundred tools means the model pays for that entire surface before the user has asked a single question, and tool selection tends to degrade as the list grows. A progressive discovery effort is starting so a server can offer a small entry point and reveal more of its catalog as the conversation narrows.</p>
+
+      <p>For server authors, this is a signal to design tool surfaces with progressive disclosure in mind. A server that exposes a handful of high-leverage tools up front and gates the rest behind discovery will behave better with models as the spec evolves.</p>
+
+      <h2 id="sdk-experience">Improved SDK developer experience</h2>
+      <p>SDKs are how most developers experience MCP. The roadmap acknowledges that many developers now build MCP clients and servers by pointing an agent at the libraries, where clear APIs and accurate docs decide whether the code works with minimal friction. Investment goes into ergonomics, conformance with the specification, and documentation across every supported platform and language.</p>
+
+      <p>Conformance testing is called out explicitly. If you maintain an SDK or are evaluating one, the conformance suite is the benchmark to watch — it is the mechanism that keeps implementations honest as the spec moves.</p>
+
+      <h2 id="proposal-prioritization">Proposal prioritization and how to contribute</h2>
+      <p>Specification Enhancement Proposals (SEPs) that fall within these five priority areas get expedited review and have the best chance of acceptance. Proposals outside them are not rejected automatically, but maintainer review time is scarce and goes to these areas first.</p>
+
+      <p>The roadmap page names the Core Maintainers responsible for each area, and anyone interested in contributing can reach them on Discord. There are several ways to participate: join a Working Group or Interest Group, propose or comment on a SEP, start an experimental extension under SEP-2133, or contribute directly to the specification, SDKs, and tooling.</p>
+
+      <h2 id="what-this-means">What this means for developers today</h2>
+      <p>The roadmap is a statement of maintainer capacity as much as technical direction. Five priority areas, each with named maintainers and Working Groups, means the protocol has the governance structure to move multiple workstreams in parallel. That is a significant shift from the earlier phase where a smaller core team sequenced everything.</p>
+
+      <p>If you are building on MCP, the practical moves are: target the HTTP-native transport for new servers; design tool surfaces for progressive disclosure; watch the Tasks extension (SEP-2663) for long-running workflows; and plan authentication around workload identity and token exchange rather than static API keys. The SDK conformance suite will be the signal of which libraries are tracking the spec faithfully.</p>
+
+      <p>The roadmap is public at <a href="https://modelcontextprotocol.io/development/roadmap">modelcontextprotocol.io/development/roadmap</a>. The Working Groups page lists current groups and how to join. The SEP guidelines explain the proposal process. All three are linked from the roadmap post.</p>
+    </div>
+
+    <div class="article-tags">
+      <span class="article-tag">MCP</span>
+      <span class="article-tag">Model Context Protocol</span>
+      <span class="article-tag">AI Agents</span>
+      <span class="article-tag">Protocol</span>
+      <span class="article-tag">Roadmap</span>
+    </div>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+</main>
+
+<footer class="site-footer page-container" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="nav-wordmark" style="margin-bottom: 16px; display: inline-block;">THE <span>AGENT</span> LAB</a>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav>
+      <div class="footer-title">Blog</div>
+      <ul class="footer-links">
+        <li><a href="/blog/">All posts</a></li>
+        <li><a href="/blog/#mcp">MCP</a></li>
+        <li><a href="/blog/#claude">Claude</a></li>
+        <li><a href="/blog/#agents">AI Agents</a></li>
+      </ul>
+    </nav>
+    <nav>
+      <div class="footer-title">Work</div>
+      <ul class="footer-links">
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/kits/">Kits</a></li>
+        <li><a href="https://github.com/theagentlab/mcp-doctor">mcp-doctor</a></li>
+      </ul>
+    </nav>
+    <nav>
+      <div class="footer-title">Connect</div>
+      <ul class="footer-links">
+        <li><a href="https://github.com/theagentlab">GitHub</a></li>
+        <li><a href="https://www.youtube.com/@TheAgentLab">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/in/mohamed-ashrey">LinkedIn</a></li>
+        <li><a href="https://ko-fi.com/ashrey122">Ko-fi</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copyright">&copy; 2026 The Agent Lab. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="https://github.com/theagentlab" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"></path></svg>
+      </a>
+      <a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.94 19.79 19.79 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.94 19.79 19.79 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/mohamed-ashrey" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

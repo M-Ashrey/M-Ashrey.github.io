@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthropic's AI-Native SDLC Playbook: What It Actually Means for Teams Shipping on Claude | The Agent Lab</title>
+<meta name="description" content="Anthropic published a stage-by-stage playbook for transforming software development with AI. Here's what's practical, what's aspirational, and what developers building on Claude and MCP should take from it.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-26-anthropic-ai-native-sdlc-playbook/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic's AI-Native SDLC Playbook: What It Actually Means for Teams Shipping on Claude">
+<meta property="og:description" content="Anthropic published a stage-by-stage playbook for transforming software development with AI. Here's what's practical, what's aspirational, and what developers building on Claude and MCP should take from it.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-26-anthropic-ai-native-sdlc-playbook/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-26-anthropic-ai-native-sdlc-playbook/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Anthropic's AI-Native SDLC Playbook - The Agent Lab">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anthropic's AI-Native SDLC Playbook: What It Actually Means for Teams Shipping on Claude">
+<meta name="twitter:description" content="Anthropic published a stage-by-stage playbook for transforming software development with AI. Here's what's practical, what's aspirational, and what developers building on Claude and MCP should take from it.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-26-anthropic-ai-native-sdlc-playbook/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Anthropic's AI-Native SDLC Playbook: What It Actually Means for Teams Shipping on Claude",
+  "description": "Anthropic published a stage-by-stage playbook for transforming software development with AI. Here's what's practical, what's aspirational, and what developers building on Claude and MCP should take from it.",
+  "image": "https://theagentlab.site/blog/2026-08-26-anthropic-ai-native-sdlc-playbook/og.png",
+  "datePublished": "2026-08-26",
+  "dateModified": "2026-08-26",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-26-anthropic-ai-native-sdlc-playbook/"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+h1 { font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -0.01em; margin-top: 3rem; }
+h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); margin-top: 2.5rem; }
+
+p { margin-top: 1rem; }
+p + p { margin-top: 1.25rem; }
+
+strong { color: var(--text-primary); font-weight: 600; }
+
+ul, ol { margin-top: 1rem; padding-left: 1.5rem; }
+li { margin-top: 0.5rem; }
+
+blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+pre code { background: none; padding: 0; border: none; font-size: inherit; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 3rem 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+/* ===================================================================
+   NAVIGATION
+   =================================================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   ARTICLE HEADER
+   =================================================================== */
+.article-header {
+  padding: 120px 0 60px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.article-meta time { color: var(--accent-bronze); }
+
+.article-header h1 { margin-top: 0; }
+
+.article-dek {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-top: 1.5rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* ===================================================================
+   ARTICLE BODY
+   =================================================================== */
+.article-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px 120px;
+}
+
+.article-body h2 { margin-top: 3.5rem; }
+.article-body h3 { margin-top: 2.5rem; }
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border-accent);
+  transition: text-decoration-color 0.2s ease;
+}
+.article-body a:hover { text-decoration-color: var(--accent-bronze); }
+
+.article-body blockquote {
+  font-size: 1.1rem;
+  padding-left: 1.5rem;
+}
+
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
+
+/* ===================================================================
+   FOOTER CTA
+   =================================================================== */
+.article-cta {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #222;
+}
+.article-cta p {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+}
+.article-cta a { color: var(--accent-bronze); }
+
+/* ===================================================================
+   SITE FOOTER
+   =================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 60px 48px;
+  background: var(--bg-foundation);
+}
+
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.footer-brand {
+  flex: 1;
+  min-width: 280px;
+}
+
+.footer-brand .logo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.footer-brand p {
+  font-size: 0.95rem;
+  color: var(--text-tertiary);
+  max-width: 320px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; padding: 0; }
+.footer-col li { margin-top: 10px; }
+.footer-col a { color: var(--text-tertiary); font-size: 0.95rem; transition: color 0.2s ease; }
+.footer-col a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .page-container, .page-narrow { padding: 0 24px; }
+  .article-header { padding: 80px 0 40px; }
+  .article-body { padding: 0 16px 80px; }
+  .nav-inner { padding: 0 24px; }
+  .site-footer { padding: 40px 24px; }
+  .footer-inner { flex-direction: column; gap: 32px; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand" aria-label="The Agent Lab home">The Agent Lab</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/services/">Services</a></li>
+      <li><a href="/kits/">Kits</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main-content" role="main">
+  <article>
+    <header class="article-header">
+      <div class="article-meta">
+        <time datetime="2026-08-26">August 26, 2026</time>
+        <span aria-hidden="true">|</span>
+        <span>Ashrey</span>
+      </div>
+      <h1>Anthropic's AI-Native SDLC Playbook: What It Actually Means for Teams Shipping on Claude</h1>
+      <p class="article-dek">Anthropic published a stage-by-stage playbook for transforming software development with AI. Here's what's practical, what's aspirational, and what developers building on Claude and MCP should take from it.</p>
+    </header>
+
+    <div class="article-body">
+      <p>On August 21, Anthropic published <a href="https://claude.com/blog/the-ai-native-sdlc-playbook" target="_blank" rel="noopener">The AI-Native SDLC Playbook</a> — a structured framework for how teams can integrate AI across every stage of the software development lifecycle. The playbook was updated on August 26 with expanded sections on testing and deployment. For developers already building on Claude Code, MCP, or the broader agent ecosystem, this isn't just another thought-leadership piece. It's a signal of how Anthropic expects the development workflow to evolve, and where the tooling gaps still are.</p>
+
+      <h2>What the playbook actually covers</h2>
+
+      <p>The playbook breaks the SDLC into six stages: Plan, Design, Build, Test, Deploy, and Maintain. Each stage gets a dedicated page with concrete patterns, anti-patterns, and Claude-specific workflows. The framing is deliberately practical — it's written by engineers who ship code, not by product marketing.</p>
+
+      <p>In the <strong>Plan</strong> stage, the playbook advocates for "spec-driven development" where requirements live as structured markdown that Claude can reference, extend, and validate against. This maps directly to what MCP servers like <code>mcp-doctor</code> already do: expose project context as typed resources so the model isn't guessing. The playbook also introduces "decision logs" — lightweight ADRs that capture why a choice was made, so future sessions (human or agent) don't relitigate settled ground.</p>
+
+      <p>The <strong>Design</strong> stage leans heavily on Claude's ability to reason about architecture from multiple angles: threat modeling, API contract review, data flow diagrams. The key insight is treating design docs as executable artifacts — not PDFs that rot, but prompts that can be re-run against the codebase to verify alignment. This is where MCP's <code>resources</code> primitive shines: a design doc becomes a resource URI that any agent can fetch, parse, and cross-reference against implementation.</p>
+
+      <p><strong>Build</strong> is where the playbook gets most specific to Claude Code. It describes the "lead/IC" pattern that Anthropic engineers use internally: a lead agent decomposes work, spins up specialized sub-agents for each task, and synthesizes results. This matches what we documented <a href="/blog/2026-08-22-anthropic-claude-code-multiagent-workflow/" target="_blank" rel="noopener">in our August 22 post</a> on Anthropic's internal multi-agent workflow. The playbook makes it explicit: don't prompt once and hope. Decompose, delegate, verify.</p>
+
+      <p>The <strong>Test</strong> section (expanded in the August 26 update) distinguishes three layers: unit tests generated alongside code, integration tests driven by MCP servers that spin up real dependencies, and "evals" — LLM-as-judge assessments of behavior that traditional assertions can't catch. This is the most actionable part for MCP builders: if your server exposes a <code>run_tests</code> tool, the agent can close the loop without human intervention.</p>
+
+      <p><strong>Deploy</strong> and <strong>Maintain</strong> are thinner. They cover feature flags, canary rollouts, and observability — but the playbook admits these are areas where the tooling hasn't caught up to the vision. The maintain stage introduces "living docs" that update from code changes via hooks, which is a direct nod to the <a href="https://github.com/anthropics/claude-code-hooks" target="_blank" rel="noopener">Claude Code hooks system</a> shipped in late July.</p>
+
+      <h2>What's practical right now</h2>
+
+      <p>Three patterns from the playbook are immediately usable for teams on Claude Code today:</p>
+
+      <ul>
+        <li><strong>Spec files as context anchors.</strong> Keep a <code>SPEC.md</code> or <code>CLAUDE.md</code> at repo root. Update it before each session. The model stays grounded; you avoid the "what were we doing?" problem.</li>
+        <li><strong>Sub-agent delegation via Task tool.</strong> Don't ask one Claude instance to do everything. Spawn a planner, a coder, a reviewer. The playbook's lead/IC pattern works because each agent has a narrow, well-scoped prompt.</li>
+        <li><strong>Hook-enforced standards.</strong> PreToolUse hooks that block commits without tests, or that run linting before file writes. This is stronger than any CLAUDE.md instruction because it's enforced at tool-call time.</li>
+      </ul>
+
+      <h2>What's aspirational (and the gaps)</h2>
+
+      <p>The playbook describes a world where design docs are executable, tests generate themselves, and deployments are governed by AI-driven policy. That world doesn't fully exist yet. The gaps are visible:</p>
+
+      <ul>
+        <li>MCP's <code>resources</code> and <code>tools</code> primitives can expose codebase state, but there's no standard schema for "design doc as resource" — every team invents their own.</li>
+        <li>Eval-driven testing needs a shared protocol for "what good looks like." The playbook hints at this but doesn't define it.</li>
+        <li>Cross-session memory (the <a href="/blog/2026-08-08-claude-code-sessions-talk/" target="_blank" rel="noopener">session messaging</a> shipped August 8) helps, but there's no persistent project memory layer that survives context resets.</li>
+      </ul>
+
+      <p>These gaps are exactly where the MCP ecosystem should focus. The playbook is effectively a requirements document for the next generation of MCP servers.</p>
+
+      <h2>What this means for MCP builders</h2>
+
+      <p>If you're building MCP servers, the playbook tells you what capabilities agents will expect:</p>
+
+      <ul>
+        <li><strong>Expose project state as resources.</strong> Not just file reads — structured views: "current spec," "open decisions," "test coverage map."</li>
+        <li><strong>Provide verification tools.</strong> <code>run_tests</code>, <code>check_types</code>, <code>validate_contract</code>. Agents need to close loops without asking humans.</li>
+        <li><strong>Emit structured events.</strong> The playbook's "living docs" vision requires hooks that fire on file changes, test results, deploy status. Your server should be an event source, not just a request-response endpoint.</li>
+      </ul>
+
+      <p>The teams that win won't be the ones with the cleverest prompts. They'll be the ones who give agents the right primitives to operate autonomously — and the playbook is Anthropic's map of what those primitives need to be.</p>
+
+      <h2>The bottom line</h2>
+
+      <p>The AI-Native SDLC Playbook is the clearest statement yet of where Anthropic thinks development is going. It's not speculative — it's distilled from how their own engineers work today. For developers on Claude and MCP, the takeaway is concrete: structure your context, decompose your work, enforce standards with hooks, and build MCP servers that give agents the verification tools they need to close loops.</p>
+
+      <p>The playbook will evolve. The August 26 update added testing depth. Expect more on deploy and maintain as the tooling matures. But the core pattern — spec-driven, agent-delegated, hook-enforced, eval-verified — is the new baseline.</p>
+
+      <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+      <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+    </div>
+  </article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">The Agent Lab</div>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <div class="footer-links">
+      <nav class="footer-col" aria-label="Site navigation">
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/kits/">Kits</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-label="Resources">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="https://github.com/m-ashrey/mcp-doctor" target="_blank" rel="noopener">mcp-doctor</a></li>
+          <li><a href="https://www.youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a></li>
+          <li><a href="https://theagentlab.site/feed.xml" target="_blank" rel="noopener">RSS Feed</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-label="Contact">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="https://github.com/m-ashrey" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/mohamed-ashrey" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:hello@theagentlab.site">Email</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 The Agent Lab. All rights reserved.
+  </div>
+</footer>
+</body>
+</html>

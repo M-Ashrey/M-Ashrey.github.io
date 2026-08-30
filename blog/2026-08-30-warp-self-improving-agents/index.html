@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>How Warp Built Self-Improving Agents Using File-Based Skills | The Agent Lab</title>
+<meta name="description" content="Warp's self-improving agent architecture uses two file-based skills and human feedback loops to turn one-off agent runs into systems that compound capability over time. A practical pattern for any team building on MCP and the Claude Platform.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-30-warp-self-improving-agents/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="How Warp Built Self-Improving Agents Using File-Based Skills">
+<meta property="og:description" content="Warp's self-improving agent architecture uses two file-based skills and human feedback loops to turn one-off agent runs into systems that compound capability over time.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-30-warp-self-improving-agents/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-30-warp-self-improving-agents/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab: How Warp Built Self-Improving Agents Using File-Based Skills">
+<meta property="article:published_time" content="2026-08-30T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="Claude">
+<meta property="article:tag" content="Agent Skills">
+<meta property="article:tag" content="Self-Improving Agents">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Warp Built Self-Improving Agents Using File-Based Skills">
+<meta name="twitter:description" content="Warp's self-improving agent architecture uses two file-based skills and human feedback loops to turn one-off agent runs into systems that compound capability over time.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-30-warp-self-improving-agents/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "How Warp Built Self-Improving Agents Using File-Based Skills",
+  "description": "Warp's self-improving agent architecture uses two file-based skills and human feedback loops to turn one-off agent runs into systems that compound capability over time. A practical pattern for any team building on MCP and the Claude Platform.",
+  "image": "https://theagentlab.site/blog/2026-08-30-warp-self-improving-agents/og.png",
+  "datePublished": "2026-08-30T00:00:00+02:00",
+  "dateModified": "2026-08-30T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-30-warp-self-improving-agents/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.nav-wordmark svg { width: 32px; height: 32px; flex: none; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-links a:hover { color: var(--text-primary); background: var(--bg-surface-1); }
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.nav-cta:hover { background: #d4a567; box-shadow: var(--shadow-sm); }
+.nav-cta:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-head {
+  padding: 120px 0 40px;
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+
+.article-meta time { color: var(--accent-bronze-dim); }
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  max-width: 32ch;
+}
+
+.article-dek {
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 32px;
+}
+
+.article-byline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.article-byline .author { color: var(--accent-bronze); font-weight: 500; }
+
+.article-body {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 48px 120px;
+}
+
+.article-body p {
+  margin-bottom: 1.5rem;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 3rem 0 1rem;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 2.5rem 0 0.75rem;
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border-accent);
+  transition: text-decoration-color 0.15s, color 0.15s;
+}
+.article-body a:hover { text-decoration-color: var(--accent-bronze); color: #d4a567; }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-surface-2);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.article-body pre code { background: none; padding: 0; border: none; font-size: inherit; }
+
+.article-body ul, .article-body ol { margin: 1.5rem 0; padding-left: 1.5rem; }
+.article-body li { margin-bottom: 0.5rem; }
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  background: var(--bg-surface-1);
+  padding: 1rem 1.5rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2.5rem 0;
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin: 1.5rem 0;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 80px 48px 40px;
+  background: var(--bg-foundation);
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 60px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 24px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 12px; }
+.footer-col a { color: var(--text-secondary); transition: color 0.15s; }
+.footer-col a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-ghost);
+}
+
+.footer-bottom a { color: var(--text-tertiary); transition: color 0.15s; }
+.footer-bottom a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 1080px) {
+  .page-container, .page-narrow { padding: 0 22px; }
+  .nav-bar { padding: 0 22px; }
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .article-head { padding: 72px 0 32px; }
+  .article-body { padding: 0 22px 72px; }
+  .site-footer { padding: 60px 22px 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 720px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ===================================================================
+   CTA BANNER (article footer)
+   =================================================================== */
+.article-cta {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+.article-cta p {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+}
+.article-cta a { color: var(--accent-bronze); }
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="https://theagentlab.site/" class="nav-wordmark" aria-label="The Agent Lab home">
+    <svg viewBox="0 0 46 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M32.73 0h-6.945L38.45 32h6.945L32.73 0ZM12.665 0 0 32h7.082l2.59-6.72h13.25l2.59 6.72h7.082L19.929 0h-7.264Zm-.702 19.337 4.334-11.246 4.334 11.246h-8.668Z" fill="currentColor"/></svg>
+    The Agent Lab
+  </a>
+  <div class="nav-links">
+    <a href="https://theagentlab.site/blog/">Blog</a>
+    <a href="https://theagentlab.site/services/">Services</a>
+    <a href="https://theagentlab.site/kits/">Kits</a>
+  </div>
+  <a href="https://theagentlab.site/services/" class="nav-cta">Work with us</a>
+</nav>
+
+<main id="main-content" class="page-narrow">
+  <header class="article-head">
+    <div class="article-meta">
+      <time datetime="2026-08-30">August 30, 2026</time>
+      <span>AI Agents</span>
+      <span>MCP</span>
+      <span>Claude Platform</span>
+    </div>
+    <h1 class="article-title">How Warp Built Self-Improving Agents Using File-Based Skills</h1>
+    <p class="article-dek">Warp's self-improving agent architecture uses two file-based skills and human feedback loops to turn one-off agent runs into systems that compound capability over time. A practical pattern for any team building on MCP and the Claude Platform.</p>
+    <div class="article-byline">
+      <span class="author">Ashrey</span>
+      <span>| The Agent Lab</span>
+    </div>
+  </header>
+
+  <article class="article-body">
+    <p>Most AI agents today are stateless. They run, produce output, and forget everything the moment the session ends. The next run starts from zero. Warp, the AI-powered terminal used by 800,000 developers, hit this wall with their internal code review agent. Engineers complained about unhelpful comments and low-quality output. Stopgap fixes — rewriting prompts by hand, expanding AGENTS.md — helped briefly but did not scale.</p>
+
+    <p>The core problem: feedback to an agent typically disappears when the session closes, removing critical context from the agentic loop. Warp's solution, detailed in their <a href="https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude" target="_blank" rel="noopener">recent blog post</a>, is a self-improving agent architecture built on file-based skills. The pattern is simple, reproducible, and works on the Claude Platform today.</p>
+
+    <h2>The Two-Skill Architecture</h2>
+
+    <p>Warp evolved a self-improving agent consisting of two skills with human feedback between them:</p>
+
+    <ul>
+      <li><strong>Inner / base skill</strong> — holds the functional domain knowledge and instructions. For code review, this skill contains the rules for what makes a good review, how to analyze a PR, what conventions to follow.</li>
+      <li><strong>Outer / improver skill</strong> — an observer agent that runs on a schedule. It pulls accumulated human feedback, compares what the agent suggested against how humans responded, and proposes a small, focused edit to the base skill.</li>
+    </ul>
+
+    <p>Because skills are plain files, agents are extremely good at updating them. These updates are reviewable, approvable, and mergeable through a normal PR workflow. Once merged, the next run of the inner skill inherits the improvement.</p>
+
+    <blockquote>
+      "File-based skills are a way of encoding knowledge for agents without putting that knowledge directly in the prompt, as something the agent can simply look up in the course of doing its job. The framework is really simple actually: there's the base domain-specific skill and then there's the improver skill that refines that domain-specific skill. This simplicity is the beauty of this approach." — Zach Lloyd, Warp founder
+    </blockquote>
+
+    <h2>How the Loop Works in Practice</h2>
+
+    <p>Warp's issue triage agent demonstrates the pattern end-to-end:</p>
+
+    <ol>
+      <li><strong>Trigger:</strong> A GitHub Action fires an agent when someone files a new issue.</li>
+      <li><strong>Inner skill runs:</strong> The triage agent analyzes the issue for complexity and feasibility, assigns labels, and suggests a fix direction — all driven by the base skill file.</li>
+      <li><strong>Human feedback:</strong> A maintainer spots a missed label (e.g., <code>ready to spec</code>) and leaves a comment on the issue explaining what was missed and why.</li>
+      <li><strong>Outer skill runs:</strong> On a schedule, the improver agent (running in Warp's orchestration platform, Oz) authenticates to GitHub, runs a bundled Python script to pull recent issues carrying feedback, summarizes them into JSON, and reads that back into context.</li>
+      <li><strong>Skill edit proposed:</strong> The improver identifies concrete feedback signals and proposes the smallest edit to the inner skill — in this case, adding logic to apply <code>ready to spec</code> when an issue describes a real problem even if the exact UI shape is undefined.</li>
+      <li><strong>Human review & merge:</strong> The PR arrives with a description explaining which signals prompted the change. A human reviews, approves, and merges. The next triage run inherits the new knowledge.</li>
+    </ol>
+
+    <p>That final human step closes the loop and keeps a person in control of what actually changes.</p>
+
+    <h2>Best Practices from the Warp Team</h2>
+
+    <h3>Write principles, not rules</h3>
+    <p>"Construct the skill as though you're instructing a smart person, not like you're programming a computer," Zach says. Direction like "Look for repeated code" provides better generalization than exhaustive variable-naming rules.</p>
+
+    <h3>Explain the why</h3>
+    <p>Providing the rationale behind a rule lets the agent reason about the problem instead of following rigid instructions, enabling better generalization to novel cases.</p>
+
+    <h3>Make feedback effortless to give</h3>
+    <p>Capture it where people already work — commenting directly on a PR or issue. Make it automatic with no extra submission step. "Low friction is what keeps signal flowing. If you make it too hard you're not going to get the feedback and you're not going to be able to improve the skill."</p>
+
+    <h3>Keep skills small, use progressive disclosure</h3>
+    <p>A good skill file isn't large; it references resource files and scripts rather than dumping everything into context at once. The bundled Python script that pulls GitHub feedback is itself a best practice — skills can reference resource files instead of writing fresh code on every run.</p>
+
+    <h3>Feedback quality > volume, but volume helps</h3>
+    <p>A small amount of detailed, domain-specific feedback from a senior engineer can outweigh lots of cursory thumbs-up/down because binary signals don't say <em>why</em>. "You can get really good signal even from a relatively small sample size if it's very detailed feedback from a person around domain specific knowledge that the agent otherwise would have no way of getting."</p>
+
+    <h3>Put extra effort into the improver skill</h3>
+    <p>The improver skill (the observer agent) is highly reusable across different use cases. "Outside of the domain-specific knowledge component, this is a fairly reusable mechanism — the improver skill for a code review agent is not that different from the improver skill for any other agent."</p>
+
+    <h2>Key Questions to Answer Before You Build</h2>
+
+    <h3>Are you conflating skills with memory?</h3>
+    <p>Skills are procedural and stable — "how to do X," run-agnostic, changed deliberately. Memory is auto-written by the agent at inference time and never stops changing. Don't mix them.</p>
+
+    <h3>Do you need one improver loop, or one per agent?</h3>
+    <p>Meet in the middle: a templated base loop captures the overlap across your agents, with domain-specific weights layered on. A handful of improvers can each own one; a hundred should share.</p>
+
+    <h3>What happens when the feedback is wrong?</h3>
+    <p>Assume it will be. Don't let the agent accept feedback blindly — give it context to sanity-check, filter whose input counts, and keep a human in the loop at either the filtering or final-review stage.</p>
+
+    <h3>Is your domain verifiable?</h3>
+    <p>Build the verification harness first, then let the agent tune against it: generate a reference corpus, compare output to reference, fix, repeat. If it isn't domain-verifiable, lean on deterministic evals against golden outputs wherever they exist. Where you must use human feedback, restrict it to domain experts — don't open the floodgates.</p>
+
+    <h3>How do you know the whole system is improving?</h3>
+    <p>Track the global metrics humans already eyeball — time to merge, contributor count, cost — and feed them back into the improver agents.</p>
+
+    <h2>Why This Matters for MCP and Agent Builders</h2>
+
+    <p>The Warp pattern maps cleanly to the Model Context Protocol. Skills are file-based, version-controlled, and tool-agnostic — they can be served via MCP resources, edited via MCP tools, and invoked by any compatible client. The self-improvement loop becomes a first-class primitive: an MCP server that exposes <code>read_skill</code>, <code>write_skill</code>, and <code>list_feedback</code> operations, with the improver agent as a scheduled MCP client.</p>
+
+    <p>For teams shipping on the Claude Platform today, the takeaway is immediate: you don't need a custom orchestration platform to start. The pattern works with file-based skills, GitHub Actions for scheduling, and the Claude API for the improver agent. Warp's Oz platform adds polish (auth, secrets, observability), but the architecture is portable.</p>
+
+    <p>Start with one agent. Give it a base skill. Add an improver that runs daily. Capture feedback where your team already works. Close the loop with a human review gate. Compound from there.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Read</h4>
+      <ul>
+        <li><a href="https://theagentlab.site/blog/">Blog</a></li>
+        <li><a href="https://theagentlab.site/kits/">Kits</a></li>
+        <li><a href="https://theagentlab.site/mcp-doctor/">mcp-doctor</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Work</h4>
+      <ul>
+        <li><a href="https://theagentlab.site/services/">Services</a></li>
+        <li><a href="https://theagentlab.site/services/#mcp">MCP Implementation</a></li>
+        <li><a href="https://theagentlab.site/services/#agents">Agent Architecture</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/mohamed-ashrey/">LinkedIn</a></li>
+        <li><a href="https://github.com/m-ashrey">GitHub</a></li>
+        <li><a href="https://www.youtube.com/@TheAgentLab">YouTube</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="https://theagentlab.site/privacy/">Privacy</a></li>
+        <li><a href="https://theagentlab.site/terms/">Terms</a></li>
+        <li><a href="https://theagentlab.site/refunds/">Refunds</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab</span>
+    <span><a href="https://theagentlab.site/">theagentlab.site</a></span>
+  </div>
+</footer>
+</body>
+</html>

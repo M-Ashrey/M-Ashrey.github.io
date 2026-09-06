@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>MCP Goes Stateless: What the 2026-07-28 Spec Changes for Developers | The Agent Lab</title>
+<meta name="description" content="The Model Context Protocol 2026-07-28 specification drops session state for a stateless HTTP core. This unlocks horizontal scaling, simpler deployments, and new patterns like Multi Round-Trip Requests. Here is what developers building on MCP need to know.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-06-mcp-goes-stateless/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP Goes Stateless: What the 2026-07-28 Spec Changes for Developers">
+<meta property="og:description" content="The Model Context Protocol 2026-07-28 specification drops session state for a stateless HTTP core. This unlocks horizontal scaling, simpler deployments, and new patterns like Multi Round-Trip Requests.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-06-mcp-goes-stateless/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-06-mcp-goes-stateless/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MCP Goes Stateless - The Agent Lab">
+<meta property="article:published_time" content="2026-09-06T00:00:00+02:00">
+<meta property="article:author" content="Ashrey">
+<meta property="article:section" content="Blog">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="Model Context Protocol">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Protocol">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP Goes Stateless: What the 2026-07-28 Spec Changes for Developers">
+<meta name="twitter:description" content="The Model Context Protocol 2026-07-28 specification drops session state for a stateless HTTP core. This unlocks horizontal scaling, simpler deployments, and new patterns like Multi Round-Trip Requests.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-06-mcp-goes-stateless/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MCP Goes Stateless: What the 2026-07-28 Spec Changes for Developers",
+  "description": "The Model Context Protocol 2026-07-28 specification drops session state for a stateless HTTP core. This unlocks horizontal scaling, simpler deployments, and new patterns like Multi Round-Trip Requests.",
+  "datePublished": "2026-09-06T00:00:00+02:00",
+  "dateModified": "2026-09-06T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-06-mcp-goes-stateless/"
+  },
+  "image": "https://theagentlab.site/blog/2026-09-06-mcp-goes-stateless/og.png",
+  "keywords": "MCP, Model Context Protocol, AI agents, protocol, stateless"
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION
+   =================================================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  height: 64px;
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.nav-brand span { color: var(--accent-bronze); }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 160px 0 80px;
+  text-align: center;
+}
+.article-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 24px;
+}
+.article-meta time { color: var(--text-tertiary); }
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  max-width: 800px;
+  margin: 0 auto 24px;
+}
+.article-dek {
+  font-size: clamp(18px, 2.5vw, 22px);
+  color: var(--text-secondary);
+  max-width: 68ch;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+.article-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.article-author img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-default);
+}
+
+.article-body {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 24px 120px;
+}
+.article-body > * + * { margin-top: 1.75rem; }
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-top: 3rem;
+}
+.article-body h3 {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 2.5rem;
+}
+.article-body p { color: var(--text-secondary); }
+.article-body a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid var(--border-accent);
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.article-body a:hover { color: var(--text-primary); border-color: var(--accent-bronze); }
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  overflow-x: auto;
+}
+.article-body pre code { background: none; padding: 0; border: none; font-size: 13px; line-height: 1.7; }
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 24px;
+  margin-left: 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+.article-body ul, .article-body ol { padding-left: 28px; color: var(--text-secondary); }
+.article-body li + li { margin-top: 0.5rem; }
+.article-body hr { border: none; border-top: 1px solid var(--border-subtle); margin: 3rem 0; }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  padding: 80px 0 40px;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+.footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 24px; flex-wrap: wrap; }
+.footer-links a { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); }
+.footer-links a:hover { color: var(--accent-bronze); }
+.footer-copyright { font-family: var(--font-mono); font-size: 11px; color: var(--text-ghost); }
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 768px) {
+  .page-container, .page-narrow { padding: 0 24px; }
+  .nav-inner { padding: 0 24px; }
+  .nav-links { display: none; }
+  .article-header { padding: 120px 0 60px; }
+  .article-body { padding: 0 16px 80px; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+<div class="nav-inner">
+<a href="/" class="nav-brand">THE <span>AGENT LAB</span></a>
+<div class="nav-links">
+<a href="/blog/">Blog</a>
+<a href="/services/">Services</a>
+<a href="/kits/">Kits</a>
+</div>
+</div>
+</nav>
+
+<main id="main" role="main">
+<header class="article-header">
+<div class="page-narrow">
+<div class="article-meta">
+<time datetime="2026-09-06">September 6, 2026</time>
+<span>•</span>
+<span>MCP</span>
+<span>•</span>
+<span>Protocol</span>
+</div>
+<h1 class="article-title">MCP Goes Stateless: What the 2026-07-28 Spec Changes for Developers</h1>
+<p class="article-dek">The Model Context Protocol 2026-07-28 specification drops session state for a stateless HTTP core. This unlocks horizontal scaling, simpler deployments, and new patterns like Multi Round-Trip Requests.</p>
+<div class="article-author">
+<img src="https://theagentlab.site/avatar.png" alt="" loading="lazy">
+<span>Ashrey</span>
+</div>
+</div>
+</header>
+
+<article class="article-body">
+<p>The Model Context Protocol has been the connective tissue between LLM applications and external tools since late 2024. But the original spec carried a structural constraint: it was stateful at the protocol layer. Servers had to maintain session state, track <code>Mcp-Session-Id</code> headers, and handle initialization handshakes. That worked for local development and small deployments. It broke down at scale.</p>
+
+<p>The 2026-07-28 specification, published in late July, is the largest revision since launch. Its headline change is exactly what the title says: <strong>MCP is now stateless at the protocol layer</strong>. The session abstraction is gone. The <code>Mcp-Session-Id</code> header is gone. The initialize handshake is simplified. What replaces it is ordinary HTTP request/response semantics that any load balancer, CDN, or serverless platform already understands.</p>
+
+<h2>What Changed Concretely</h2>
+
+<p>The spec revision touches five areas that matter to developers building MCP servers or clients:</p>
+
+<ol>
+<li><strong>Stateless transport core.</strong> No protocol-level sessions. Each request carries all context it needs. A request can be answered by any server instance behind a standard HTTP load balancer.</li>
+<li><strong>Multi Round-Trip Requests (SEP-2322).</strong> The pattern that replaces server-initiated requests. Servers return handles (opaque identifiers) from tool calls. Clients thread those handles back as arguments on later calls. State moves from the transport layer into the model's context as ordinary arguments, where the model can see and reason about it.</li>
+<li><strong>Header-based routing.</strong> New <code>Mcp-Method</code> and <code>Mcp-Name</code> headers let gateways route on header values without inspecting request bodies.</li>
+<li><strong>Cacheable list results.</strong> <code>tools/list</code>, <code>resources/list</code>, and <code>prompts/list</code> can now return <code>ETag</code> and <code>Cache-Control</code> headers. Clients can conditional-GET. This matters when you have hundreds of tools and want to avoid re-fetching on every session.</li>
+<li><strong>Authorization hardening.</strong> A formal <code>WWW-Authenticate</code> challenge flow replaces the ad-hoc approaches servers improvised. The extensions framework is also formalized so vendors can extend the protocol without forking it.</li>
+</ol>
+
+<p>The <a href="https://modelcontextprotocol.io/specification/2026-07-28" target="_blank" rel="noopener">full specification</a> is on the MCP site. The <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank" rel="noopener">release announcement</a> walks through the rationale. Microsoft's Azure team <a href="https://techcommunity.microsoft.com/blog/appsonazureblog/mcp-just-went-stateless-%E2%80%94-what-the-2026-spec-changes-about-scaling-on-app-servic/4530222" target="_blank" rel="noopener">published a detailed breakdown</a> of what this means for App Service scaling. Google's developer blog <a href="https://developers.googleblog.com/scaling-ai-agent-infrastructure-with-the-mcp-stateless-updates/" target="_blank" rel="noopener">covers the same ground</a> for Cloud Run and GKE.</p>
+
+<h2>Why This Matters for Server Authors</h2>
+
+<p>If you run an MCP server today — whether it's a database connector, a filesystem bridge, or an internal API wrapper — the migration path is straightforward but not zero-effort.</p>
+
+<h3>Drop session storage</h3>
+<p>Your server no longer needs to map <code>Mcp-Session-Id</code> to in-memory state. That means no Redis for session affinity, no sticky sessions in your load balancer, no cleanup logic for abandoned sessions. A stateless server is a simpler server.</p>
+
+<h3>Adopt handle-based patterns</h3>
+<p>Where you previously stored a database cursor, file handle, or authenticated connection in session state, you now return a handle from the tool call. The client passes it back. Example flow:</p>
+
+<pre><code>// Client calls tool
+{
+  "method": "tools/call",
+  "params": {
+    "name": "db_query",
+    "arguments": { "sql": "SELECT * FROM users WHERE active = true" }
+  }
+}
+
+// Server returns a handle instead of the full result set
+{
+  "result": {
+    "content": [{ "type": "text", "text": "Query queued. Handle: qry_abc123" }],
+    "structuredContent": { "handle": "qry_abc123", "rowCount": 1247 }
+  }
+}
+
+// Client fetches pages using the handle
+{
+  "method": "tools/call",
+  "params": {
+    "name": "db_fetch",
+    "arguments": { "handle": "qry_abc123", "offset": 0, "limit": 100 }
+  }
+}</code></pre>
+
+<p>This pattern — sometimes called "server-driven pagination via handles" — is now the idiomatic way to stream large results without protocol-level sessions.</p>
+
+<h3>Update your SDK</h3>
+<p>Tier 1 SDKs (TypeScript, Python) have 2.0 releases that implement the 2026-07-28 revision. The TypeScript SDK v2.0 runs on the new spec. The Python SDK has a 2.0 beta. If you pinned to 1.x, plan the upgrade. The breaking changes are mostly around transport initialization and session handling — your tool definitions and business logic stay the same.</p>
+
+<h2>What This Means for Client Authors</h2>
+
+<p>Claude Code, Cursor, and other MCP clients gain two practical benefits:</p>
+
+<ul>
+<li><strong>Simpler connection management.</strong> No initialize handshake to orchestrate. Connect, call tools, disconnect. Reconnect to any instance.</li>
+<li><strong>Multi Round-Trip Requests.</strong> The elicitation pattern (server asks client for clarification mid-flow) now works on stateless infrastructure. The server returns a handle; the client prompts the user; the client calls back with the handle and user input. This enables richer interactive workflows without WebSockets or long-lived connections.</li>
+</ul>
+
+<p>Claude's <a href="https://claude.com/blog/bringing-mcp-2026-07-28-to-claude" target="_blank" rel="noopener">announcement</a> notes that MCP tunnels (research preview) also benefit: they connect Claude to MCP servers inside private networks without inbound firewall rules, and the stateless core makes the tunnel infrastructure simpler to operate.</p>
+
+<h2>Operational Wins</h2>
+
+<p>The stateless shift is not just architectural hygiene. It changes what's possible in production:</p>
+
+<ul>
+<li><strong>Serverless MCP.</strong> Deploy an MCP server to Cloud Run, Lambda, or Cloudflare Workers. Scale to zero. No warm-up session initialization. Each invocation is a plain HTTP request.</li>
+<li><strong>Edge caching.</strong> Tool and resource lists can be cached at the CDN layer. A client in Tokyo gets the tool manifest from an edge node, not your origin.</li>
+<li><strong>Blue-green deployments.</strong> Swap server versions mid-request-stream. Since no request depends on server-local session state, in-flight requests complete on the old version while new requests hit the new version.</li>
+<li><strong>Standard observability.</strong> HTTP request logs, standard metrics, standard tracing. No custom session correlation IDs needed.</li>
+</ul>
+
+<h2>What Hasn't Changed</h2>
+
+<p>The tool, resource, and prompt primitives are stable. The JSON-RPC 2.0 envelope is stable. The capability negotiation model is stable. If you built an MCP server against the 2025 spec, your tool definitions and handler logic are largely portable. The work is in the transport layer and any session-dependent patterns you adopted.</p>
+
+<h2>Migration Checklist</h2>
+
+<ol>
+<li>Audit your server for <code>Mcp-Session-Id</code> dependencies. Remove session storage.</li>
+<li>Identify stateful patterns (cursors, auth tokens, partial results) and convert to handle-based returns.</li>
+<li>Upgrade to SDK 2.0 (TypeScript) or 2.0 beta (Python).</li>
+<li>Test behind a load balancer with multiple replicas. Verify requests distribute correctly.</li>
+<li>Add <code>ETag</code> and <code>Cache-Control</code> to list endpoints.</li>
+<li>Implement <code>WWW-Authenticate</code> challenge flow if you gate access.</li>
+</ol>
+
+<h2>The Bigger Picture</h2>
+
+<p>MCP's stateless turn reflects a broader pattern in AI infrastructure: the protocols that win are the ones that compose with existing HTTP infrastructure rather than demanding their own runtime. The 2025 spec asked you to run a stateful WebSocket server. The 2026 spec asks you to run an HTTP handler. That difference compounds across every deployment decision downstream.</p>
+
+<p>For developers, the takeaway is practical: MCP servers are now boring HTTP services. That is a compliment. Boring services scale, debug, and operate with the tooling you already have.</p>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+<div class="page-narrow">
+<div class="footer-links">
+<a href="/">Home</a>
+<a href="/blog/">Blog</a>
+<a href="/services/">Services</a>
+<a href="/kits/">Kits</a>
+<a href="https://github.com/m-ashrey" target="_blank" rel="noopener">GitHub</a>
+<a href="https://www.linkedin.com/in/mohamed-ashrey/" target="_blank" rel="noopener">LinkedIn</a>
+</div>
+<p class="footer-copyright">© 2026 The Agent Lab. All rights reserved.</p>
+</div>
+</footer>
+</body>
+</html>

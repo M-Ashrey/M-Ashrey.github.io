@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Skills Need a Permissions Manifest, But a Manifest Alone Is Not Enforcement | The Agent Lab</title>
+<meta name="description" content="The Agent Skills format standardised distribution before authority. SKILL.md can bundle executable code but cannot declare which files that code may read. Packslip and Grith show the three-layer fix: signed delivery, requested permissions, runtime enforcement.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-07-agent-skills-permissions-manifest/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent Skills Need a Permissions Manifest, But a Manifest Alone Is Not Enforcement">
+<meta property="og:description" content="The Agent Skills format standardised distribution before authority. SKILL.md can bundle executable code but cannot declare which files that code may read. Packslip and Grith show the three-layer fix: signed delivery, requested permissions, runtime enforcement.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-07-agent-skills-permissions-manifest/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-07-agent-skills-permissions-manifest/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Agent Skills Need a Permissions Manifest, But a Manifest Alone Is Not Enforcement">
+<meta name="twitter:description" content="The Agent Skills format standardised distribution before authority. SKILL.md can bundle executable code but cannot declare which files that code may read. Packslip and Grith show the three-layer fix: signed delivery, requested permissions, runtime enforcement.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-07-agent-skills-permissions-manifest/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Agent Skills Need a Permissions Manifest, But a Manifest Alone Is Not Enforcement",
+  "description": "The Agent Skills format standardised distribution before authority. SKILL.md can bundle executable code but cannot declare which files that code may read. Packslip and Grith show the three-layer fix: signed delivery, requested permissions, runtime enforcement.",
+  "image": "https://theagentlab.site/blog/2026-09-07-agent-skills-permissions-manifest/og.png",
+  "url": "https://theagentlab.site/blog/2026-09-07-agent-skills-permissions-manifest/",
+  "datePublished": "2026-09-07",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/"
+  }
+}
+</script>
+<style id="brand-core">
+/* Brand tokens mirror BRAND_GUIDELINES.md exactly. Do not declare colours elsewhere. */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-void: #09090b; --bg-foundation: #0f1014; --bg-surface-1: #16171c; --bg-surface-2: #1c1d24; --bg-surface-3: #24252e; --bg-inset: #0c0c10;
+  --border-subtle: rgba(255,255,255,0.04); --border-default: rgba(255,255,255,0.07); --border-strong: rgba(255,255,255,0.12); --border-accent: rgba(191,149,83,0.30);
+  --text-primary: #e8e4de; --text-secondary: #9f9a92; --text-tertiary: #928d84; --text-ghost: #3d3a36;
+  --accent-bronze: #bf9553; --accent-bronze-dim: #8a6c3e; --accent-copper: #c47a4a; --accent-slate: #5a7c8a; --accent-sage: #6b8a5a; --accent-clay: #8a5a5a;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2); --shadow-sm: 0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl: 0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif; --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+  --radius-sm: 3px; --radius-md: 5px; --radius-lg: 8px;
+  --z-void: -1; --z-canvas: 0; --z-surface: 10; --z-nav: 1000; --measure: 68ch;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-body); background: var(--bg-void); color: var(--text-secondary); line-height: 1.6; overflow-x: hidden; padding-top: 64px; }
+body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10000; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); background-size: 256px 256px; }
+a { color: inherit; text-decoration: none; } ::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+.skip-link { position: absolute; left: 16px; top: -80px; z-index: 10001; font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bronze); color: var(--bg-void); padding: 12px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); transition: top 0.2s ease; }
+.skip-link:focus { top: 80px; }
+.page-container { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
+.page-narrow { max-width: 900px; margin: 0 auto; padding: 0 48px; }
+.section { padding: 120px 0; position: relative; }
+.section + .section { border-top: 1px solid var(--border-subtle); }
+.section-label { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-bronze-dim); margin-bottom: 48px; padding-left: 2px; display: flex; align-items: center; gap: 16px; }
+.section-label::before { content: ''; width: 24px; height: 1px; background: var(--accent-bronze-dim); opacity: 0.5; }
+.section-title { font-family: var(--font-display); font-size: 40px; line-height: 1.15; letter-spacing: -0.015em; color: var(--text-primary); margin-bottom: 18px; max-width: 22ch; }
+.section-sub { font-size: 16px; font-weight: 380; line-height: 1.7; color: var(--text-secondary); max-width: var(--measure); margin-bottom: 48px; }
+.nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav); padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--border-subtle); isolation: isolate; }
+.nav-bar::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--bg-void); opacity: 0.88; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.nav-wordmark { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-primary); white-space: nowrap; }
+.nav-wordmark span { color: var(--accent-bronze); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-family: var(--font-body); font-size: 13px; font-weight: 450; color: var(--text-tertiary); letter-spacing: 0.01em; transition: color 0.3s ease; }
+.nav-links a:hover { color: var(--text-primary); }
+.nav-cta { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bg-void); background: var(--accent-bronze); padding: 8px 20px; border: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.3s ease; box-shadow: var(--shadow-sm); }
+.nav-cta:hover { filter: brightness(1.08); box-shadow: var(--shadow-md); }
+.article-head { padding: 96px 0 40px; }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-bronze); margin-bottom: 24px; display: flex; align-items: center; gap: 14px; }
+.eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent-bronze); }
+.article-title { font-family: var(--font-display); font-size: clamp(40px, 5vw, 56px); line-height: 1.1; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 24px; max-width: 28ch; }
+.article-title em { font-style: italic; color: var(--accent-bronze); }
+.article-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.article-dek { font-size: 18px; font-weight: 380; line-height: 1.65; color: var(--text-secondary); max-width: var(--measure); }
+.prose { max-width: var(--measure); font-size: 17px; line-height: 1.8; color: var(--text-secondary); }
+.prose > * + * { margin-top: 1.5em; }
+.prose h2 { font-family: var(--font-display); font-size: 32px; line-height: 1.2; letter-spacing: -0.015em; color: var(--text-primary); margin-top: 2.5em; margin-bottom: 0.8em; }
+.prose h3 { font-family: var(--font-display); font-size: 24px; line-height: 1.25; color: var(--text-primary); margin-top: 2em; margin-bottom: 0.6em; }
+.prose p { font-size: 17px; line-height: 1.8; color: var(--text-secondary); }
+.prose strong { color: var(--text-primary); font-weight: 550; }
+.prose a { color: var(--accent-bronze); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
+.prose a:hover { color: var(--accent-copper); }
+.prose code { font-family: var(--font-mono); font-size: 0.9em; background: var(--bg-surface-2); padding: 0.15em 0.4em; border-radius: var(--radius-sm); color: var(--text-primary); }
+.prose pre { background: var(--bg-inset); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 1.25rem; overflow-x: auto; margin-top: 1.5em; margin-bottom: 1.5em; }
+.prose pre code { background: none; padding: 0; font-size: 0.85rem; line-height: 1.6; }
+.prose blockquote { border-left: 3px solid var(--accent-bronze); padding-left: 1.5rem; margin: 1.5em 0; color: var(--text-tertiary); font-style: italic; }
+.prose blockquote p { color: inherit; font-style: inherit; }
+.prose ul, .prose ol { padding-left: 1.5rem; }
+.prose li { margin-bottom: 0.5em; line-height: 1.7; }
+.prose table { width: 100%; border-collapse: collapse; margin: 1.5em 0; }
+.prose th, .prose td { border: 1px solid var(--border-default); padding: 0.75rem 1rem; text-align: left; }
+.prose th { background: var(--bg-surface-2); font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
+.prose td { color: var(--text-secondary); }
+.prose hr { border: none; border-top: 1px solid var(--border-subtle); margin: 2.5rem 0; }
+.fine { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); }
+.footer { background: var(--bg-foundation); border-top: 1px solid var(--border-subtle); margin-top: 80px; }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 48px; padding: 64px 0 32px; }
+.footer-wordmark { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-primary); }
+.footer-wordmark span { color: var(--accent-bronze); }
+.footer-line { font-size: 14px; color: var(--text-tertiary); margin-top: 16px; max-width: 420px; }
+.footer-social { display: flex; gap: 16px; margin-top: 24px; }
+.footer-social a { color: var(--text-tertiary); transition: color 0.2s; }
+.footer-social a:hover { color: var(--accent-bronze); }
+.footer-nav { display: flex; flex-wrap: wrap; gap: 48px; }
+.footer-col .h { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-bronze-dim); margin-bottom: 16px; display: block; }
+.footer-col a { display: block; font-size: 13px; color: var(--text-tertiary); margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text-primary); }
+.footer-base { border-top: 1px solid var(--border-subtle); padding: 24px 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 12px; color: var(--text-tertiary); }
+.footer-base a { color: var(--text-tertiary); transition: color 0.2s; }
+.footer-base a:hover { color: var(--accent-bronze); }
+@media (max-width: 1080px) { .page-container, .page-narrow, .nav-bar { padding: 0 22px; } .nav-links { display: none; } .article-head { padding: 64px 0 40px; } .article-title { font-size: 34px; line-height: 1.14; } .section { padding: 72px 0; } .footer-inner, .footer-base { padding: 0; } }
+@media (max-width: 720px) { .section { padding: 64px 0; } .article-title { font-size: 28px; } .article-dek { font-size: 16px; } .prose { font-size: 16px; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav-bar">
+  <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
+    <li><a href="/kits/">Kits</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
+</nav>
+<main id="main">
+<div class="page-narrow">
+  <header class="article-head">
+    <span class="eyebrow">Security · Agent Skills · MCP</span>
+    <h1 class="article-title">Agent Skills Need a <em>Permissions Manifest</em>, But a Manifest Alone Is Not Enforcement</h1>
+    <div class="article-meta"><time datetime="2026-09-07">September 7, 2026</time> · Ashrey</div>
+    <p class="article-dek">The Agent Skills format standardised distribution before authority. SKILL.md can bundle executable Python, Bash and JavaScript but provides no portable way to declare which files that code may read, which processes it may spawn, or which hosts it may contact. Packslip and Grith demonstrate the three-layer fix: signed delivery, requested permissions, runtime enforcement.</p>
+  </header>
+
+  <article class="prose">
+    <p>On September 7, 2026, grith.ai published <a href="https://grith.ai/blog/skill-md-permissions-manifest" target="_blank" rel="noopener">"An agent skill can hand a stranger your shell — hours after you installed it"</a>. Two days earlier, Jeff Dickey (creator of mise) announced <a href="https://jdx.dev/posts/2026-09-05-introducing-packslip/" target="_blank" rel="noopener">packslip</a>, a signed release manifest that vendors publish alongside their binaries. Both pieces hit the same structural problem from opposite angles: the Agent Skills ecosystem has solved distribution. It has not solved authority.</p>
+
+    <h2>The format distributes code. It does not bound it.</h2>
+
+    <p>The Agent Skills specification defines a portable folder format. A skill contains a <code>SKILL.md</code> with frontmatter (name, description, license, compatibility, metadata) and an optional <code>scripts/</code> directory for executable Python, Bash and JavaScript. The authoring guide shows skills invoking <code>uvx</code>, <code>npx</code>, <code>bunx</code>, <code>deno run</code> and <code>go run</code> — packages resolved at execution time.</p>
+
+    <p>What the specification does <em>not</em> provide is a portable way to limit what that code can do. The <code>allowed-tools</code> frontmatter field names high-level tool categories (e.g. <code>Read</code>, <code>Bash(git:*)</code>) but the spec marks it experimental, notes support varies between clients, and crucially: it names tools rather than authority. <code>Read</code> does not answer which paths. <code>Bash(git:*)</code> does not answer which repository, remote or credentials. It says nothing about child processes, DNS, listening sockets or secrets.</p>
+
+    <p>So the portable format has a standard place for executable code, but no standard way to bound that code's effects.</p>
+
+    <h2>Progressive disclosure delays the risk</h2>
+
+    <p>Skills use progressive disclosure. At startup, an agent sees each skill's name and description. When a task matches, it loads the full <code>SKILL.md</code>. It reads supporting files and runs bundled scripts only when the instructions call for them.</p>
+
+    <p>That is good context management. It is awkward security timing.</p>
+
+    <p>The developer may inspect and install a skill on Monday. On Thursday, during an unrelated-looking repository task, the agent decides the description matches and activates it. A plausible malicious chain then looks like this:</p>
+
+    <ol>
+      <li>The skill tells the agent to run <code>python3 scripts/report.py</code> as a routine preparation step.</li>
+      <li>The script searches for configuration that will supposedly improve its report.</li>
+      <li>It reads a neighbouring project's <code>.env</code>, a Git credential store or a cloud credential file.</li>
+      <li>It sends the result to an external endpoint or uses the developer's existing authenticated tooling to publish it.</li>
+      <li>It returns a normal-looking report, so the user sees no obvious failure.</li>
+    </ol>
+
+    <p>Nothing in that chain requires a memory-corruption exploit. The skill asks the agent to use capabilities the agent already has. The Markdown is a delayed control plane for code execution under ambient developer authority.</p>
+
+    <h2>How dangerous is that? It depends on the agent's runtime posture</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Runtime posture</th>
+          <th>Consequence of a malicious skill</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Read-only workspace, no network, no secrets</td>
+          <td>Mostly prompt manipulation and exposure of workspace content</td>
+        </tr>
+        <tr>
+          <td>Workspace write access plus package execution</td>
+          <td>Source tampering and dependency compromise</td>
+        </tr>
+        <tr>
+          <td>Home-directory reads plus outbound network</td>
+          <td>Credential and private-project exfiltration</td>
+        </tr>
+        <tr>
+          <td>Full shell with approval bypass</td>
+          <td>Developer-account compromise and persistence</td>
+        </tr>
+        <tr>
+          <td>CI runner with repository or deployment credentials</td>
+          <td>Supply-chain or production compromise</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Native agent sandboxes and approval prompts matter. They reduce risk when they are enabled and narrowly configured. They are not part of the portable skill contract, however, and a skill that works across many clients does not receive one consistent security boundary.</p>
+
+    <h2>Packslip solves signed delivery. It does not solve behaviour.</h2>
+
+    <p>Packslip is a vendor-published, Sigstore-signed manifest that sits alongside a release. It tells package managers (currently mise) which binaries to download, how to verify them, and — critically for this discussion — where to find matching shell completions and <em>agent skills</em> for that exact version.</p>
+
+    <pre><code class="language-jsonc">{
+  "resources": [{
+    "kind": "skill",
+    "name": "hk-configure",
+    "repo": "skills/hk-configure"
+  }]
+}</code></pre>
+
+    <p>Mise downloads the declared skills into the tool version's installation directory. Making them available to the agent is a separate, opt-in step (<code>mise skills sync --dir .agents/skills</code>). The packslip announcement states the limit precisely: <strong>"A verified signature tells you where the instructions came from. It doesn't establish that they're appropriate for your project."</strong></p>
+
+    <p>Signed skills are better than unsigned skills. Version pins, checksums, release-age delays and independent review all remove real supply-chain risks. They answer: who published this? Are these the bytes they signed? Did the contents change between releases? Has a reviewer approved this exact version?</p>
+
+    <p>They do not answer: which files may it read or modify? Which credentials may it use? Which processes may it spawn? Which hosts may receive data? Did its runtime behaviour match its declared purpose?</p>
+
+    <p>A trusted author can make a mistake. A legitimate release can contain an over-broad helper. An acquired or compromised publisher can sign malicious instructions perfectly. Provenance is necessary, but a valid signature is not a safety verdict.</p>
+
+    <h2>What a real permissions manifest needs</h2>
+
+    <p>A useful extension would declare concrete resources and effects, not just high-level tool names. For example:</p>
+
+    <pre><code class="language-yaml">requested-permissions:
+  filesystem:
+    read:
+      - '${workspace}/src/**'
+      - '${workspace}/package.json'
+    write:
+      - '${workspace}/generated/**'
+  process:
+    spawn:
+      - 'python3'
+      - 'git'
+  network:
+    connect:
+      - 'api.x.com:443'
+  secrets:
+    use:
+      - 'X_API_TOKEN'</code></pre>
+
+    <p>This is illustrative, not current Agent Skills syntax. The important semantics are:</p>
+
+    <ol>
+      <li><strong>The skill requests authority. It does not grant authority to itself.</strong> The host or an external policy must intersect the request with what the operator permits.</li>
+      <li><strong>Objects are explicit.</strong> Filesystem permissions name paths, network permissions name destinations, secret permissions name handles and process permissions name executable identities.</li>
+      <li><strong>Children inherit the boundary.</strong> Running an allowed <code>python3</code> cannot become a tunnel around the policy.</li>
+      <li><strong>Undeclared effects fail closed.</strong> A skill that requests workspace reads and then reaches for <code>~/.ssh/id_ed25519</code> does not get a warning label. It gets a denied read.</li>
+      <li><strong>Observed behaviour is recorded.</strong> The audit should show what was requested, granted, attempted and denied.</li>
+    </ol>
+
+    <p>This direction already has research behind it. <a href="https://arxiv.org/abs/2606.03024" target="_blank" rel="noopener">SkillGuard</a> proposes treating skills as permission-bearing executable artefacts, combining manifests, deny-by-default runtime access control and behaviour monitoring. Its evaluation also shows why nobody should market manifests as a complete solution: the framework reduced attack success, but did not reduce it to zero.</p>
+
+    <p>Permission metadata is a contract. Runtime enforcement is what makes breaking the contract consequential.</p>
+
+    <h2>Where Grith sits today</h2>
+
+    <p>Grith does not currently parse <code>SKILL.md</code>, verify skill signatures or identify which active skill caused an operation. When Claude runs a skill, Grith sees the caller as the supervised Claude session, not as <code>release-notes@1.2.0</code>.</p>
+
+    <p>What Grith does provide is the enforcement layer underneath the agent:</p>
+
+    <pre><code class="language-text">grith exec --workspace-only -- claude</code></pre>
+
+    <p>The skill can persuade Claude to run Python. It cannot persuade Grith that Python's subsequent syscalls did not happen.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>The skill tells the agent to...</th>
+          <th>Grith evaluates...</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Run a bundled helper</td>
+          <td>The process spawn, arguments, executable provenance and child process tree</td>
+        </tr>
+        <tr>
+          <td>Read an SSH key, <code>.env</code> or cloud credential</td>
+          <td>The actual file path, sensitivity and resulting data taint</td>
+        </tr>
+        <tr>
+          <td>Send data elsewhere</td>
+          <td>DNS queries, destination, port, egress reputation and prior sensitive reads</td>
+        </tr>
+        <tr>
+          <td>Rewrite or delete files</td>
+          <td>The target path, operation risk, rate and destructive pattern</td>
+        </tr>
+        <tr>
+          <td>Hand work to Docker, <code>systemd-run</code> or a desktop control socket</td>
+          <td>The attempted authority delegation before work escapes the supervised tree</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>With <code>--workspace-only</code>, filesystem access outside the project boundary is denied before the normal read-noise shortcuts. Necessary system runtime reads and paths explicitly trusted by the selected agent profile remain reachable. The sensitive-path, taint, egress and process filters still apply independently.</p>
+
+    <p>That final qualification matters. Grith's shipped Claude and Codex profiles trust their own state directories, including <code>~/.claude/**</code> and <code>~/.codex/**</code>, for routine operation. Skill files in those trees can currently be read and modified without a skill-specific decision. Grith limits the effects a skill causes elsewhere, but it is not yet a skill package manager or a per-skill capability system.</p>
+
+    <h2>The missing join</h2>
+
+    <p>The complete model has three separate layers:</p>
+
+    <ol>
+      <li><strong>Signed delivery:</strong> establish publisher identity, version and exact bytes.</li>
+      <li><strong>Requested permissions:</strong> describe the maximum authority the skill says it needs.</li>
+      <li><strong>Runtime enforcement:</strong> constrain and audit the effects the agent actually attempts.</li>
+    </ol>
+
+    <p>Packslip is pushing the first layer forward. The Agent Skills ecosystem needs to standardise the second. Grith already supplies much of the third at the agent-process boundary.</p>
+
+    <p>The next step is to join them: resolve the active skill to a canonical path and content hash, carry that identity into the syscall context, convert its requested permissions into subtractive runtime policy, and report declared versus observed behaviour. Crucially, those restrictions must run before convenience allowlists. Otherwise the most familiar paths and commands become the easiest place to hide.</p>
+
+    <p>This also gives skill authors something they do not have today: a testable least-authority contract. A PDF skill could prove that its integration tests touch only the selected document and output directory. An X publishing skill could prove that it connects only to the declared API host and never reads unrelated credentials. A release could fail if observed behaviour widens without a reviewed manifest change.</p>
+
+    <p>That is more useful than a badge saying "scanned". It is evidence.</p>
+
+    <h2>A skill is not dangerous because it is Markdown</h2>
+
+    <p>It is dangerous because Markdown can select code, and the code inherits authority that was granted to the agent for an entirely different reason.</p>
+
+    <p>The ecosystem is making skill discovery, installation, signing and synchronisation dramatically easier. That is good work. Before one-command installation becomes the default, the runtime contract needs to catch up.</p>
+
+    <p>For every skill, users should be able to answer four questions before and after it runs:</p>
+
+    <ul>
+      <li>Who shipped it?</li>
+      <li>What authority did it request?</li>
+      <li>What authority was actually granted?</li>
+      <li>What did it attempt to do?</li>
+    </ul>
+
+    <p>Today, an agent skill can bundle Python. It still can't declare which files that Python may read.</p>
+
+    <p>Signing the skill proves who made that decision. A permissions manifest makes the decision visible. Enforcement underneath the agent is what makes it real.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner page-container">
+    <div class="footer-brand">
+      <div class="footer-wordmark">The Agent <span>Lab</span></div>
+      <p class="footer-line">An AI development lab building live quoting engines for home service contractors. Run by Ashrey, Co-Founder.</p>
+      <div class="footer-social">
+        <a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.1 7.5c-.2-.9-.9-1.6-1.8-1.8C17.5 5.3 12 5.3 12 5.3s-5.5 0-7.3.4c-.9.2-1.6.9-1.8 1.8C2.5 9.3 2.5 12 2.5 12s0 2.7.4 4.5c.2.9.9 1.6 1.8 1.8 1.8.4 7.3.4 7.3.4s5.5 0 7.3-.4c.9-.2 1.6-.9 1.8-1.8.4-1.8.4-4.5.4-4.5s0-2.7-.4-4.5zM10.2 15.3V8.7l5.4 3.3-5.4 3.3z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/mohamed-ashrey/" aria-label="LinkedIn" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.3 20.5H3V9.2h3.3v11.3zM4.6 7.8c-1.1 0-1.9-.9-1.9-1.9 0-1.1.9-1.9 1.9-1.9s1.9.9 1.9 1.9c0 1.1-.8 1.9-1.9 1.9zM21 20.5h-3.3v-5.9c0-1.5-.6-2.4-1.9-2.4-1 0-1.7.7-1.9 1.4-.1.3-.1.6-.1.9v6h-3.3s0-9.8 0-11.3h3.3v1.6c.4-.7 1.3-1.7 3.1-1.7 2.3 0 4 1.5 4 4.7v6.7z"/></svg>
+        </a>
+      </div>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <div class="footer-col">
+        <span class="h">The Engine</span>
+        <a href="/services/">What it does</a>
+        <a href="/ai/">Who we build for</a>
+        <a href="/#partners">Agency partners</a>
+      </div>
+      <div class="footer-col">
+        <span class="h">The Lab</span>
+        <a href="/kits/">Kits</a>
+        <a href="/blog/">Blog</a>
+        <a href="/#founding">Founding access</a>
+      </div>
+      <div class="footer-col">
+        <span class="h">Open Source</span>
+        <a href="https://github.com/M-Ashrey">GitHub</a>
+        <a href="https://dev.to/m_ashrey122">dev.to</a>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-base page-container">
+    <span class="footer-copy">&copy; 2026 The Agent Lab</span>
+    <span class="footer-copy"><a href="/terms/">Terms</a> &middot; <a href="/refunds/">Refunds</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="mailto:m.ashrey122@gmail.com">Contact</a></span>
+  </div>
+</footer>
+</body>
+</html>

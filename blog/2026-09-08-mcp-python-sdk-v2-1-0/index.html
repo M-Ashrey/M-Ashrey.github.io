@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP Python SDK v2.1.0: What Changed for Developers Shipping on the 2026 Spec | The Agent Lab</title>
+<meta name="description" content="The MCP Python SDK v2.1.0 landed this week — the first minor release since v2.0.0 stabilized around the 2026-07-28 specification. Three changes deserve attention: simpler client constructor, stricter error handling, SSE/OAuth hardening.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-08-mcp-python-sdk-v2-1-0/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP Python SDK v2.1.0: What Changed for Developers Shipping on the 2026 Spec">
+<meta property="og:description" content="The MCP Python SDK v2.1.0 landed this week — the first minor release since v2.0.0 stabilized around the 2026-07-28 specification. Three changes deserve attention: simpler client constructor, stricter error handling, SSE/OAuth hardening.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-08-mcp-python-sdk-v2-1-0/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-08-mcp-python-sdk-v2-1-0/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP Python SDK v2.1.0: What Changed for Developers Shipping on the 2026 Spec">
+<meta name="twitter:description" content="The MCP Python SDK v2.1.0 landed this week — the first minor release since v2.0.0 stabilized around the 2026-07-28 specification. Three changes deserve attention: simpler client constructor, stricter error handling, SSE/OAuth hardening.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-08-mcp-python-sdk-v2-1-0/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MCP Python SDK v2.1.0: What Changed for Developers Shipping on the 2026 Spec",
+  "description": "The MCP Python SDK v2.1.0 landed this week — the first minor release since v2.0.0 stabilized around the 2026-07-28 specification. Three changes deserve attention: simpler client constructor, stricter error handling, SSE/OAuth hardening.",
+  "image": "https://theagentlab.site/blog/2026-09-08-mcp-python-sdk-v2-1-0/og.png",
+  "url": "https://theagentlab.site/blog/2026-09-08-mcp-python-sdk-v2-1-0/",
+  "datePublished": "2026-09-08",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/"
+  }
+}
+</script>
+<style id="brand-core">
+/* Brand tokens mirror BRAND_GUIDELINES.md exactly. Do not declare colours elsewhere. */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-void: #09090b; --bg-foundation: #0f1014; --bg-surface-1: #16171c; --bg-surface-2: #1c1d24; --bg-surface-3: #24252e; --bg-inset: #0c0c10;
+  --border-subtle: rgba(255,255,255,0.04); --border-default: rgba(255,255,255,0.07); --border-strong: rgba(255,255,255,0.12); --border-accent: rgba(191,149,83,0.30);
+  --text-primary: #e8e4de; --text-secondary: #9f9a92; --text-tertiary: #928d84; --text-ghost: #3d3a36;
+  --accent-bronze: #bf9553; --accent-bronze-dim: #8a6c3e; --accent-copper: #c47a4a; --accent-slate: #5a7c8a; --accent-sage: #6b8a5a; --accent-clay: #8a5a5a;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2); --shadow-sm: 0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl: 0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif; --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+  --radius-sm: 3px; --radius-md: 5px; --radius-lg: 8px;
+  --z-void: -1; --z-canvas: 0; --z-surface: 10; --z-nav: 1000; --measure: 68ch;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-body); background: var(--bg-void); color: var(--text-secondary); line-height: 1.6; overflow-x: hidden; padding-top: 64px; }
+body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10000; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); background-size: 256px 256px; }
+a { color: inherit; text-decoration: none; } ::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+.skip-link { position: absolute; left: 16px; top: -80px; z-index: 10001; font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bronze); color: var(--bg-void); padding: 12px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); transition: top 0.2s ease; }
+.skip-link:focus { top: 80px; }
+.page-container { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
+.page-narrow { max-width: 900px; margin: 0 auto; padding: 0 48px; }
+.section { padding: 120px 0; position: relative; }
+.section + .section { border-top: 1px solid var(--border-subtle); }
+.section-label { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-bronze-dim); margin-bottom: 48px; padding-left: 2px; display: flex; align-items: center; gap: 16px; }
+.section-label::before { content: ''; width: 24px; height: 1px; background: var(--accent-bronze-dim); opacity: 0.5; }
+.section-title { font-family: var(--font-display); font-size: 40px; line-height: 1.15; letter-spacing: -0.015em; color: var(--text-primary); margin-bottom: 18px; max-width: 22ch; }
+.section-sub { font-size: 16px; font-weight: 380; line-height: 1.7; color: var(--text-secondary); max-width: var(--measure); margin-bottom: 48px; }
+.nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav); padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--border-subtle); isolation: isolate; }
+.nav-bar::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--bg-void); opacity: 0.88; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.nav-wordmark { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-primary); white-space: nowrap; }
+.nav-wordmark span { color: var(--accent-bronze); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-family: var(--font-body); font-size: 13px; font-weight: 450; color: var(--text-tertiary); letter-spacing: 0.01em; transition: color 0.3s ease; }
+.nav-links a:hover { color: var(--text-primary); }
+.nav-cta { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bg-void); background: var(--accent-bronze); padding: 8px 20px; border: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; transition: all 0.3s ease; box-shadow: var(--shadow-sm); }
+.nav-cta:hover { filter: brightness(1.08); box-shadow: var(--shadow-md); }
+.article-head { padding: 96px 0 40px; }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-bronze); margin-bottom: 24px; display: flex; align-items: center; gap: 14px; }
+.eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent-bronze); }
+.article-title { font-family: var(--font-display); font-size: clamp(40px, 5vw, 56px); line-height: 1.1; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 24px; max-width: 28ch; }
+.article-title em { font-style: italic; color: var(--accent-bronze); }
+.article-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.article-dek { font-size: 18px; font-weight: 380; line-height: 1.65; color: var(--text-secondary); max-width: var(--measure); }
+.prose { max-width: var(--measure); font-size: 17px; line-height: 1.8; color: var(--text-secondary); }
+.prose > * + * { margin-top: 1.5em; }
+.prose h2 { font-family: var(--font-display); font-size: 28px; line-height: 1.2; letter-spacing: -0.01em; color: var(--text-primary); margin-top: 2.5em; margin-bottom: 0.5em; }
+.prose h3 { font-family: var(--font-display); font-size: 22px; line-height: 1.3; color: var(--text-primary); margin-top: 2em; margin-bottom: 0.5em; }
+.prose p { color: var(--text-secondary); }
+.prose a { color: var(--accent-bronze); text-decoration: underline; text-underline-offset: 2px; }
+.prose a:hover { color: var(--accent-copper); }
+.prose code { font-family: var(--font-mono); font-size: 0.9em; background: var(--bg-surface-2); padding: 2px 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); }
+.prose pre { background: var(--bg-inset); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 24px; overflow-x: auto; margin-top: 1.5em; margin-bottom: 1.5em; }
+.prose pre code { background: transparent; padding: 0; border: none; font-size: 14px; line-height: 1.7; color: var(--text-primary); }
+.prose ul, .prose ol { padding-left: 1.5em; color: var(--text-secondary); }
+.prose li { margin-top: 0.5em; }
+.prose table { width: 100%; border-collapse: collapse; margin-top: 1.5em; margin-bottom: 1.5em; font-size: 15px; }
+.prose th, .prose td { border: 1px solid var(--border-default); padding: 12px 16px; text-align: left; }
+.prose th { background: var(--bg-surface-1); color: var(--text-primary); font-family: var(--font-mono); font-size: 13px; font-weight: 500; }
+.prose td { color: var(--text-secondary); }
+.prose hr { border: none; border-top: 1px solid var(--border-subtle); margin: 3em 0; }
+.prose blockquote { border-left: 3px solid var(--accent-bronze); padding-left: 16px; margin: 1.5em 0; color: var(--text-tertiary); font-style: italic; }
+.site-footer { padding: 80px 0 40px; border-top: 1px solid var(--border-subtle); margin-top: 80px; }
+.footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; }
+.footer-brand { max-width: 280px; }
+.footer-brand .wordmark { font-family: var(--font-mono); font-size: 14px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-primary); margin-bottom: 16px; }
+.footer-brand .wordmark span { color: var(--accent-bronze); }
+.footer-brand p { font-size: 14px; line-height: 1.7; color: var(--text-tertiary); }
+.footer-nav h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-bronze-dim); margin-bottom: 16px; }
+.footer-nav ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-nav a { font-size: 14px; color: var(--text-tertiary); transition: color 0.2s; }
+.footer-nav a:hover { color: var(--accent-bronze); }
+.footer-bottom { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-bottom p { font-family: var(--font-mono); font-size: 11px; color: var(--text-ghost); }
+.footer-bottom .footer-links { display: flex; gap: 24px; }
+.footer-bottom a { font-family: var(--font-mono); font-size: 11px; color: var(--text-ghost); transition: color 0.2s; }
+.footer-bottom a:hover { color: var(--accent-bronze-dim); }
+@media (max-width: 900px) {
+  .page-container, .page-narrow, .nav-bar { padding: 0 24px; }
+  .article-title { max-width: none; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav-bar">
+  <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
+    <li><a href="/kits/">Kits</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
+</nav>
+
+<main id="main">
+<div class="page-narrow">
+
+  <header class="article-head">
+    <span class="eyebrow">MCP &middot; Python SDK &middot; 2026 Spec</span>
+    <h1 class="article-title">MCP Python SDK <em>v2.1.0</em>: What Changed for Developers Shipping on the 2026 Spec</h1>
+    <div class="article-meta">September 8, 2026</div>
+    <p class="article-dek">The first minor release since v2.0.0 stabilized around the 2026-07-28 specification. Three changes deserve attention: a simpler client constructor, stricter error handling that keeps exception details out of model responses, and SSE/OAuth hardening that closes a DoS surface.</p>
+  </header>
+
+  <article class="prose">
+    <p>The MCP Python SDK v2.1.0 landed this week — the first minor release since v2.0.0 stabilized around the 2026-07-28 specification. If you're running MCP servers in production, three changes in this release deserve attention: a simpler client constructor, stricter error handling that keeps exception details out of model responses, and SSE/OAuth hardening that closes a DoS surface.</p>
+
+    <h2>The Headline: Client Now Takes StdioServerParameters Directly</h2>
+
+    <pre><code># Before v2.1.0
+from mcp.client.stdio import StdioServerParameters
+from mcp.client import Client
+
+params = StdioServerParameters(command="uv", args=["run", "server.py"])
+client = Client(params)
+
+# After v2.1.0 — same code works, but the Client signature now accepts
+# StdioServerParameters natively without the intermediate step
+client = Client(StdioServerParameters(command="uv", args=["run", "server.py"]))</code></pre>
+
+    <p>This is a small ergonomic win, but it signals the SDK's direction: the high-level <code>Client</code> is becoming the primary interface, and the transport-specific parameter classes are first-class citizens. The same pattern now works for <code>SseServerParameters</code> and <code>StreamableHttpServerParameters</code> — one import, one line, ready to connect.</p>
+
+    <h2>Error Handling: Exceptions No Longer Leak to the Model</h2>
+
+    <p>This is the behavioral change that will bite you if you're not aware of it.</p>
+
+    <p>In v2.0.x, an unhandled exception in a tool handler would serialize the full traceback and send it to the client. The model would see the raw Python exception text. That's a security issue (internal paths, secrets in stack traces) and a reliability issue (models don't parse tracebacks well).</p>
+
+    <p>In v2.1.0:</p>
+    <ul>
+      <li>Unexpected exceptions are logged once at <code>ERROR</code> with full traceback (server-side only)</li>
+      <li>The client receives a generic message: <code>Error executing tool <name></code></li>
+      <li>If you <em>want</em> the model to see a specific error, raise <code>ToolError</code>, <code>ResourceError</code>, or <code>PromptError</code> — those are logged at <code>INFO</code> without traceback and the message reaches the client intact</li>
+    </ul>
+
+    <pre><code>from mcp.server.mcpserver import ToolError
+
+@server.tool()
+async def risky_operation(x: int) -> str:
+    if x < 0:
+        raise ToolError("x must be non-negative")  # Model sees this
+    return await do_work(x)  # Unexpected exceptions become generic "Error executing tool risky_operation"</code></pre>
+
+    <p>This aligns with the 2026-07-28 spec's error code allocation: <code>-32000</code> to <code>-32019</code> remain implementation-defined, <code>-32020</code> to <code>-32099</code> are reserved for MCP-defined errors. <code>ToolError</code> maps cleanly to that reserved range.</p>
+
+    <h2>Prompt Messages Now Accept Image and Audio Blocks</h2>
+
+    <p>The 2026-07-28 spec added <code>Image</code> and <code>Audio</code> content block types. v2.0.0 supported them in tool results. v2.1.0 extends that to prompt messages — both the messages you send <em>to</em> prompts and the messages prompts can return.</p>
+
+    <pre><code>from mcp.types import Image, Audio
+
+@server.prompt()
+async def analyze_media(image: Image, audio: Audio) -> list[Message]:
+    return [
+        UserMessage(content=[image, audio, "Analyze both together"]),
+        AssistantMessage(content="Here's my analysis..."),
+    ]</code></pre>
+
+    <p>Prompt functions can also now return bare content blocks (text, image, audio) instead of wrapping everything in <code>Message</code> objects. The SDK coerces them. <code>Message</code>, <code>UserMessage</code>, and <code>AssistantMessage</code> are now exported from <code>mcp.server.mcpserver</code> for convenience.</p>
+
+    <h2>SSE Transport and OAuth Endpoints Get the 4 MiB Body Limit</h2>
+
+    <p>The 4 MiB request body limit has existed for stdio and streamable HTTP since v2.0.0. v2.1.0 extends it to:</p>
+    <ul>
+      <li>SSE transport (<code>SseServerTransport</code>, <code>MCPServer.sse_app()</code>)</li>
+      <li>OAuth endpoints (token, authorization, registration)</li>
+    </ul>
+
+    <p>Both <code>SseServerTransport</code> and <code>MCPServer.sse_app()</code> now accept <code>max_request_body_size</code> to override the default. The SSE message endpoint also returns <code>405 Method Not Allowed</code> for non-POST requests — a small hardening that prevents accidental GETs from hitting the message handler.</p>
+
+    <p>If you're running an MCP server behind a load balancer or proxy that buffers bodies, verify your proxy limits exceed 4 MiB or set <code>max_request_body_size</code> lower to match.</p>
+
+    <h2>Pre-2026 Session Compatibility Fixes</h2>
+
+    <p>Two fixes improve backward compatibility with 2025-era clients:</p>
+    <ul>
+      <li>Pre-2026 sessions now ignore <code>cache-hint</code> fields from later revisions instead of failing <code>list_tools()</code></li>
+      <li>Boolean sub-schemas in tool schema <code>properties</code> are now accepted (previously rejected as invalid)</li>
+    </ul>
+
+    <p>If you operate a gateway or proxy that serves mixed-version clients, these reduce the chance of a version mismatch breaking a session mid-flight.</p>
+
+    <h2>Windows: <code>mcp install</code> Preserves Non-ASCII Config</h2>
+
+    <p>A long-standing Windows issue: <code>mcp install</code> would corrupt Claude Desktop config files containing non-ASCII characters (accented paths, non-Latin usernames) because it read the file with the system code page instead of UTF-8. v2.1.0 fixes this — the config is read and written as UTF-8 regardless of the active code page.</p>
+
+    <h2>What This Means for Your Stack</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>If you...</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Use <code>Client</code> with stdio servers</td>
+          <td>Simplify your connection code — pass <code>StdioServerParameters</code> directly</td>
+        </tr>
+        <tr>
+          <td>Have tool handlers that can raise</td>
+          <td>Audit for bare <code>raise Exception(...)</code> and convert to <code>ToolError</code> where the model should see the message</td>
+        </tr>
+        <tr>
+          <td>Run SSE transport in production</td>
+          <td>Set <code>max_request_body_size</code> to match your infrastructure limits</td>
+        </tr>
+        <tr>
+          <td>Support mixed-version clients</td>
+          <td>Test <code>list_tools()</code> with a 2025-era client after upgrade</td>
+        </tr>
+        <tr>
+          <td>Install on Windows with non-ASCII paths</td>
+          <td>Upgrade to v2.1.0 — the config corruption bug is fixed</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The Bigger Picture</h2>
+
+    <p>v2.1.0 is a maintenance release, but it reveals the SDK's maturation. The 2026-07-28 spec was a major break (stateless core, no initialize handshake, extensions framework). v2.0.0 implemented it. v2.1.0 hardens the edges: security (error leakage), operability (body limits), and compatibility (Windows, legacy clients).</p>
+
+    <p>The next spec revision will likely focus on the roadmap items the MCP maintainers highlighted post-2026-07-28: agent communication primitives, server discovery via <code>.well-known</code> metadata, and enterprise auth (CIMD, issuer-bound credentials). The SDK will track those. For now, v2.1.0 is the stable baseline for anyone shipping on the 2026 spec.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+
+</div>
+</main>
+
+<footer class="site-footer">
+<div class="page-container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="wordmark">The Agent <span>Lab</span></div>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav class="footer-nav">
+      <h4>Build</h4>
+      <ul>
+        <li><a href="/services/">The Engine</a></li>
+        <li><a href="/kits/">Kits</a></li>
+        <li><a href="/blog/">Blog</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-nav">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="/terms/">Terms</a></li>
+        <li><a href="/refunds/">Refunds</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 The Agent Lab. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="https://github.com/m-ashrey">GitHub</a>
+      <a href="https://x.com/ashrey122">X</a>
+      <a href="https://linkedin.com/in/mohamed-ashrey">LinkedIn</a>
+    </div>
+  </div>
+</div>
+</footer>
+</body>
+</html>

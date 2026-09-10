@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Anthropic's Commerce Agent Blueprint: Two Reference Agents You Can Run in an Afternoon | The Agent Lab</title>
+<meta name="description" content="Anthropic open-sourced a commerce agent blueprint with two working reference agents — shopping and merchant — plus guardrails, eval suite, and a Claude Code plugin. Here is what shipped, why the guardrails layer is the real product, and how to adopt it.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-10-claude-commerce-agents-blueprint/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic's Commerce Agent Blueprint: Two Reference Agents You Can Run in an Afternoon">
+<meta property="og:description" content="Anthropic open-sourced a commerce agent blueprint with two working reference agents — shopping and merchant — plus guardrails, eval suite, and a Claude Code plugin. Here is what shipped, why the guardrails layer is the real product, and how to adopt it.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-10-claude-commerce-agents-blueprint/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-10-claude-commerce-agents-blueprint/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Anthropic commerce agents blueprint — two reference agents with guardrails and eval suite">
+<meta property="article:published_time" content="2026-09-10T00:00:00+02:00">
+<meta property="article:modified_time" content="2026-09-10T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="Claude">
+<meta property="article:tag" content="Commerce">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anthropic's Commerce Agent Blueprint: Two Reference Agents You Can Run in an Afternoon">
+<meta name="twitter:description" content="Anthropic open-sourced a commerce agent blueprint with two working reference agents — shopping and merchant — plus guardrails, eval suite, and a Claude Code plugin.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-10-claude-commerce-agents-blueprint/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Anthropic's Commerce Agent Blueprint: Two Reference Agents You Can Run in an Afternoon",
+  "description": "Anthropic open-sourced a commerce agent blueprint with two working reference agents — shopping and merchant — plus guardrails, eval suite, and a Claude Code plugin. Here is what shipped, why the guardrails layer is the real product, and how to adopt it.",
+  "datePublished": "2026-09-10T00:00:00+02:00",
+  "dateModified": "2026-09-10T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-10-claude-commerce-agents-blueprint/"
+  },
+  "image": "https://theagentlab.site/blog/2026-09-10-claude-commerce-agents-blueprint/og.png",
+  "articleSection": "AI Agents",
+  "keywords": "Claude, Commerce, AI Agents, MCP, Anthropic"
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 450;
+  color: var(--text-tertiary);
+  letter-spacing: 0.01em;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg-void);
+  background: var(--accent-bronze);
+  padding: 8px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-cta:hover {
+  filter: brightness(1.08);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===================================================================
+   HERO
+   =================================================================== */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 96px 0 120px;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, color-mix(in srgb, var(--accent-bronze) 4%, transparent) 0%, transparent 70%);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--accent-bronze);
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(56px, 6vw, 88px);
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.05;
+  margin-bottom: 28px;
+}
+
+.hero-headline em {
+  font-style: italic;
+  color: var(--accent-bronze);
+}
+
+.hero-standfirst {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 36px;
+}
+
+.hero-body {
+  max-width: 580px;
+  margin-bottom: 44px;
+  font-size: 17px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.hero-body strong { color: var(--text-primary); font-weight: 550; }
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hero-graphic {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  perspective: 1000px;
+}
+
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+}
+
+/* Zero-JS fallback served when prefers-reduced-motion is set. */
+.hero-static {
+  position: absolute;
+  inset: 12%;
+  border: 1px solid var(--border-accent);
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  display: none;
+}
+
+.hero-static::before,
+.hero-static::after {
+  content: '';
+  position: absolute;
+  inset: 14%;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+}
+
+.hero-static::after {
+  inset: 34%;
+  border-color: var(--border-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-canvas { display: none; }
+  .hero-static { display: block; }
+}
+
+/* ===================================================================
+   BUTTONS
+   =================================================================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg-void);
+  background: var(--accent-bronze);
+  padding: 12px 28px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  background: transparent;
+  padding: 12px 28px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-bronze);
+  color: var(--accent-bronze);
+}
+
+/* ===================================================================
+   ARTICLE PAGE SPECIFIC
+   =================================================================== */
+.article-header {
+  padding: 48px 0 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.article-meta {
+  display: flex;
+  gap: 32px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.article-meta time { font-variant-numeric: tabular-nums; }
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  max-width: none;
+}
+
+.article-dek {
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 0;
+}
+
+.article-body {
+  max-width: var(--measure);
+  padding: 48px 0 80px;
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 48px 0 16px;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 36px 0 12px;
+}
+
+.article-body p {
+  font-size: 17px;
+  font-weight: 380;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.article-body p strong { color: var(--text-primary); font-weight: 550; }
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.article-body a:hover { color: var(--accent-copper); }
+
+.article-body ul, .article-body ol {
+  margin: 20px 0 20px 24px;
+  line-height: 1.75;
+}
+
+.article-body li { margin-bottom: 8px; }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+
+.article-body pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.article-body .callout {
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.article-body .callout h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 12px;
+}
+
+.article-body .callout p { margin-bottom: 0; color: var(--text-secondary); }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 60px 0 48px;
+  background: var(--bg-foundation);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.footer-brand .wordmark {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.footer-brand .wordmark span { color: var(--accent-bronze); }
+
+.footer-brand p {
+  font-size: 15px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 64px;
+  justify-content: flex-end;
+}
+
+.footer-column h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+}
+
+.footer-column ul { list-style: none; }
+
+.footer-column li { margin-bottom: 10px; }
+
+.footer-column a {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  transition: color 0.3s ease;
+}
+
+.footer-column a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 48px auto 0;
+  padding: 24px 48px 0;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-graphic { display: none; }
+  .article-header { padding: 32px 0 16px; }
+  .article-body { padding: 32px 0 48px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-links { justify-content: flex-start; flex-wrap: wrap; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .page-container, .page-narrow { padding: 0 24px; }
+  .nav-bar { padding: 0 24px; }
+  .footer-bottom { padding: 24px 24px 0; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav-wordmark" aria-label="The Agent Lab — Home">THE<span>AGENT</span>LAB</a>
+  <ul class="nav-links">
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/services/">Services</a></li>
+    <li><a href="/kits/">Kits</a></li>
+  </ul>
+  <a href="https://ko-fi.com/ashrey122" class="nav-cta" target="_blank" rel="noopener">Support</a>
+</nav>
+
+<main id="main" class="page-narrow">
+  <header class="article-header">
+    <div class="article-meta">
+      <time datetime="2026-09-10">September 10, 2026</time>
+      <span>AI Agents</span>
+      <span>7 min read</span>
+    </div>
+    <h1 class="article-title">Anthropic's Commerce Agent Blueprint: Two Reference Agents You Can Run in an Afternoon</h1>
+    <p class="article-dek">On September 2, 2026, Anthropic open-sourced a commerce agent blueprint at github.com/anthropics/commerce-agents. Two working reference agents, four vertical implementations, a guardrails layer, an eval suite, and a Claude Code plugin. The scaffolding most teams rebuild is now Apache-2.0 code.</p>
+  </header>
+
+  <article class="article-body">
+    <section>
+      <p>On September 2, 2026, Anthropic published a commerce agent blueprint that changes how teams should think about building AI shopping experiences. The release is at <a href="https://github.com/anthropics/commerce-agents" target="_blank" rel="noopener">github.com/anthropics/commerce-agents</a>, Apache-2.0 licensed, and it contains two working reference implementations: a customer-facing shopping agent and a staff-facing merchant agent.</p>
+
+      <p>The blueprint is not a model release or a platform feature. It is a product-development framework — the harnesses, patterns, and guardrails an engineering team needs to get a commerce agent running in days instead of months.</p>
+    </section>
+
+    <section>
+      <h2>What Shipped</h2>
+      <p>Two reference agents form the core:</p>
+
+      <p><strong>Shopping Agent</strong> (customer-facing): Handles product discovery, comparison, cart management, and checkout flows. It runs in the storefront, talks to your catalog API, and enforces guardrails like price limits, inventory checks, and policy compliance.</p>
+
+      <p><strong>Merchant Agent</strong> (staff-facing): Runs in the back office. It handles inventory updates, order reconciliation, refund approvals, and catalog maintenance. It talks to your ERP or admin APIs and enforces the same policy layer.</p>
+
+      <p>Both agents share a common architecture: an agent loop, a tool layer over your catalog/admin APIs, an approval gate for sensitive actions, and an eval suite. Anthropic built this scaffolding so teams don't have to rebuild it.</p>
+    </section>
+
+    <section>
+      <h2>Four Vertical Implementations</h2>
+      <p>The repo includes complete example implementations for:</p>
+
+      <ul>
+        <li><strong>Retail</strong>: Product search, variant selection, size/color logic, bundle recommendations</li>
+        <li><strong>Travel</strong>: Flight/hotel search, date flexibility, loyalty tier logic, cancellation policies</li>
+        <li><strong>Telecom</strong>: Plan comparison, device upgrade eligibility, port-in flows, promo stacking rules</li>
+        <li><strong>Ticketing</strong>: Seat maps, dynamic pricing tiers, transfer/refund rules, waitlist management</li>
+      </ul>
+
+      <p>Each vertical demonstrates how the same agent skeleton adapts to different catalog shapes and business rules.</p>
+    </section>
+
+    <section>
+      <h2>The Guardrails Layer</h2>
+      <p>The most valuable part of the blueprint is the guardrails system. It sits between the agent and your APIs and enforces:</p>
+
+      <ul>
+        <li><strong>Price floors/ceilings</strong>: The agent cannot quote below cost or above MAP</li>
+        <li><strong>Inventory atomicity</strong>: Cart holds are reserved, not just checked</li>
+        <li><strong>Policy compliance</strong>: Refund windows, transfer rules, promo exclusions</li>
+        <li><strong>Audit logging</strong>: Every agent action is traceable to a session and a decision</li>
+      </ul>
+
+      <p>This is what separates a demo from a production agent. Most teams build the agent loop first and bolt on guardrails later. The blueprint inverts that order.</p>
+
+      <div class="callout">
+        <h4>Key Insight</h4>
+        <p>The guardrails module is the actual product. The agents demonstrate the pattern; the guardrails make it shippable.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Claude Code Plugin</h2>
+      <p>The release includes a Claude Code plugin that lets you develop and test the agents locally. You can spin up the shopping agent against a mock catalog, run the eval suite, and iterate on prompts without deploying. The plugin handles the MCP connection to your local catalog API and the approval gate simulation.</p>
+
+      <p>This means you can validate the agent behavior against your actual catalog data and business rules before any production deployment. The eval suite includes regression tests for the guardrails, so a change to a price rule or inventory policy immediately shows whether it broke anything.</p>
+    </section>
+
+    <section>
+      <h2>What This Means for Builders</h2>
+      <p>If you are building an AI shopping assistant or a merchant tool today, you were going to build this scaffolding yourself. The agent loop, the tool layer, the approval gate, the eval suite — every team rebuilds them. Anthropic has now released that scaffolding as code.</p>
+
+      <p>The strategic signal: Anthropic is moving from "here is a model" to "here is how you ship a product on the model." The blueprint is a reference implementation of the patterns they see working in production with partners like Shopify and Priceline (both run live agents on this technology).</p>
+
+      <p>The code is Apache-2.0. You can fork it, strip the verticals you don't need, wire your own catalog and ERP, and have a production-grade agent skeleton in an afternoon. The eval suite tells you when it's ready to ship.</p>
+    </section>
+
+    <section>
+      <h2>Practical Takeaway</h2>
+      <ol>
+        <li>Clone the repo: <code>git clone https://github.com/anthropics/commerce-agents</code></li>
+        <li>Run the retail demo against the mock catalog</li>
+        <li>Read the guardrails module — that is the pattern worth adopting</li>
+        <li>Wire your catalog API, configure your price and inventory rules</li>
+        <li>Run the eval suite. When it passes, you have a shippable agent</li>
+      </ol>
+
+      <p>If your team is evaluating whether to build or buy an AI commerce layer, this blueprint is the benchmark. It shows what production-grade looks like when the model provider builds the reference implementation.</p>
+    </section>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="wordmark">THE<span>AGENT</span>LAB</div>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <div class="footer-column">
+        <h4>Blog</h4>
+        <ul>
+          <li><a href="/blog/">All posts</a></li>
+          <li><a href="/blog/#mcp">MCP</a></li>
+          <li><a href="/blog/#claude">Claude</a></li>
+          <li><a href="/blog/#agents">AI Agents</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Work</h4>
+        <ul>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/kits/">Kits</a></li>
+          <li><a href="https://github.com/m-ashrey/mcp-doctor">mcp-doctor</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="https://linkedin.com/in/mohamed-ashrey">LinkedIn</a></li>
+          <li><a href="https://github.com/m-ashrey">GitHub</a></li>
+          <li><a href="https://youtube.com/@TheAgentLab">YouTube</a></li>
+          <li><a href="https://ko-fi.com/ashrey122">Ko-fi</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 The Agent Lab</span>
+    <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+  </div>
+</footer>
+
+<script>
+/* Hero canvas — subtle radial drift */
+(function() {
+  const canvas = document.querySelector('.hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, t = 0;
+  function resize() {
+    w = canvas.width = canvas.offsetWidth * devicePixelRatio;
+    h = canvas.height = canvas.offsetHeight * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+  }
+  function draw() {
+    const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+    ctx.clearRect(0, 0, cw, ch);
+    t += 0.0006;
+    for (let i = 0; i < 3; i++) {
+      const r = Math.min(cw, ch) * (0.15 + i * 0.25);
+      const alpha = 0.03 * (1 - i * 0.2);
+      const offset = Math.sin(t + i) * 8;
+      ctx.beginPath();
+      ctx.arc(cw/2 + offset, ch/2, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(191, 149, 83, ${alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();
+  draw();
+  window.addEventListener('resize', resize);
+})();
+</script>
+</body>
+</html>

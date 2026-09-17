@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP's Context Tax and the Multiplexer Fix | The Agent Lab</title>
+<meta name="description" content="MCP tool schemas can consume 50% of your context window before the agent does anything. Multiplexers like mcp-multiplexer cut that by 95% with lazy schema discovery. Here's how it works and why it matters.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-17-mcp-multiplexer-context-tax/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP's Context Tax and the Multiplexer Fix">
+<meta property="og:description" content="MCP tool schemas can consume 50% of your context window before the agent does anything. Multiplexers like mcp-multiplexer cut that by 95% with lazy schema discovery.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-17-mcp-multiplexer-context-tax/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-17-mcp-multiplexer-context-tax/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MCP multiplexer context tax solution diagram">
+<meta property="article:published_time" content="2026-09-17T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="Blog">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Context Window">
+<meta property="article:tag" content="Claude Code">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP's Context Tax and the Multiplexer Fix">
+<meta name="twitter:description" content="MCP tool schemas can consume 50% of your context window before the agent does anything. Multiplexers cut that by 95% with lazy schema discovery.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-17-mcp-multiplexer-context-tax/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MCP's Context Tax and the Multiplexer Fix",
+  "description": "MCP tool schemas can consume 50% of your context window before the agent does anything. Multiplexers like mcp-multiplexer cut that by 95% with lazy schema discovery.",
+  "image": "https://theagentlab.site/blog/2026-09-17-mcp-multiplexer-context-tax/og.png",
+  "datePublished": "2026-09-17T00:00:00+02:00",
+  "dateModified": "2026-09-17T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-17-mcp-multiplexer-context-tax/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+}
+
+.section-dek {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-top: 16px;
+  line-height: 1.7;
+}
+
+/* ===================================================================
+   NAV
+   =================================================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  height: 64px;
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   BLOG ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 80px 0 40px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.article-meta time { color: var(--accent-bronze); }
+.article-meta .sep { color: var(--border-default); }
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+  margin-bottom: 16px;
+}
+
+.article-dek {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.article-content {
+  max-width: var(--measure);
+  padding: 48px 0 80px;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1.3;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 48px 0 20px;
+  padding-top: 24px;
+}
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 36px 0 16px;
+}
+
+.article-content p { margin-bottom: 1.5rem; }
+
+.article-content a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.article-content a:hover { border-color: var(--accent-bronze); }
+
+.article-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-surface-2);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent-bronze);
+}
+
+.article-content pre {
+  background: var(--bg-foundation);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  overflow-x: auto;
+  margin: 24px 0;
+  line-height: 1.6;
+}
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.article-content blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 24px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-content ul, .article-content ol { margin: 16px 0 16px 24px; }
+.article-content li { margin-bottom: 8px; }
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 0.9375rem;
+}
+.article-content th, .article-content td {
+  border: 1px solid var(--border-default);
+  padding: 12px 16px;
+  text-align: left;
+}
+.article-content th {
+  background: var(--bg-surface-1);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+}
+.article-content tr:nth-child(even) td { background: var(--bg-surface-1); }
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.article-content .callout {
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  background: rgba(191, 149, 83, 0.04);
+  margin: 24px 0;
+}
+.article-content .callout strong { color: var(--accent-bronze); }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  background: var(--bg-foundation);
+  border-top: 1px solid var(--border-subtle);
+  padding: 80px 0 48px;
+}
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
+}
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.footer-desc {
+  color: var(--text-tertiary);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  max-width: 280px;
+}
+.footer-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+  display: block;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { color: var(--text-secondary); transition: color 0.2s ease; }
+.footer-links a:hover { color: var(--accent-bronze); }
+.footer-bottom {
+  max-width: 1400px;
+  margin: 64px auto 0;
+  padding: 0 48px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-copyright { font-family: var(--font-mono); font-size: 11px; color: var(--text-ghost); }
+.footer-social { display: flex; gap: 24px; }
+.footer-social a { color: var(--text-tertiary); transition: color 0.2s ease; }
+.footer-social a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 1024px) {
+  .page-container, .page-narrow, .nav-inner, .footer-grid, .footer-bottom { padding: 0 24px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .article-content { font-size: 1rem; }
+  body { padding-top: 56px; }
+  .nav { height: 56px; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+<div class="nav-inner">
+<a href="/" class="nav-brand">The Agent Lab</a>
+<ul class="nav-links">
+<li><a href="/">Home</a></li>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/services/">Services</a></li>
+<li><a href="/kits/">Kits</a></li>
+</ul>
+</div>
+</nav>
+
+<main id="main" role="main">
+<article>
+<header class="article-header">
+<div class="page-narrow">
+<div class="article-meta">
+<time datetime="2026-09-17">September 17, 2026</time>
+<span class="sep">|</span>
+<span>Ashrey</span>
+<span class="sep">|</span>
+<span>8 min read</span>
+</div>
+<h1 class="article-title">MCP's Context Tax and the Multiplexer Fix</h1>
+<p class="article-dek">MCP tool schemas can consume 50% of your context window before the agent does anything. Multiplexers like mcp-multiplexer cut that by 95% with lazy schema discovery. Here's how it works and why it matters.</p>
+</div>
+</header>
+
+<div class="article-content page-narrow">
+<p>You open a fresh Claude Code session. You haven't asked it to do anything yet. You run <code>/context</code> and see the warning: <strong>Large MCP tools context (~82,000 tokens > 25,000)</strong>.</p>
+
+<p>This is the MCP context tax. Every MCP server you connect pushes its full tool schemas into the model's context at session start. Ten servers with 40–50 tools each means 40,000–80,000 tokens gone before your first prompt. On a 200k context window, that's 20–40% of your budget spent on definitions the agent may never use.</p>
+
+<p>The problem is real and widely documented. Scott Spence measured <a href="https://scottspence.com/posts/optimising-mcp-server-context-usage-in-claude-code" target="_blank" rel="noopener">81,986 tokens</a> across seven MCP servers in a single Claude Code session. The MCP specification issue <a href="https://github.com/modelcontextprotocol/modelcontextprotocol/issues/2808" target="_blank" rel="noopener">#2808</a> notes that tool definitions consume 5–15× more tokens than minimal schemas. Claude Code issues <a href="https://github.com/anthropics/claude-code/issues/13717" target="_blank" rel="noopener">#13717</a> and <a href="https://github.com/anthropics/claude-code/issues/7172" target="_blank" rel="noopener">#7172</a> track the consolidation request. A Reddit user on r/LangChain reported <a href="https://www.reddit.com/r/LangChain/comments/1qukgay/preloading_mcp_tools_cost_me_50k_tokens_per_run/" target="_blank" rel="noopener">50k tokens per run</a> just from preloaded MCP tools.</p>
+
+<h2>Why Tool Schemas Are So Expensive</h2>
+
+<p>An MCP tool definition isn't just a function signature. Each tool carries:</p>
+
+<ul>
+<li>Name and description</li>
+<li>Full JSON Schema for input parameters (including nested objects, arrays, enums, constraints)</li>
+<li>Annotations for UI hints (readOnly, destructive, idempotent)</li>
+<li>Server-level instructions and metadata</li>
+</ul>
+
+<p>A typical tool schema runs 300–800 tokens. Multiply by 50 tools and you're at 15,000–40,000 tokens. The <a href="https://github.com/modelcontextprotocol/modelcontextprotocol/issues/2808" target="_blank" rel="noopener">MCP spec issue</a> shows that a minimal type-only schema for the same tool is 5–15× smaller. The verbosity is by design—rich schemas help the model understand what tools do—but the cost is paid upfront for every tool, used or not.</p>
+
+<h2>The Multiplexer Pattern: Lazy Schema Discovery</h2>
+
+<p>The fix is architectural: don't load schemas until the model actually needs them. This is what <a href="https://github.com/JohGirard/mcp-multiplexer" target="_blank" rel="noopener">mcp-multiplexer</a> (by JohGirard) implements. Instead of connecting each MCP server directly, you point your client at one multiplexer server. The multiplexer fronts all upstream servers but exposes only <strong>7 meta-tools</strong>:</p>
+
+<table>
+<thead>
+<tr><th>Meta-tool</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>list_servers</code></td><td>Overview: name, status, tool count, instructions</td></tr>
+<tr><td><code>list_tools(server)</code></td><td>Tool names, one-line descriptions, annotations — no schemas</td></tr>
+<tr><td><code>search_tools(query, server?, limit=5)</code></td><td>Matching tools <strong>with full input schemas</strong></td></tr>
+<tr><td><code>describe_tool(server, tool)</code></td><td>One exact tool's full input schema</td></tr>
+<tr><td><code>call_tool(server, tool, arguments)</code></td><td>Proxied call; results returned verbatim</td></tr>
+<tr><td><code>refresh_tools(server?)</code></td><td>Reconnect and rebuild the tool index</td></tr>
+<tr><td><code>authorize_server(server, pasted_url?)</code></td><td>Start/complete OAuth login for a server</td></tr>
+</tbody>
+</table>
+
+<p>The model discovers tools lazily: list and search first, fetch a full schema only when it's about to call. The tool index is cached at <code>~/.cache/mcp-multiplexer/index.json</sub> for instant startup, and upstream servers connect lazily.</p>
+
+<div class="callout">
+<strong>Measured savings:</strong> The project's <code>--stats</code> command reports: without mux ~16,333 tokens (46 tools), with mux ~553 tokens (meta-tools), saved ~15,780 tokens (96%). The marketing claims "up to 95%" — the measured number is slightly better.
+</div>
+
+<h2>How the Model Actually Uses It</h2>
+
+<p>You might wonder: does the model know to use these meta-tools? Yes. The multiplexer's instructions tell the model the protocol:</p>
+
+<blockquote>
+<p>To use tools, first call <code>list_servers</code> or <code>search_tools</code> to discover what's available. Then call <code>describe_tool</code> to get the full schema for a specific tool. Finally call <code>call_tool</code> to execute it.</p>
+</blockquote>
+
+<p>In practice the flow looks like:</p>
+
+<ol>
+<li>Model calls <code>search_tools("read file", limit=3)</code> → gets 3 matching tools with full schemas</li>
+<li>Model picks one, calls <code>call_tool("filesystem", "read_file", {path: "..."})</code></li>
+<li>Multiplexer proxies the call to the upstream filesystem server, returns result verbatim</li>
+</ol>
+
+<p>This is 2–3 tool calls instead of 1, but the token cost of those 2–3 calls is tiny compared to loading 50 schemas upfront. The tradeoff is a discovery hop for a massive context saving.</p>
+
+<h2>Hybrid Mode: Expose Your Favorites</h2>
+
+<p>For servers you call every session, many times per session (e.g., Serena for code navigation, a database server you query constantly), the discovery hop is pure overhead. The multiplexer supports <code>"expose": true</code> on a per-server basis:</p>
+
+<pre><code>{
+  "mcpServers": {
+    "serena": {
+      "command": "uvx",
+      "args": ["serena", "start-mcp-server"],
+      "expose": true
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    }
+  }
+}
+</code></pre>
+
+<p>With <code>expose: true</code>, that server's tools mount directly as first-class <code>server__tool</code> tools (e.g., <code>serena__find_symbol</code>), schema and all, next to the meta-tools. The model calls them like any directly-connected tool — no search, no describe, no proxy hop. The server stays reachable through the meta-tools too, and <code>allow</code>/<code>deny</code> still apply.</p>
+
+<p>Rule of thumb: multiplex the fleet, expose the favorites.</p>
+
+<h2>Governance and OAuth Built In</h2>
+
+<p>The multiplexer isn't just a token saver. It adds two features that matter for team and production use:</p>
+
+<p><strong>Allow/deny governance.</strong> Per-server <code>allow</code> (exact names or <code>prefix*</code> globs) and <code>deny</code> lists let you restrict what the model can see and call. <code>deny</code> always wins. This is a control plane for agent tool access without modifying upstream servers.</p>
+
+<p><strong>OAuth 2.1 brokering.</strong> Remote servers that speak the MCP authorization spec work with <code>"oauth": true</code> on a URL server. First use fails with an authorization URL; open it, approve; a temporary localhost listener completes the exchange. Tokens live in <code>~/.cache/mcp-multiplexer/tokens.json</code> (mode 0600), refresh automatically, and survive restarts. The model can also drive this itself via the <code>authorize_server</code> meta-tool.</p>
+
+<h2>Claude Code Integration</h2>
+
+<p>The project is also a <a href="https://github.com/JohGirard/mcp-multiplexer/blob/main/docs/plugin.md" target="_blank" rel="noopener">Claude Code plugin</a>. Install it and it migrates your existing servers into a multiplexer config:</p>
+
+<pre><code>/plugin marketplace add JohGirard/mcp-multiplexer
+/plugin install mcp-multiplexer@mcp-multiplexer
+</code></pre>
+
+<p>Then ask Claude to "set up mcp-multiplexer" (or run <code>/mcp-multiplexer:setup</code>). The plugin installs the binary, rewrites your config (secrets become <code>${VAR}</code> references, OAuth servers get flagged), rewires your client config, and verifies.</p>
+
+<p>With the plugin installed, <code>/mcp-multiplexer:gain</code> shows the token savings report in chat.</p>
+
+<h2>What It Doesn't Do (Non-Goals)</h2>
+
+<p>The README is explicit about non-goals, which is refreshing:</p>
+
+<ul>
+<li>MCP resources and prompts (tools only)</li>
+<li>Upstream sampling, elicitation, and roots</li>
+<li>No truncation of tool results — returned verbatim</li>
+<li>OAuth for URL servers only (stdio servers use env for secrets)</li>
+<li>No <code>tools/list_changed</code> notification forwarding — use <code>refresh_tools</code></li>
+</ul>
+
+<p>This scope discipline is why the binary is small, fast, and reliable.</p>
+
+<h2>Related Work</h2>
+
+<p>mcp-multiplexer isn't the only project attacking this problem. The pattern goes by several names:</p>
+
+<ul>
+<li><strong>MCP gateways:</strong> <a href="https://github.com/e2b-dev/awesome-mcp-gateways" target="_blank" rel="noopener">Gate22</a>, <a href="https://github.com/metatool-ai/metamcp" target="_blank" rel="noopener">MetaMCP</a>, <a href="https://github.com/keysersoft/awesome-mcp-gateways" target="_blank" rel="noopener">Jetski</a>, <a href="https://github.com/bryanwills/awesome-mcp-list" target="_blank" rel="noopener">agiletec-inc/airis-mcp-gateway</a> (60+ tools through 7 meta-tools)</li>
+<li><strong>Lazy schema loading:</strong> <a href="https://focused.io/lab/stop-eager-loading-mcp-tools" target="_blank" rel="noopener">Focused</a>, <a href="https://www.open-mcp.org/blog/lazy-loading-input-schemas" target="_blank" rel="noopener">OpenMCP</a>, <a href="https://ismaelramos.dev/blog/lazy-loading-mcp-tools/" target="_blank" rel="noopener">Ismael Ramos</a>, <a href="https://arxiv.org/html/2604.21816v1" target="_blank" rel="noopener">ArXiv 2604.21816</a> ("Tool Attention Is All You Need")</li>
+<li><strong>Filesystem-based discovery:</strong> <a href="https://www.getmaxim.ai/bifrost/blog/why-mcp-tool-discovery-belongs-in-a-filesystem-not-the-context-window" target="_blank" rel="noopener">Bifrost</a> exposes tools as files; discovery becomes lazy</li>
+<li><strong>Call batching:</strong> <a href="https://github.com/edimuj/callmux" target="_blank" rel="noopener">callmux</a> batches multiple tool calls into one request (~19× context reduction)</li>
+</ul>
+
+<p>Claude Code itself has started addressing this: recent versions defer MCP tool schemas by default and load on demand through tool search (<a href="https://geotoolbox.ai/blog/claude-code-context-window" target="_blank" rel="noopener">Geotoolbox</a>, <a href="https://wmedia.es/en/tips/claude-code-context-command-token-usage" target="_blank" rel="noopener">wmedia.es</a>). But the multiplexer approach works across all MCP clients (Cursor, Zed, custom clients) and adds governance/OAuth on top.</p>
+
+<h2>Should You Use It?</h2>
+
+<p>If you run 3+ MCP servers in Claude Code (or Cursor, Zed, etc.) and see context warnings, yes. The install is one binary, the config is your existing <code>mcpServers</code> with one wrapper, and the plugin handles migration. The token savings are measurable and immediate.</p>
+
+<p>If you run 1–2 servers with few tools, the overhead of the discovery hop may not be worth it. But as your tool fleet grows, the multiplexer pattern becomes the default architecture — it's the difference between an agent that can think and an agent that's already out of context before it starts.</p>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</div>
+</article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+<div class="footer-grid">
+<div>
+<p class="footer-brand">The Agent Lab</p>
+<p class="footer-desc">Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+</div>
+<nav aria-label="Blog categories">
+<p class="footer-title">Explore</p>
+<ul class="footer-links">
+<li><a href="/blog/">All Posts</a></li>
+<li><a href="/blog/#mcp">MCP</a></li>
+<li><a href="/blog/#agents">AI Agents</a></li>
+<li><a href="/blog/#claude">Claude</a></li>
+</ul>
+</nav>
+<nav aria-label="Contact and social">
+<p class="footer-title">Connect</p>
+<ul class="footer-links">
+<li><a href="https://github.com/M-Ashrey">GitHub</a></li>
+<li><a href="https://www.youtube.com/@TheAgentLab">YouTube</a></li>
+<li><a href="https://www.linkedin.com/in/mohamed-ashrey/">LinkedIn</a></li>
+<li><a href="mailto:ashrey@theagentlab.site">Email</a></li>
+</ul>
+</nav>
+</div>
+<div class="footer-bottom">
+<p class="footer-copyright">&copy; 2026 The Agent Lab. All rights reserved.</p>
+<div class="footer-social">
+<a href="https://github.com/M-Ashrey" aria-label="GitHub">GitHub</a>
+<a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube">YouTube</a>
+<a href="https://www.linkedin.com/in/mohamed-ashrey/" aria-label="LinkedIn">LinkedIn</a>
+</div>
+</div>
+</footer>
+</body>
+</html>

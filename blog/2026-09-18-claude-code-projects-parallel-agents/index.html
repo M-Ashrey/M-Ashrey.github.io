@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Projects Gets Parallel Agents: A Coordinator, Shared Memory, and Plugin Evals | The Agent Lab</title>
+<meta name="description" content="Anthropic redesigned Claude Code Projects to run parallel agent threads with a coordinator, shared memory, and a project library. Plus: claude plugin eval brings CI-grade testing to agent extensions.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-18-claude-code-projects-parallel-agents/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code Projects Gets Parallel Agents: A Coordinator, Shared Memory, and Plugin Evals">
+<meta property="og:description" content="Anthropic redesigned Claude Code Projects to run parallel agent threads with a coordinator, shared memory, and a project library. Plus: claude plugin eval brings CI-grade testing to agent extensions.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-18-claude-code-projects-parallel-agents/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-18-claude-code-projects-parallel-agents/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Claude Code Projects parallel agents coordinator shared memory">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Code Projects Gets Parallel Agents: A Coordinator, Shared Memory, and Plugin Evals">
+<meta name="twitter:description" content="Anthropic redesigned Claude Code Projects to run parallel agent threads with a coordinator, shared memory, and a project library. Plus: claude plugin eval brings CI-grade testing to agent extensions.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-18-claude-code-projects-parallel-agents/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Claude Code Projects Gets Parallel Agents: A Coordinator, Shared Memory, and Plugin Evals",
+  "description": "Anthropic redesigned Claude Code Projects to run parallel agent threads with a coordinator, shared memory, and a project library. Plus: claude plugin eval brings CI-grade testing to agent extensions.",
+  "image": "https://theagentlab.site/blog/2026-09-18-claude-code-projects-parallel-agents/og.png",
+  "url": "https://theagentlab.site/blog/2026-09-18-claude-code-projects-parallel-agents/",
+  "datePublished": "2026-09-18T00:00:00+02:00",
+  "dateModified": "2026-09-18T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-18-claude-code-projects-parallel-agents/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+}
+
+.section-dek {
+  margin-top: 16px;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  line-height: 1.6;
+}
+
+/* ===================================================================
+   HEADER / NAV
+   =================================================================== */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.site-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.site-brand:hover { color: var(--accent-bronze); }
+
+.nav-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--text-primary); background: var(--bg-surface-1); }
+.nav-link.active { color: var(--accent-bronze); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 160px 0 80px;
+  text-align: center;
+}
+
+.article-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+  margin: 0 auto 24px;
+}
+
+.article-dek {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.article-content {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 0 120px;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1.25;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 64px 0 24px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.article-content h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 48px 0 16px;
+}
+
+.article-content p { margin: 16px 0; }
+
+.article-content a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+.article-content a:hover { border-color: var(--accent-bronze); }
+
+.article-content strong { color: var(--text-primary); font-weight: 600; }
+
+.article-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-content pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  overflow-x: auto;
+  margin: 24px 0;
+  line-height: 1.6;
+}
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.article-content ul, .article-content ol { margin: 16px 0; padding-left: 24px; }
+.article-content li { margin: 8px 0; }
+
+.article-content blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 20px;
+  margin: 24px 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.figure {
+  margin: 32px 0;
+  text-align: center;
+}
+.figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-md);
+}
+.figure figcaption {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  background: var(--bg-foundation);
+  border-top: 1px solid var(--border-subtle);
+  padding: 80px 48px 40px;
+  margin-top: 80px;
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 64px;
+}
+
+.footer-brand .site-brand { display: inline-block; margin-bottom: 16px; }
+.footer-tagline {
+  color: var(--text-tertiary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.footer-nav h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+.footer-nav ul { list-style: none; }
+.footer-nav li { margin: 10px 0; }
+.footer-nav a { color: var(--text-secondary); }
+.footer-nav a:hover { color: var(--accent-bronze); }
+
+.footer-contact h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+.footer-contact p { color: var(--text-tertiary); margin: 10px 0; font-size: 0.9375rem; }
+.footer-contact a { color: var(--text-secondary); }
+.footer-contact a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 768px) {
+  .page-container, .page-narrow, .header-inner { padding: 0 24px; }
+  .site-footer { padding: 60px 24px 32px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .article-header { padding: 120px 0 60px; }
+  .article-content { padding-bottom: 80px; }
+  .nav-primary { display: none; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header">
+<div class="header-inner">
+<a href="/" class="site-brand">The Agent Lab</a>
+<nav class="nav-primary">
+<a href="/blog/" class="nav-link active">Blog</a>
+<a href="/services/" class="nav-link">Services</a>
+<a href="/kits/" class="nav-link">Kits</a>
+</nav>
+</div>
+</header>
+
+<main id="main" class="page-narrow">
+<article>
+<header class="article-header">
+<div class="article-meta">
+<time datetime="2026-09-18">September 18, 2026</time>
+<span>Ashrey</span>
+</div>
+<h1 class="article-title">Claude Code Projects Gets Parallel Agents: A Coordinator, Shared Memory, and Plugin Evals</h1>
+<p class="article-dek">Anthropic redesigned Claude Code Projects to run parallel agent threads with a coordinator, shared memory, and a project library. Plus: <code>claude plugin eval</code> brings CI-grade testing to agent extensions.</p>
+</header>
+
+<div class="article-content">
+<p>On September 17, Anthropic shipped the most substantial change to Claude Code since auto mode went default: a redesigned <strong>Projects</strong> experience that turns a project into a persistent, multi-threaded workspace where a coordinator splits a goal into parallel cloud sessions, each a full Claude Code instance running on Opus by default. The beta is live for select Pro and Max subscribers.</p>
+
+<p>At the same time, <code>claude plugin eval</code> landed in v2.1.269 (September 11), giving plugin authors a reproducible way to score their extensions against a no-plugin baseline, with JSON and HTML reports, configurable graders, and exit codes that work as CI gates.</p>
+
+<p>Together, these two releases signal a shift: Claude Code is becoming a <strong>parallel agent runtime</strong>, and the tooling around it is maturing toward production-grade evaluation.</p>
+
+<h2>What Changed in Projects</h2>
+
+<p>The old Projects model was a collection of manually managed sessions. You opened a project, started a session, worked, closed it. Context lived in the session. If you wanted parallelism, you opened multiple terminals and copied context between them.</p>
+
+<p>The new model introduces three primitives:</p>
+
+<ul>
+<li><strong>Coordinator</strong> — A lead agent that receives your goal, decomposes it into independent threads, assigns each thread to a cloud session, and tracks progress.</li>
+<li><strong>Parallel threads</strong> — Each thread is a full Claude Code cloud session (running on Opus by default) with its own working directory, git branch, and tool access. Threads run concurrently, modify code independently, run tests, and open pull requests.</li>
+<li><strong>Shared memory + project library</strong> — A persistent knowledge layer that survives across threads. Files, artifacts, decisions, and context written by one thread are visible to the coordinator and other threads.</li>
+</ul>
+
+<p>The unit of work shifts from "a session" to "a project goal." You describe what you want built. The coordinator plans, spawns threads, monitors them, merges results, and presents a unified outcome.</p>
+
+<h2>How the Coordinator Works</h2>
+
+<p>Based on the beta documentation and early access reports, the flow looks like this:</p>
+
+<ol>
+<li>You create or open a Project and state a goal (e.g., "Add user authentication with JWT, refresh tokens, and rate limiting to the API").</li>
+<li>The coordinator analyses the codebase, identifies independent workstreams (auth middleware, token service, rate limiter, tests, docs), and spawns a thread per workstream.</li>
+<li>Each thread gets a fresh cloud session on Opus, a dedicated git branch, and access to the project library.</li>
+<li>Threads execute in parallel. They can read shared memory, write artifacts to the library, and push commits to their branches.</li>
+<li>The coordinator monitors thread health, resolves git merge conflicts when threads touch overlapping files, and synthesizes a final result — typically a set of PRs ready for review.</li>
+</ol>
+
+<p>This is not "Claude Code with multiple tabs." It is a <strong>multi-agent system</strong> where the coordinator is itself an agent, and the threads are agents. The coordinator does not just dispatch tasks; it reasons about dependencies, detects conflicts, and steers progress.</p>
+
+<h2>Shared Memory: The Missing Piece for Long-Running Work</h2>
+
+<p>Before this, context persistence across sessions was manual — you copied files, wrote notes, or relied on git history. The project library changes that:</p>
+
+<ul>
+<li><strong>Files and artifacts</strong> written by any thread persist in the library. A thread that builds a type definition can publish it; another thread consuming that API reads it from the library.</li>
+<li><strong>Decisions and rationale</strong> are stored explicitly. The coordinator can record "chose JWT over sessions because..." and future threads inherit that context.</li>
+<li><strong>Cross-repo work</strong> is supported. A project can span multiple repositories; the library sits above them.</li>
+</ul>
+
+<p>This makes Projects viable for work that spans days or weeks — refactors, feature epics, migrations — where a single session would hit context limits or lose thread.</p>
+
+<h2>Plugin Evals: CI for Agent Extensions</h2>
+
+<p>While Projects handles orchestration, <code>claude plugin eval</code> handles verification. Released September 11 in v2.1.269, it runs a plugin's eval suite against Claude Code and produces scored, reproducible results.</p>
+
+<p>Key capabilities:</p>
+
+<ul>
+<li><strong>No-plugin baseline</strong> — Every case runs with and without the plugin. The delta tells you whether the plugin actually helps.</li>
+<li><strong>Six grader types</strong> — Exact match, semantic similarity, JSON schema validation, code execution, LLM-as-judge, and custom graders.</li>
+<li><strong>Configurable models</strong> — Pin the agent model (<code>--model claude-sonnet-5</code>) and judge model (<code>--judge-model claude-haiku-4-5</code>) so scores stay comparable over time.</li>
+<li><strong>CI-ready exit codes</strong> — 0 = all cases above threshold, 1 = at least one below, 2 = cost ceiling hit. The <code>--threshold</code> flag (default 1.0) sets the pass line.</li>
+<li><strong>Cost control</strong> — <code>--max-cost-usd</code> caps spend; partial results are returned if hit.</li>
+<li><strong>Reports</strong> — JSON (<code>--json results.json</code>) for archiving, HTML (<code>--report report.html</code>) for human review, with per-grader verdicts and judge votes.</li>
+</ul>
+
+<p>A documented CI invocation:</p>
+
+<pre><code>claude plugin eval . \
+  --trust-plugin \
+  --json results.json \
+  --threshold 0.8 \
+  --model claude-sonnet-5 \
+  --judge-model claude-haiku-4-5 \
+  --no-publish \
+  --max-cost-usd 20
+</code></pre>
+
+<p>This is the first time agent extensions have had a standard, reproducible evaluation harness. It plugs into GitHub Actions, GitLab CI, or any runner that can execute the CLI.</p>
+
+<h2>What This Means for Developers</h2>
+
+<p><strong>Projects changes how you plan work.</strong> Instead of breaking a feature into sequential tasks for one agent, you describe the outcome and let the coordinator parallelize. The mental model shifts from "I drive the agent" to "I define the goal; the system orchestrates the agents."</p>
+
+<p><strong>Plugin evals change how you ship extensions.</strong> You can now gate merges on eval scores. A plugin that regresses on a test case fails the build. This is table stakes for any plugin you depend on in production.</p>
+
+<p><strong>Both features are beta.</strong> Projects is gated to select Pro and Max users. Plugin evals are available to all on v2.1.269+. Expect rough edges: coordinator plans may need correction, merge conflicts may require manual resolution, eval flakiness exists (the docs note results vary between runs).</p>
+
+<h2>What to Watch</h2>
+
+<ul>
+<li><strong>General availability of Projects.</strong> The beta is limited. Wider rollout timing is unannounced.</li>
+<li><strong>Opus-by-default pricing.</strong> Parallel Opus sessions multiply cost. Anthropic has not published per-thread pricing for Projects.</li>
+<li><strong>Eval stability.</strong> The <code>--runs</code> flag (multiple runs per case) mitigates variance but increases cost. Best practices for threshold-setting will emerge.</li>
+<li><strong>Integration with MCP.</strong> Projects threads are full Claude Code sessions. They can spawn MCP servers, call tools, and use the project library as a shared context store — effectively making the library an MCP-compatible memory layer.</li>
+</ul>
+
+<h2>Practical Next Steps</h2>
+
+<ol>
+<li>If you have Pro or Max, check for the Projects beta in your Claude Code UI. Try a small multi-file refactor as a first test.</li>
+<li>If you maintain a Claude Code plugin, add an eval suite and wire <code>claude plugin eval</code> into CI. Start with <code>--threshold 0.8</code> and <code>--runs 3</code>.</li>
+<li>If you build on MCP, consider how the project library could serve as a shared memory layer for your own multi-agent workflows.</li>
+</ol>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</div>
+</article>
+</main>
+
+<footer class="site-footer">
+<div class="footer-grid">
+<div class="footer-brand">
+<a href="/" class="site-brand">The Agent Lab</a>
+<p class="footer-tagline">Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+</div>
+<nav class="footer-nav">
+<h4>Navigate</h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/services/">Services</a></li>
+<li><a href="/kits/">Kits</a></li>
+</ul>
+</nav>
+<div class="footer-contact">
+<h4>Contact</h4>
+<p><a href="mailto:ashrey@theagentlab.site">ashrey@theagentlab.site</a></p>
+<p><a href="https://github.com/M-Ashrey">GitHub</a> · <a href="https://linkedin.com/in/mohamed-ashrey">LinkedIn</a> · <a href="https://youtube.com/@TheAgentLab">YouTube</a></p>
+</div>
+</div>
+<div class="footer-bottom">
+<span>&copy; 2026 The Agent Lab. All rights reserved.</span>
+<span><a href="/privacy/" style="color:inherit">Privacy</a> · <a href="/terms/" style="color:inherit">Terms</a></span>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP Servers Are Designed Secure — But Almost None Can Prove It | The Agent Lab</title>
+<meta name="description" content="Leslie Kadenge read 13 production MCP servers. The ecosystem hardened fast — annotations, path handling, least privilege are table stakes. The gap: nobody can independently verify it.">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-24-mcp-security-verification-gap/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP Servers Are Designed Secure — But Almost None Can Prove It">
+<meta property="og:description" content="Leslie Kadenge read 13 production MCP servers. The ecosystem hardened fast — annotations, path handling, least privilege are table stakes. The gap: nobody can independently verify it.">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-24-mcp-security-verification-gap/og.png">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-24-mcp-security-verification-gap/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP Servers Are Designed Secure — But Almost None Can Prove It">
+<meta name="twitter:description" content="Leslie Kadenge read 13 production MCP servers. The ecosystem hardened fast — annotations, path handling, least privilege are table stakes. The gap: nobody can independently verify it.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-24-mcp-security-verification-gap/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MCP Servers Are Designed Secure — But Almost None Can Prove It",
+  "description": "Leslie Kadenge read 13 production MCP servers. The ecosystem hardened fast — annotations, path handling, least privilege are table stakes. The gap: nobody can independently verify it.",
+  "image": "https://theagentlab.site/blog/2026-09-24-mcp-security-verification-gap/og.png",
+  "datePublished": "2026-09-24",
+  "dateModified": "2026-09-24",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-24-mcp-security-verification-gap/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/">THE AGENT LAB</a>
+<nav>
+<a href="/blog/">Blog</a>
+<a href="/services/">Services</a>
+<a href="/kits/">Kits</a>
+</nav>
+</div>
+</header>
+<main class="wrap">
+<article class="post">
+<header class="post-header">
+<span class="post-date">September 24, 2026</span>
+<h1>MCP Servers Are Designed Secure — But Almost None Can Prove It</h1>
+<p class="post-dek">Leslie Kadenge read 13 production MCP servers. The ecosystem hardened fast — annotations, path handling, least privilege are table stakes. The gap: nobody can independently verify it.</p>
+</header>
+<div class="post-content">
+<p>Last month Leslie Kadenge published something rare: a security review of <a href="https://les-k.github.io/field-notes.html">13 production MCP servers</a>, all shipped by funded companies and actively maintained. Not toy projects. Not proofs of concept. Real servers handling real traffic.</p>
+
+<p>He went in expecting the picture the security-tooling vendors paint: unguarded destructive tools, path traversal everywhere, prompt injection straight through to the model. That's not what he found.</p>
+
+<h2>The ecosystem hardened faster than the fear narrative admits</h2>
+
+<p>The single most encouraging result: <code>ToolAnnotations</code> — the machine-readable hints (<code>readOnlyHint</code>, <code>destructiveHint</code>, <code>openWorldHint</code>) that let a client decide which tools to gate — have gone from rare to expected among serious servers.</p>
+
+<p>One cost-management server registers 127 tools through a wrapper whose TypeScript type makes all three hints <strong>non-optional</strong>. You physically cannot add a tool to that codebase without declaring whether it is read-only, destructive, and open-world. 57 of those tools mutate state; not one is missing a hint. Not discipline — a type that refuses to compile without the answer.</p>
+
+<p>A project-management server marks <code>destructive=True</code> on every delete action <strong>and ships a conformance test that fails the build</strong> if a delete is ever added without it. The guarantee is not "we remembered"; it is "CI won't let us forget." A notebook server that literally executes code annotates all eighteen of its tools. An enterprise productivity server derives a read-only <em>mode</em> by filtering the exposed tool list on the <code>readOnlyHint</code>, so a locked-down deployment can't call a mutating tool because the mutating tools aren't offered.</p>
+
+<p>The lesson: annotations are table stakes now. Shipping without them no longer reads as "early" — it reads as "behind."</p>
+
+<h2>Path handling is mostly done right</h2>
+
+<p>The classic MCP file-write bug: a tool takes a caller-supplied path, resolves it, and writes — without checking the result stayed inside an allowed directory. It's easy to get subtly wrong.</p>
+
+<p>Most servers that touch the filesystem now get it right. The best example: a mobile-automation server whose screenshot tool <strong>resolves symlinks first and then checks the resolved path against an allowlist of roots</strong> — case-insensitively on Windows, which is the detail people miss. Resolve, <em>then</em> check; check the destination, not the link.</p>
+
+<h2>Where the gaps actually are</h2>
+
+<p>They exist, but they're specific, and they cluster in three places.</p>
+
+<h3>1. The README–reality gap</h3>
+
+<p>A server states a safety property in prose — "read only by default," "hard to misuse" — and it's <em>true today</em> but nothing enforces it. No annotation declares it, so a client can't act on it; and sometimes a full write path sits in the codebase, unreachable but written and waiting, one wired-up call away from making the README false.</p>
+
+<p>What's missing is the machine check that keeps the promise real after the next contributor, or the next fork.</p>
+
+<h3>2. Untrusted content returned unmarked</h3>
+
+<p>Servers whose purpose is reading the open web frequently return page content into the model's context with nothing marking it as untrusted. That's the product working as designed; the gap is that <code>openWorldHint</code> exists to say "what comes back is not under your user's control" and it often goes undeclared. On a tool that reads arbitrary pages, that hint is the difference between a host that treats the result as data and one that treats it as instructions.</p>
+
+<h3>3. The occasional real hole</h3>
+
+<p>One server let a caller choose the output path for a written result with no containment at all — a write-anywhere primitive reachable through ordinary use, triggered by content the server was designed to read. That one was reported privately. It was the exception across thirteen servers, not the rule.</p>
+
+<h2>The gap worth money</h2>
+
+<blockquote>
+<p>Funded MCP servers are now, overwhelmingly, <em>designed</em> securely. Almost none of them can <em>show</em> that they are.</p>
+</blockquote>
+
+<p>The teams have internalised the practices — annotations, allowlists, least-privilege, read-only modes. What they lack, nearly universally, is independent verification: a second pair of eyes that read the whole thing and wrote down what they found, with a test behind each finding. Their own CI proves their own assumptions. It cannot prove the assumption they didn't think to make.</p>
+
+<p>That gap is not a criticism. It's the normal state of any codebase that grew faster than anyone had time to audit it. And it's exactly the thing an enterprise customer's security questionnaire asks about — not "is your code good?" but "who checked it, and can I see what they found?"</p>
+
+<h2>Why automated scanners aren't the answer</h2>
+
+<p>While Leslie was writing this, an automated index that scores public MCP servers for trust graded one of his own servers as deficient — its three tools flagged as "missing" their annotation hints — on a server that in fact declares all four hints, correctly, on every tool, including the destructive one.</p>
+
+<p>The scanner had matched the protocol's camelCase hint names (<code>readOnlyHint</code>) against the source, which, being Python, spells them in snake_case (<code>read_only_hint</code>) exactly as the SDK requires, and reported them absent. A tool that cannot reliably tell whether a safeguard is even <em>present</em> is in no position to tell you whether it is <em>correct</em>.</p>
+
+<p>That's the whole difference between scanning a server and reading one — and, for the person whose customer is asking, it's the difference worth paying for.</p>
+
+<h2>What this means for you</h2>
+
+<p><strong>If you're building an MCP server:</strong> the bar has risen. Annotations and correct path handling are no longer things that make you look careful; their absence is a thing that makes you look behind. The good news: the practices are now well established enough to copy from the servers named in Leslie's review.</p>
+
+<p><strong>If you sell software with an MCP server in it:</strong> your code is probably fine. The question you will be asked is not whether it is fine, but whether anyone independent can say so. Right now, for almost everyone, the honest answer is no — and that answer is worth closing, because the person asking is usually a customer you're trying to win.</p>
+
+<p><strong>If you're buying or integrating:</strong> don't trust a badge. Ask for the readout. If the vendor can't produce a document that names the tools, names the findings, and attaches a test to each one — keep looking.</p>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</div>
+</article>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<p>&copy; 2026 The Agent Lab. All rights reserved.</p>
+</div>
+</footer>
+</body>
+</html>

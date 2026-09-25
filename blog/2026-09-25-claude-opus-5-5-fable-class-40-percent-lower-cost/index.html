@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Opus 5.5: Fable-Class Intelligence at 40% Lower Cost — What Changed for Builders | The Agent Lab</title>
+<meta name="description" content="Anthropic shipped Claude Opus 5.5 on September 22, 2026. Fable 5.1-level performance at roughly 40% less running cost than Opus 5. Here's what changed for developers building on the Anthropic stack.">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-25-claude-opus-5-5-fable-class-40-percent-lower-cost/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Opus 5.5: Fable-Class Intelligence at 40% Lower Cost — What Changed for Builders">
+<meta property="og:description" content="Anthropic shipped Claude Opus 5.5 on September 22, 2026. Fable 5.1-level performance at roughly 40% less running cost than Opus 5. Here's what changed for developers building on the Anthropic stack.">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-25-claude-opus-5-5-fable-class-40-percent-lower-cost/og.png">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-25-claude-opus-5-5-fable-class-40-percent-lower-cost/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Opus 5.5: Fable-Class Intelligence at 40% Lower Cost — What Changed for Builders">
+<meta name="twitter:description" content="Anthropic shipped Claude Opus 5.5 on September 22, 2026. Fable 5.1-level performance at roughly 40% less running cost than Opus 5. Here's what changed for developers building on the Anthropic stack.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-25-claude-opus-5-5-fable-class-40-percent-lower-cost/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Claude Opus 5.5: Fable-Class Intelligence at 40% Lower Cost — What Changed for Builders",
+  "description": "Anthropic shipped Claude Opus 5.5 on September 22, 2026. Fable 5.1-level performance at roughly 40% less running cost than Opus 5. Here's what changed for developers building on the Anthropic stack.",
+  "image": "https://theagentlab.site/blog/2026-09-25-claude-opus-5-5-fable-class-40-percent-lower-cost/og.png",
+  "datePublished": "2026-09-25",
+  "dateModified": "2026-09-25",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-25-claude-opus-5-5-fable-class-40-percent-lower-cost/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/">THE AGENT LAB</a>
+<nav>
+<a href="/blog/">Blog</a>
+<a href="/services/">Services</a>
+<a href="/kits/">Kits</a>
+</nav>
+</div>
+</header>
+<main class="wrap">
+<article class="post">
+<header class="post-header">
+<span class="post-date">September 25, 2026</span>
+<h1>Claude Opus 5.5: Fable-Class Intelligence at 40% Lower Cost — What Changed for Builders</h1>
+<p class="post-dek">Anthropic shipped Claude Opus 5.5 on September 22, 2026. Fable 5.1-level performance at roughly 40% less running cost than Opus 5. Here's what changed for developers building on the Anthropic stack.</p>
+</header>
+<div class="post-content">
+<p>Anthropic shipped Claude Opus 5.5 on September 22, 2026. The headline is simple: Fable 5.1-level performance on most tasks at roughly 40% less running cost than Opus 5. But the details matter for anyone shipping on the Anthropic stack.</p>
+
+<h2>The Pricing Shift</h2>
+
+<p>Standard API pricing lands at $4 per million input tokens and $20 per million output tokens — a 20% drop from Opus 5's $5/$25. Cache reads fall from $0.50 to $0.20 per million tokens. The 40% typical-workload savings comes from both lower per-token rates and fewer tokens used per task.</p>
+
+<p>A new Fast mode runs up to 2.5x faster at 2x the standard price ($8/$40), available on the Claude API and in Claude Code only — not on Bedrock, Google Cloud Vertex, Azure AI Foundry, or Claude Platform on AWS.</p>
+
+<h2>Four Breaking Changes from Opus 5</h2>
+
+<p>The migration guide lists four breaking changes that affect code already running on Opus 5:</p>
+
+<ol>
+<li>
+<p><strong>Thinking cannot be disabled</strong>. Opus 5.5 always thinks. The <code>thinking: { "type": "adaptive" }</code> parameter is now mandatory behavior, not optional. Requests that previously ran without thinking will now incur thinking tokens.</p>
+</li>
+<li>
+<p><strong>Forced tool use returns an error</strong>. The pattern of forcing a specific tool via <code>tool_choice: { "type": "tool", "name": "..." }</code> now errors. The model decides its own tool calls.</p>
+</li>
+<li>
+<p><strong>Thinking blocks are tied to the model and conversation</strong>. You cannot swap thinking blocks between Opus 5.5 and other models, nor can you freely edit earlier context and replay preserved thinking. For API accounts created on or after August 31, 2026, replaying thinking after editing earlier messages can trigger errors.</p>
+</li>
+<li>
+<p><strong>Computer tool update on Claude API and Google Cloud</strong>. The <code>computer_20251124</code> tool is replaced by <code>computer_toolset_20260801</code> with different response handling. Bedrock retains the old tool.</p>
+</li>
+</ol>
+
+<h2>Preserved Thinking — The New Default</h2>
+
+<p>Opus 5.5 introduces preserved thinking: the model's reasoning blocks persist across turns and are billed once. This changes how you design multi-turn conversations. The thinking is tied to the specific model version and conversation — you cannot migrate thinking blocks to a different model or even a different Opus 5.5 conversation.</p>
+
+<p>For developers, this means chat applications will feel slower on first reply because the model thinks at length before responding. System prompts that instruct thinking behavior now apply to the preserved blocks.</p>
+
+<h2>Fast Mode — Research Preview</h2>
+
+<p>Fast mode is a separate tier: up to 2.5x output speed for 2x the standard API price. It requires the <code>speed: "fast"</code> parameter with the <code>fast-mode-2026-02-01</code> beta header on the Claude API. Temperature, top_p, and top_k must be removed from request payloads when using Fast mode.</p>
+
+<p>This is a research preview — expect changes. It is not available on Bedrock, Vertex, Foundry, or AWS-hosted Claude Platform.</p>
+
+<h2>Migration Checklist</h2>
+
+<p>If you are moving from Opus 5:</p>
+<ul>
+<li>Remove any <code>thinking: { "type": "disabled" }</code> or equivalent — thinking is now mandatory</li>
+<li>Replace forced tool use patterns with prompt engineering or system instructions</li>
+<li>Audit conversation history handling: preserved thinking blocks from Opus 5.5 cannot be read by Opus 5 or other models</li>
+<li>On Claude API and Google Cloud, migrate <code>computer_20251124</code> to <code>computer_toolset_20260801</code></li>
+<li>Test model switching and fallback logic separately — thinking block incompatibility breaks naive fallbacks</li>
+<li>Update pricing calculations: $4/$20 standard, $8/$40 Fast mode, $0.20 cache reads</li>
+</ul>
+
+<h2>What This Means for MCP and Agent Builders</h2>
+
+<p>For developers building on MCP and the agent stack, Opus 5.5 changes the economics of agentic workflows. The 40% cost reduction on typical workloads makes multi-agent orchestration, extended reasoning chains, and high-tool-count servers more viable.</p>
+
+<p>The preserved thinking feature aligns with the MCP 2026-07-28 spec's Multi Round-Trip Requests (MRTR) — both introduce stateful reasoning that persists across protocol turns. An agent that uses MRTR to gather input can now pair it with preserved thinking to avoid re-reasoning on each turn.</p>
+
+<p>The breaking changes are real but manageable. The removal of forced tool use pushes toward better prompt design. The thinking mandate means you pay for reasoning on every turn — budget accordingly.</p>
+
+<h2>The Bottom Line</h2>
+
+<p>Opus 5.5 is the first model where Fable-class capability ships at Opus pricing. For teams that standardized on Opus 5 for cost reasons, the upgrade path is clear but requires code changes. For teams on Fable 5.1, the 40% savings on equivalent work is compelling.</p>
+
+<p>The Fast mode preview signals where Anthropic is heading: latency as a tunable parameter, not a fixed model property. That matters for real-time agent interfaces and user-facing applications.</p>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</div>
+</article>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<p>&copy; 2026 The Agent Lab. All rights reserved.</p>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthropic Donates MCP to the Linux Foundation: What Neutral Governance Means for Server Authors | The Agent Lab</title>
+<meta name="description" content="Anthropic donated the Model Context Protocol to the Agentic AI Foundation under the Linux Foundation. The spec doesn't change — but the governance does. Here's what server authors and enterprise adopters need to know about the new structure, the 146-member coalition, and why the July 2026 stateless spec matters.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-26-anthropic-donates-mcp-linux-foundation-governance/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic Donates MCP to the Linux Foundation: What Neutral Governance Means for Server Authors">
+<meta property="og:description" content="Anthropic donated the Model Context Protocol to the Agentic AI Foundation under the Linux Foundation. The spec doesn't change — but the governance does. Here's what server authors and enterprise adopters need to know.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-26-anthropic-donates-mcp-linux-foundation-governance/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-26-anthropic-donates-mcp-linux-foundation-governance/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab — MCP governance under the Linux Foundation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anthropic Donates MCP to the Linux Foundation: What Neutral Governance Means for Server Authors">
+<meta name="twitter:description" content="Anthropic donated the Model Context Protocol to the Agentic AI Foundation under the Linux Foundation. The spec doesn't change — but the governance does.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-26-anthropic-donates-mcp-linux-foundation-governance/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Anthropic Donates MCP to the Linux Foundation: What Neutral Governance Means for Server Authors",
+  "description": "Anthropic donated the Model Context Protocol to the Agentic AI Foundation under the Linux Foundation. The spec doesn't change — but the governance does. Here's what server authors and enterprise adopters need to know about the new structure, the 146-member coalition, and why the July 2026 stateless spec matters.",
+  "image": "https://theagentlab.site/blog/2026-09-26-anthropic-donates-mcp-linux-foundation-governance/og.png",
+  "datePublished": "2026-09-26",
+  "dateModified": "2026-09-26",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-26-anthropic-donates-mcp-linux-foundation-governance/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+h1 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 16px; }
+h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); margin: 48px 0 16px; }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); margin: 32px 0 12px; }
+
+p { margin-bottom: 16px; max-width: var(--measure); }
+
+a.inline-link {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid var(--border-accent);
+  padding-bottom: 1px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+a.inline-link:hover { border-color: var(--accent-bronze); color: var(--text-primary); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  overflow-x: auto;
+  margin: 24px 0;
+  max-width: var(--measure);
+}
+
+pre code { background: none; padding: 0; border: none; font-size: inherit; }
+
+blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 24px;
+  margin: 24px 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+  max-width: var(--measure);
+}
+
+ul, ol { margin: 16px 0 16px 24px; max-width: var(--measure); }
+li { margin-bottom: 8px; }
+
+/* ===================================================================
+   NAVIGATION
+   =================================================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 80px 0 40px;
+  text-align: center;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.article-meta time { color: var(--accent-bronze); }
+
+.article-title {
+  max-width: 800px;
+  margin: 0 auto 16px;
+}
+
+.article-dek {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.article-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+
+.article-content h2 { margin-top: 64px; }
+.article-content h3 { margin-top: 48px; }
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-default);
+  margin: 32px 0;
+  box-shadow: var(--shadow-lg);
+}
+
+.article-content figcaption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 8px;
+}
+
+.article-footer {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-default);
+  color: var(--text-tertiary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.tag:hover { border-color: var(--accent-bronze); color: var(--accent-bronze); }
+
+/* ===================================================================
+   CTA
+   =================================================================== */
+.cta {
+  margin: 3rem 0 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #222;
+  text-align: center;
+}
+
+.cta p {
+  font-size: 0.95rem;
+  color: #888;
+  max-width: none;
+}
+
+.cta a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid var(--border-accent);
+  padding-bottom: 1px;
+}
+.cta a:hover { border-color: var(--accent-bronze); color: var(--text-primary); }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.footer {
+  padding: 64px 0 32px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 64px;
+}
+
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+.footer-links a:hover { color: var(--accent-bronze); }
+
+.footer-copyright {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+<div class="nav-inner">
+<a href="/" class="nav-brand" aria-label="The Agent Lab home">The Agent Lab</a>
+<ul class="nav-links">
+<li><a href="/">Home</a></li>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/services/">Services</a></li>
+<li><a href="/kits/">Kits</a></li>
+</ul>
+</div>
+</nav>
+
+<main id="main" role="main">
+<article class="article">
+<header class="article-header">
+<div class="article-meta">
+<time datetime="2026-09-26">September 26, 2026</time>
+<span aria-hidden="true">·</span>
+<span>By Ashrey</span>
+</div>
+<h1 class="article-title">Anthropic Donates MCP to the Linux Foundation: What Neutral Governance Means for Server Authors</h1>
+<p class="article-dek">The Model Context Protocol moved under the Agentic AI Foundation in December 2025. In September 2026 the foundation announced 97 new members — 146 total — and a governing board chaired by David Nalley. The protocol spec is unchanged. The governance layer is not. Here is what shifts for anyone shipping an MCP server today.</p>
+</header>
+
+<div class="article-content">
+<p>On December 9, 2025, Anthropic announced it was donating the Model Context Protocol to the Agentic AI Foundation (AAIF), a directed fund under the Linux Foundation. Co-founders Anthropic, Block, and OpenAI contributed MCP, <code>goose</code>, and <code>AGENTS.md</code> respectively. Google, Microsoft, AWS, Cloudflare, and Bloomberg joined as platinum supporters.</p>
+
+<p>The announcement was significant, but the practical impact on server authors was deferred. Nine months later, the foundation published its first major membership update: 97 new organizations joined in a single cohort, bringing the total to 146 members. The governing board, chaired by David Nalley (AWS Director of Developer Experience), is now seated. Eight platinum sponsors — AWS, Anthropic, Block, Bloomberg, Cloudflare, Google, Microsoft, OpenAI — fund the operations.</p>
+
+<p>For developers building on MCP, the question is not whether the protocol changes — it does not. The question is what the new governance structure unlocks and what constraints it introduces.</p>
+
+<h2>The spec is frozen at the donation boundary</h2>
+
+<p>The MCP specification itself did not change when the donation closed. The 2026-07-28 revision — which made MCP stateless at the protocol layer, removing the <code>initialize/initialized</code> handshake and <code>Mcp-Session-Id</code> sessions — was finalized before the foundation took stewardship. That spec is now the baseline.</p>
+
+<p>Future revisions will follow the Linux Foundation's standard process: RFCs, working group review, and maintainer merges. The governing board approves budgets and project scope; it does not approve or reject individual specification merges. This is the standard split for a directed fund. A platinum membership buys a seat at the budget table, not a veto on the protocol.</p>
+
+<h2>What the foundation actually governs</h2>
+
+<p>The AAIF governs three things that directly affect server authors:</p>
+
+<ul>
+<li><strong>The MCP Registry.</strong> The discoverability layer — server cards, publisher verification, and the <code>registry.modelcontextprotocol.io</code> endpoint — is now foundation infrastructure. Enterprise controls (group policy, MDM support, pre-approved deployments, publisher blocklists, private extension directories) are being built into the registry, not the protocol.</li>
+<li><strong>Conformance testing.</strong> The SEP-2640 scenarios merged September 11, 2026 define five test scenarios for skill discovery. The foundation funds the test harness and CI infrastructure. A server that passes conformance gets a registry badge. This is optional but increasingly expected by enterprise buyers.</li>
+<li><strong>SDK maintenance.</strong> The TypeScript, Python, and Go SDKs (97M monthly downloads combined per the foundation's September metrics) are now foundation projects. Bug fixes and spec-aligning updates are funded. Breaking changes still require the RFC process.</li>
+</ul>
+
+<p>What the foundation does <em>not</em> govern: your server code, your transport choice, your authentication scheme, or your deployment model. Those remain implementation decisions.</p>
+
+<h2>Why the stateless spec matters more than the governance announcement</h2>
+
+<p>The July 2026 spec revision is the practical milestone for server authors. By removing sessions from the protocol layer, every call now carries its own metadata. This enables horizontal HTTP scaling — a single server can now sit behind a load balancer without sticky sessions. It also simplifies gateway implementations: an MCP gateway no longer needs to track session state across upstream servers.</p>
+
+<p>If you are shipping a production MCP server today, the stateless transport is the feature to adopt. The foundation's conformance suite will validate it. The registry will surface it. The governance structure ensures the spec won't be unilaterally rewritten by a single vendor.</p>
+
+<h2>What changes for enterprise adopters</h2>
+
+<p>Before the donation, an enterprise evaluating MCP had to accept vendor risk: Anthropic could pivot, deprecate, or relicense. That risk is now structurally reduced. The protocol lives in a Linux Foundation LLC series. The trademark is held by the foundation. The specification evolution follows an open RFC process with multiple corporate stakeholders.</p>
+
+<p>For regulated industries (finance, healthcare, defense), this is the difference between "we can pilot this" and "we can standardize on this." Bloomberg's public statement on the AAIF launch cited exactly this: MCP as critical infrastructure that now has the governance durability to meet compliance requirements.</p>
+
+<h2>What server authors should do this quarter</h2>
+
+<ol>
+<li><strong>Migrate to the stateless transport.</strong> Drop <code>initialize/initialized</code> and <code>Mcp-Session-Id</code>. Send metadata per request. Test against the SEP-2640 conformance harness.</li>
+<li><strong>Publish a Server Card.</strong> The registry now expects a <code>server.json</code> manifest with name, version, capabilities, transport, and authentication metadata. This is what the registry UI surfaces and what enterprise policy engines consume.</li>
+<li><strong>Run the conformance suite.</strong> It is open source. Passing it gets you the "Conformant" badge on the registry. No one is mandating it yet, but the procurement checklists are being written.</li>
+<li><strong>Watch the A2A working group.</strong> The AAIF is also incubating the Agent-to-Agent (A2A) protocol in parallel. MCP and A2A solve adjacent problems (tool calling vs. agent coordination). Interop patterns will emerge from the working groups.</li>
+</ol>
+
+<h2>The bottom line</h2>
+
+<p>MCP is now neutral infrastructure in the same sense as Kubernetes or Node.js. The protocol spec is stable. The registry, conformance, and SDKs are funded. The governing board manages budgets, not merges. For server authors, the work is the same: build useful servers, adopt the stateless transport, publish Server Cards. The difference is that the rails you are building on now have institutional durability.</p>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</div>
+
+<footer class="article-footer">
+<div class="article-tags">
+<span class="tag">MCP</span>
+<span class="tag">Governance</span>
+<span class="tag">Linux Foundation</span>
+<span class="tag">Agentic AI</span>
+<span class="tag">Protocol</span>
+</div>
+</footer>
+</article>
+</main>
+
+<footer class="footer" role="contentinfo">
+<div class="footer-inner">
+<div class="footer-brand">The Agent Lab</div>
+<ul class="footer-links">
+<li><a href="/">Home</a></li>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/services/">Services</a></li>
+<li><a href="/kits/">Kits</a></li>
+</ul>
+<p class="footer-copyright">© 2026 The Agent Lab</p>
+</div>
+</footer>
+</body>
+</html>

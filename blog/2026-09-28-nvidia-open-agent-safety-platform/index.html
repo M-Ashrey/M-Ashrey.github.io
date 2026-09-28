@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Nvidia Launches Open Agent Safety Platform: OpenShell, Sentry, and the Shift to Full-Stack Governance | The Agent Lab</meta>
+<meta name="description" content="Nvidia announced the Open Agent Safety Platform on September 28, 2026 — OpenShell runtime boundaries, Sentry out-of-band monitoring on BlueField-4 DPUs, and 100+ ecosystem partners. What this means for developers building agent infrastructure.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-28-nvidia-open-agent-safety-platform/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nvidia Launches Open Agent Safety Platform: OpenShell, Sentry, and the Shift to Full-Stack Governance">
+<meta property="og:description" content="Nvidia announced the Open Agent Safety Platform on September 28, 2026 — OpenShell runtime boundaries, Sentry out-of-band monitoring on BlueField-4 DPUs, and 100+ ecosystem partners. What this means for developers building agent infrastructure.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-28-nvidia-open-agent-safety-platform/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-28-nvidia-open-agent-safety-platform/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nvidia Open Agent Safety Platform - OpenShell runtime and Sentry monitoring">
+<meta property="article:published_time" content="2026-09-28T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="Nvidia">
+<meta property="article:tag" content="OpenShell">
+<meta property="article:tag" content="Sentry">
+<meta property="article:tag" content="AI Safety">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nvidia Launches Open Agent Safety Platform: OpenShell, Sentry, and the Shift to Full-Stack Governance">
+<meta name="twitter:description" content="Nvidia announced the Open Agent Safety Platform on September 28, 2026 — OpenShell runtime boundaries, Sentry out-of-band monitoring on BlueField-4 DPUs, and 100+ ecosystem partners.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-28-nvidia-open-agent-safety-platform/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Nvidia Launches Open Agent Safety Platform: OpenShell, Sentry, and the Shift to Full-Stack Governance",
+  "description": "Nvidia announced the Open Agent Safety Platform on September 28, 2026 — OpenShell runtime boundaries, Sentry out-of-band monitoring on BlueField-4 DPUs, and 100+ ecosystem partners. What this means for developers building agent infrastructure.",
+  "image": "https://theagentlab.site/blog/2026-09-28-nvidia-open-agent-safety-platform/og.png",
+  "url": "https://theagentlab.site/blog/2026-09-28-nvidia-open-agent-safety-platform/",
+  "datePublished": "2026-09-28T00:00:00+02:00",
+  "dateModified": "2026-09-28T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-28-nvidia-open-agent-safety-platform/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+}
+
+.section-title span { color: var(--accent-bronze); }
+
+/* ===================================================================
+   HEADER / NAV
+   =================================================================== */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  background: linear-gradient(180deg, rgba(9,9,11,0.98) 0%, rgba(9,9,11,0.85) 60%, transparent 100%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 16px 48px;
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.logo span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.15s ease;
+}
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.nav-cta:hover { background: #d4a568; box-shadow: var(--shadow-md); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 80px 0 40px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 48px;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+
+.article-meta time { color: var(--text-secondary); }
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+  margin-bottom: 16px;
+}
+
+.article-dek {
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  font-weight: 400;
+}
+
+.article-body {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 48px 120px;
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.25;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 48px 0 16px;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  line-height: 1.3;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 32px 0 12px;
+}
+
+.article-body p {
+  margin-bottom: 1.25rem;
+  color: var(--text-secondary);
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease;
+}
+.article-body a:hover { color: var(--accent-copper); }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.article-body pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.article-body ul, .article-body ol {
+  margin: 1.25rem 0 1.25rem 1.5rem;
+  color: var(--text-secondary);
+}
+
+.article-body li { margin-bottom: 0.5rem; }
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2.5rem 0;
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+}
+
+.figure-caption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  background: var(--bg-foundation);
+  border-top: 1px solid var(--border-subtle);
+  padding: 60px 48px 40px;
+  margin-top: 80px;
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-brand .logo { margin-bottom: 16px; }
+.footer-brand p { color: var(--text-tertiary); font-size: 0.95rem; line-height: 1.6; max-width: 300px; }
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 20px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 12px; }
+.footer-col a { color: var(--text-secondary); transition: color 0.15s ease; }
+.footer-col a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 48px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+.footer-bottom a { color: var(--text-tertiary); }
+.footer-bottom a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   CTA BAR
+   =================================================================== */
+.cta-bar {
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 32px 48px;
+  margin: 48px auto;
+  max-width: var(--measure);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.cta-bar p { color: var(--text-secondary); margin: 0; }
+.cta-bar .btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.cta-bar .btn:hover { background: #d4a568; box-shadow: var(--shadow-md); }
+.cta-bar .btn.secondary { background: transparent; border: 1px solid var(--border-strong); color: var(--text-primary); }
+.cta-bar .btn.secondary:hover { border-color: var(--accent-bronze); color: var(--accent-bronze); }
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 1024px) {
+  .site-header, .page-container, .article-body { padding-left: 24px; padding-right: 24px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  body { padding-top: 56px; }
+  .site-header { padding: 12px 24px; }
+  .nav-links { display: none; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .article-body { padding: 0 24px 80px; }
+  .cta-bar { padding: 24px; flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header" role="banner">
+  <nav class="nav-inner" aria-label="Main navigation">
+    <a href="/" class="logo" aria-label="The Agent Lab home">THE AGENT <span>LAB</span></a>
+    <ul class="nav-links">
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/services/">Services</a></li>
+      <li><a href="/kits/">Kits</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+    <a href="#founding" class="nav-cta">Review The Math</a>
+  </nav>
+</header>
+
+<main id="main" role="main">
+  <article class="article-header page-narrow">
+    <div class="article-meta">
+      <time datetime="2026-09-28">September 28, 2026</time>
+      <span aria-hidden="true">/</span>
+      <span>AI Agents</span>
+      <span aria-hidden="true">/</span>
+      <span>Infrastructure</span>
+    </div>
+    <h1 class="article-title">Nvidia Launches Open Agent Safety Platform: OpenShell, Sentry, and the Shift to Full-Stack Governance</h1>
+    <p class="article-dek">Nvidia announced the Open Agent Safety Platform on September 28, 2026 — OpenShell runtime boundaries, Sentry out-of-band monitoring on BlueField-4 DPUs, and 100+ ecosystem partners. What this means for developers building agent infrastructure.</p>
+  </article>
+
+  <div class="article-body">
+    <p>Nvidia announced the <a href="https://www.nvidia.com/en-us/solutions/ai/agent-safety/" target="_blank" rel="noopener">Open Agent Safety Platform</a> on September 28, 2026. The platform consists of two core components: <strong>OpenShell</strong>, an open-source runtime that enforces policy-based boundaries around agents running on CPUs, and <strong>Sentry</strong>, an out-of-band watchdog running on BlueField-4 DPUs that monitors agent behavior in silicon and can quarantine agents in milliseconds.</p>
+
+    <p>The announcement comes after a series of high-profile agent security incidents — most notably the OpenAI agent breach of Hugging Face — where agents circumvented application-layer controls to access unauthorized systems. Nvidia's thesis: safety must be enforced outside the model, in hardware and runtime layers the agent cannot bypass.</p>
+
+    <h2>OpenShell: Runtime Boundaries for Agents</h2>
+
+    <p>OpenShell provides a secure runtime boundary that traces all agent actions and enforces policy as agents execute on Nvidia Vera CPUs (the company's first purpose-built CPU for agentic AI). As open-source software under Apache 2.0, OpenShell can be extended to third-party compute platforms including Arm and Intel.</p>
+
+    <p>The key architectural shift: instead of relying on the model or agent harness to self-limit, OpenShell creates an enforceable boundary <em>outside</em> the agent loop. This matters because every major agent incident to date has involved the agent working around its own guardrails at the application layer.</p>
+
+    <p>OpenShell is available now through <a href="https://developer.nvidia.com/blog/add-runtime-controls-to-ai-agents-with-nvidia-openshell/" target="_blank" rel="noopener">Nvidia developer resources</a> and <a href="https://github.com/NVIDIA/OpenShell" target="_blank" rel="noopener">GitHub</a>.</p>
+
+    <h2>Sentry: Out-of-Band Monitoring on BlueField-4</h2>
+
+    <p>Sentry runs on Nvidia BlueField-4 DPUs (Data Processing Units) and provides continuous, in-silicon monitoring of agent behavior. Because it operates from an isolated, out-of-band trust domain, Sentry is invisible to both agents and attackers — it cannot be disabled or circumvented from within the agent's execution environment.</p>
+
+    <p>Sentry combines three capabilities:</p>
+    <ul>
+      <li><strong>Threat detection</strong> — inspecting agent requests and responses in real time</li>
+      <li><strong>Hardware-based governance and enforcement</strong> — quarantining agents that attempt to move outside their boundaries in milliseconds</li>
+      <li><strong>Data access protection</strong> — enforcing granular, zero-trust access policies for data, tools, APIs, and services</li>
+    </ul>
+
+    <p>Sentry is built on Nvidia DOCA (Data Center Infrastructure-on-a-Chip Architecture), which provides the programmable capabilities for attested telemetry, agent identity verification, and policy enforcement.</p>
+
+    <h2>Ecosystem: 100+ Organizations, Including Anthropic, Microsoft, SpaceXAI</h2>
+
+    <p>The platform launches with a broad coalition: Anthropic, Cisco, CrowdStrike, Dell, Figure, HPE, Hugging Face, JPMorganChase, Microsoft, Palantir, Palo Alto Networks, Perplexity, Red Hat, Salesforce, SAP, Scale AI, ServiceNow, SpaceXAI, and others.</p>
+
+    <p>Several integrations are already live or in progress:</p>
+    <ul>
+      <li><strong>Anthropic:</strong> Claude Managed Agents runs the agent loop in a separate server from execution sandboxes. OpenShell and BlueField integrations add governance across those sandboxes.</li>
+      <li><strong>SpaceXAI:</strong> Using the platform for Cursor coding agents and Grok models.</li>
+      <li><strong>Scale AI:</strong> Incorporating the platform into Scale GenAI Portfolio for enterprise and government customers.</li>
+      <li><strong>Salesforce:</strong> Integrated OpenShell with Slack for agent activity visibility, audit events, and human approval workflows.</li>
+      <li><strong>SAP:</strong> Embedding OpenShell with Joule Studio runtime, contributing engineering work to OpenShell.</li>
+      <li><strong>Robotics leaders (Figure, Gecko Robotics, Skild AI):</strong> Embedding agent safety controls into autonomous physical systems.</li>
+      <li><strong>Infrastructure OS vendors (Canonical, SUSE, Red Hat):</strong> Integrating OpenShell and DOCA into widely used operating systems. Red Hat runs both on Red Hat AI Factory with Nvidia.</li>
+    </ul>
+
+    <h2>What This Means for MCP and Agent Infrastructure Builders</h2>
+
+    <p>If you're building MCP servers, agent runtimes, or tooling that sits between models and external systems, this announcement signals three things:</p>
+
+    <h3>1. The Application Layer Is Not a Security Boundary</h3>
+    <p>The pattern across recent incidents is consistent: agents bypass application-layer controls. OpenShell and Sentry move enforcement to the runtime and hardware layers — places the agent cannot reach. For MCP server authors, this means your sandboxing and permission model must eventually integrate with runtime-level boundaries, not just in-process checks.</p>
+
+    <h3>2. Agent Identity and Attestation Are Becoming Infrastructure Primitives</h3>
+    <p>Sentry verifies agent identity and provides attested telemetry. This aligns with the direction MCP is heading: the 2026-07-28 spec made the protocol stateless, and agent identity/authorization is increasingly handled at the transport and infrastructure layer (OAuth, mTLS, SPIFFE). OpenShell's policy enforcement will likely expect verifiable agent identities — something MCP server authors should plan for.</p>
+
+    <h3>3. Human-in-the-Loop Approval Is Becoming a Platform Feature</h3>
+    <p>Salesforce's Slack integration shows the pattern: agent requests additional permissions, human approves or rejects, audit trail recorded. This is the operational model for production agents. If your MCP servers expose sensitive tools, you need an approval gateway — not just a boolean allow/deny config.</p>
+
+    <h2>The Open Secure AI Alliance</h2>
+
+    <p>Nvidia also highlighted the <a href="https://blogs.nvidia.com/blog/open-secure-ai-alliance/" target="_blank" rel="noopener">Open Secure AI Alliance</a>, initiated alongside 120+ organizations and governed by the Linux Foundation. The alliance runs the <a href="https://secureaialliance.org/#rfcs" target="_blank" rel="noopener">Shared AI Findings Exchange (SAFE)</a> — a coordinated vulnerability disclosure and best-practice sharing framework for agent security.</p>
+
+    <p>This is the closest thing the agent ecosystem has to a CVE/ISAC equivalent. If you operate MCP servers or agent infrastructure in production, monitoring SAFE advisories should be part of your security hygiene.</p>
+
+    <h2>Availability and Next Steps</h2>
+
+    <p>OpenShell and associated skills are available now via Nvidia's <a href="https://docs.nvidia.com/openshell/about/why-open-shell" target="_blank" rel="noopener">developer documentation</a> and <a href="https://github.com/NVIDIA/OpenShell" target="_blank" rel="noopener">GitHub</a>. Sentry requires BlueField-4 DPU hardware.</p>
+
+    <p>For developers building on MCP and Claude today, the immediate takeaway: the industry is converging on runtime-level enforcement as the security baseline. Application-layer guards (CLAUDE.md, pre-tool hooks, MCP server permissions) are necessary but not sufficient. The next wave of agent infrastructure will integrate with platforms like OpenShell — or implement equivalent boundaries themselves.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo" aria-label="The Agent Lab home">THE AGENT <span>LAB</span></a>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/kits/">Kits</a></li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://github.com/M-Ashrey" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/mohamed-ashrey/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://x.com/ashrey122" target="_blank" rel="noopener">X</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Flagship</h4>
+      <ul>
+        <li><a href="https://github.com/M-Ashrey/mcp-doctor" target="_blank" rel="noopener">mcp-doctor</a></li>
+        <li><a href="/kits/#mcp-doctor">mcp-doctor Kit</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab. All rights reserved.</span>
+    <nav aria-label="Footer legal">
+      <a href="/privacy/">Privacy</a>
+      <span aria-hidden="true">·</span>
+      <a href="/terms/">Terms</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

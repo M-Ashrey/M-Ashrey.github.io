@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Sonnet 5.5: 30% Faster, Same Price, Now Default in Claude Code | The Agent Lab</title>
+<meta name="description" content="Anthropic released Claude Sonnet 5.5 on September 28, 2026. It runs 30% faster, costs up to 30% less per task, scores 70.6% on Terminal-Bench 4.0 (beating Opus 5.5), and is now the default Sonnet in Claude Code 2.1.284+. Here's what changes for developers.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-10-01-claude-sonnet-5-5-faster-cheaper-agentic-coding/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Sonnet 5.5: 30% Faster, Same Price, Now Default in Claude Code">
+<meta property="og:description" content="Anthropic released Claude Sonnet 5.5 on September 28, 2026. It runs 30% faster, costs up to 30% less per task, scores 70.6% on Terminal-Bench 4.0 (beating Opus 5.5), and is now the default Sonnet in Claude Code 2.1.284+.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-10-01-claude-sonnet-5-5-faster-cheaper-agentic-coding/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-10-01-claude-sonnet-5-5-faster-cheaper-agentic-coding/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab — Claude Sonnet 5.5 release">
+<meta property="article:published_time" content="2026-10-01">
+<meta property="article:author" content="Ashrey">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="Claude Sonnet 5.5">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="Terminal-Bench">
+<meta property="article:tag" content="AI Coding Agents">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Sonnet 5.5: 30% Faster, Same Price, Now Default in Claude Code">
+<meta name="twitter:description" content="Anthropic released Claude Sonnet 5.5 on September 28, 2026. It runs 30% faster, costs up to 30% less per task, scores 70.6% on Terminal-Bench 4.0 (beating Opus 5.5), and is now the default Sonnet in Claude Code 2.1.284+.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-10-01-claude-sonnet-5-5-faster-cheaper-agentic-coding/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Claude Sonnet 5.5: 30% Faster, Same Price, Now Default in Claude Code",
+  "description": "Anthropic released Claude Sonnet 5.5 on September 28, 2026. It runs 30% faster, costs up to 30% less per task, scores 70.6% on Terminal-Bench 4.0 (beating Opus 5.5), and is now the default Sonnet in Claude Code 2.1.284+.",
+  "image": "https://theagentlab.site/blog/2026-10-01-claude-sonnet-5-5-faster-cheaper-agentic-coding/og.png",
+  "datePublished": "2026-10-01",
+  "dateModified": "2026-10-01",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-10-01-claude-sonnet-5-5-faster-cheaper-agentic-coding/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.15s ease;
+}
+.nav-link:hover { color: var(--text-primary); }
+.nav-link:focus-visible { outline: none; color: var(--accent-bronze); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.nav-cta:hover { background: var(--accent-copper); box-shadow: var(--shadow-md); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 120px 0 60px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.article-meta time { font-variant-numeric: tabular-nums; }
+.article-meta .divider { opacity: 0.4; }
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  max-width: 36ch;
+  margin-bottom: 16px;
+}
+
+.article-dek {
+  font-size: 20px;
+  font-weight: 380;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+}
+
+.article-body {
+  padding: 80px 0;
+  max-width: var(--measure);
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 48px 0 16px;
+}
+.article-body h2:first-child { margin-top: 0; }
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 32px 0 12px;
+}
+
+.article-body p {
+  margin-bottom: 20px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease;
+}
+.article-body a:hover { color: var(--accent-copper); }
+
+.article-body ul, .article-body ol {
+  margin: 20px 0 20px 24px;
+}
+.article-body li { margin-bottom: 8px; line-height: 1.7; }
+.article-body li p { margin: 0; }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-surface-1);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  overflow-x: auto;
+  margin: 24px 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.article-body pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+}
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin: 24px 0;
+}
+
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 15px;
+}
+.article-body th, .article-body td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.article-body th {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+}
+.article-body tr:last-child td { border-bottom: none; }
+
+.article-body .callout {
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin: 24px 0;
+}
+.article-body .callout p:last-child { margin-bottom: 0; }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 60px 0 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.footer-brand { grid-column: span 2; }
+
+.footer-brand .nav-wordmark { margin-bottom: 16px; }
+
+.footer-brand p {
+  color: var(--text-tertiary);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 30ch;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 10px; }
+.footer-col a { color: var(--text-secondary); transition: color 0.15s ease; }
+.footer-col a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 48px;
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 48px;
+  padding-right: 48px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: span 2; }
+  .nav-links { display: none; }
+  .page-container, .page-narrow { padding: 0 24px; }
+  .nav-bar { padding: 0 24px; }
+  .footer-bottom { padding-left: 24px; padding-right: 24px; }
+  .footer-grid { padding-left: 24px; padding-right: 24px; }
+}
+
+@media (max-width: 600px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-brand { grid-column: span 1; }
+  .article-title { max-width: none; }
+  .section-title { max-width: none; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav-wordmark" aria-label="The Agent Lab home">The Agent Lab</a>
+  <div class="nav-links">
+    <a href="/blog/" class="nav-link">Blog</a>
+    <a href="/services/" class="nav-link">Services</a>
+    <a href="/kits/" class="nav-link">Kits</a>
+  </div>
+  <a href="https://ko-fi.com/ashrey122" class="nav-cta" target="_blank" rel="noopener">Support</a>
+</nav>
+
+<main id="main" role="main">
+<article>
+<header class="article-header">
+  <div class="page-narrow">
+    <div class="article-meta">
+      <time datetime="2026-10-01">October 1, 2026</time>
+      <span class="divider">|</span>
+      <span>Ashrey</span>
+      <span class="divider">|</span>
+      <span>AI Agents</span>
+    </div>
+    <h1 class="article-title">Claude Sonnet 5.5: 30% Faster, Same Price, Now Default in Claude Code</h1>
+    <p class="article-dek">Anthropic released Claude Sonnet 5.5 on September 28, 2026. It runs 30% faster, costs up to 30% less per task, scores 70.6% on Terminal-Bench 4.0 (beating Opus 5.5's 66.4%), and is now the default Sonnet in Claude Code 2.1.284+.</p>
+  </div>
+</header>
+
+<div class="article-body page-narrow">
+  <p>Anthropic dropped <a href="https://www.anthropic.com/claude-sonnet-5-5" target="_blank" rel="noopener">Claude Sonnet 5.5</a> on September 28. Six days earlier they said it would "follow in the coming weeks." The launch is notable for three reasons: the speed jump is real, the pricing did not move, and Claude Code switched its default Sonnet model to 5.5 in version 2.1.284 (September 28) and 2.1.285 (September 29).</p>
+
+  <h2>What the numbers actually say</h2>
+
+  <p>The headline figures from Anthropic and third-party verification:</p>
+
+  <ul>
+    <li><strong>Terminal-Bench 4.0:</strong> 70.6% — up from Sonnet 5's 10.3%, and above Opus 5.5's 66.4%. This is an agentic coding evaluation that measures multi-step terminal task completion.</li>
+    <li><strong>Speed:</strong> 30%+ faster token generation than Sonnet 5.</li>
+    <li><strong>Cost per task:</strong> Up to 30% less because fewer tokens are burned per completed task.</li>
+    <li><strong>API pricing:</strong> Unchanged at $2/M input, $10/M output, $0.20/M cache reads, $2.50/M cache writes.</li>
+    <li><strong>Context window:</strong> 1M tokens (up from 200K on Sonnet 5).</li>
+    <li><strong>Max output:</strong> 128K tokens.</li>
+  </ul>
+
+  <p>The Terminal-Bench jump is the eye-catcher. Sonnet 5.5 beats the flagship Opus 5.5 on this specific benchmark while costing half as much per million output tokens (Opus 5.5 is $15/M output). For developers running agentic coding loops — where the model drives a terminal, reads files, runs tests, iterates — this is the benchmark that maps closest to daily experience.</p>
+
+  <h2>Claude Code made it default immediately</h2>
+
+  <p>Claude Code 2.1.284 (September 28) switched the default Sonnet model to <code>claude-sonnet-5-5</code>. Version 2.1.285 (September 29) added <code>--effort ultracode</code> as a first-class toggle and a <code>--desktop</code> flag for the native installer. If you run <code>claude</code> today without pinning a model, you are on Sonnet 5.5.</p>
+
+  <p>This matters because most developers do not pin models. They run <code>claude</code>, get whatever the default is, and judge the experience by that. The default-switch is a signal: Anthropic believes Sonnet 5.5 is now the better daily driver for the majority of coding workloads.</p>
+
+  <h2>What "30% less per task" means in practice</h2>
+
+  <p>The per-task cost claim is not an API price cut — the per-token rates are identical to Sonnet 5. The savings come from <strong>fewer tokens spent per completed task</strong>. Faster generation means fewer thinking tokens. Higher Terminal-Bench scores mean fewer failed attempts and fewer correction loops. In agentic workflows where a single task can burn 50K-200K tokens across multiple tool calls, a 30% reduction in token burn per task compounds fast.</p>
+
+  <p>Cache pricing is also relevant: $0.20/M for cache reads means long-running agents that re-read the same context (codebase, specs, prior turns) pay pennies. The 1M context window makes this practical for whole-repo context.</p>
+
+  <h2>Where it fits in the model lineup</h2>
+
+  <table>
+    <thead>
+      <tr><th>Model</th><th>Input $/M</th><th>Output $/M</th><th>Context</th><th>Terminal-Bench 4.0</th><th>Positioning</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Sonnet 5</td><td>$2</td><td>$10</td><td>200K</td><td>10.3%</td><td>Previous default</td></tr>
+      <tr><td><strong>Sonnet 5.5</strong></td><td><strong>$2</strong></td><td><strong>$10</strong></td><td><strong>1M</strong></td><td><strong>70.6%</strong></td><td><strong>New default Sonnet</strong></td></tr>
+      <tr><td>Opus 5.5</td><td>$15</td><td>$75</td><td>1M</td><td>66.4%</td><td>Flagship, complex reasoning</td></tr>
+    </tbody>
+  </table>
+
+  <p>Sonnet 5.5 is now the sweet spot for agentic coding: it beats the flagship on the coding benchmark that matters most for agents, costs 1/7.5x the output price of Opus 5.5, and has the same 1M context window. Opus 5.5 still leads on GDPval-AA (a broader real-world work benchmark) by about two points, so for non-coding complex reasoning Opus keeps the crown.</p>
+
+  <h2>What to do right now</h2>
+
+  <ol>
+    <li><strong>Update Claude Code:</strong> <code>npm update -g @anthropic-ai/claude-code</code> or reinstall the native binary. You want 2.1.284 or newer.</li>
+    <li><strong>Don't pin Sonnet 5:</strong> If you have <code>ANTHROPIC_DEFAULT_SONNET_MODEL</code> or <code>--model claude-sonnet-5-20261022</code> (or similar) in your workflow, remove it. Let the default carry you forward.</li>
+    <li><strong>Re-evaluate Opus usage:</strong> If you were using Opus 5.5 for coding because Sonnet 5 felt too slow or error-prone, try Sonnet 5.5 for a week. The Terminal-Bench gap suggests you may not need Opus for coding tasks.</li>
+    <li><strong>Watch cache costs:</strong> With 1M context, cache reads become a major lever. Structure your agent prompts to maximize cache hit rates — prefix stable context (repo map, specs, conventions) consistently.</li>
+  </ol>
+
+  <h2>One caveat: benchmarks are not production</h2>
+
+  <p>Terminal-Bench 4.0 is a curated evaluation. Your codebase, your tooling, your agent prompts, and your failure modes are different. The 70.6% number is a signal, not a guarantee. What changed is that the <em>default</em> model for the most popular AI coding CLI is now the one that scores highest on the most relevant agentic coding benchmark — at the same price. That is a genuine step forward.</p>
+
+  <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+  <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</div>
+</article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-wordmark">The Agent Lab</div>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/kits/">Kits</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://github.com/M-Ashrey" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/mohamed-ashrey" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="/terms/">Terms</a></li>
+        <li><a href="/refunds/">Refunds</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab</span>
+    <span>Built with evidence, not hype</span>
+  </div>
+</footer>
+</body>
+</html>

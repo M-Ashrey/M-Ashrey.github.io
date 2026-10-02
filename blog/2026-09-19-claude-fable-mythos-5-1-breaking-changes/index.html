@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Fable 5.1 and Mythos 5.1: 75% Cheaper Cache Reads, Forced Tool Use Removed, Watermarked Outputs | The Agent Lab</title>
+<meta name="description" content="Anthropic shipped Fable 5.1 and Mythos 5.1 on September 1 with three breaking API changes, 75% cheaper cache reads, and mandatory EU AI Act watermarks. Here's what developers building on the API need to change.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-19-claude-fable-mythos-5-1-breaking-changes/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Fable 5.1 and Mythos 5.1: 75% Cheaper Cache Reads, Forced Tool Use Removed, Watermarked Outputs">
+<meta property="og:description" content="Anthropic shipped Fable 5.1 and Mythos 5.1 on September 1 with three breaking API changes, 75% cheaper cache reads, and mandatory EU AI Act watermarks. Here's what developers building on the API need to change.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-19-claude-fable-mythos-5-1-breaking-changes/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-19-claude-fable-mythos-5-1-breaking-changes/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Claude Fable 5.1 Mythos 5.1 breaking changes watermarks cache pricing">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Fable 5.1 and Mythos 5.1: 75% Cheaper Cache Reads, Forced Tool Use Removed, Watermarked Outputs">
+<meta name="twitter:description" content="Anthropic shipped Fable 5.1 and Mythos 5.1 on September 1 with three breaking API changes, 75% cheaper cache reads, and mandatory EU AI Act watermarks. Here's what developers building on the API need to change.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-19-claude-fable-mythos-5-1-breaking-changes/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Claude Fable 5.1 and Mythos 5.1: 75% Cheaper Cache Reads, Forced Tool Use Removed, Watermarked Outputs",
+  "description": "Anthropic shipped Fable 5.1 and Mythos 5.1 on September 1 with three breaking API changes, 75% cheaper cache reads, and mandatory EU AI Act watermarks. Here's what developers building on the API need to change.",
+  "image": "https://theagentlab.site/blog/2026-09-19-claude-fable-mythos-5-1-breaking-changes/og.png",
+  "url": "https://theagentlab.site/blog/2026-09-19-claude-fable-mythos-5-1-breaking-changes/",
+  "datePublished": "2026-09-19T00:00:00+02:00",
+  "dateModified": "2026-09-19T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-19-claude-fable-mythos-5-1-breaking-changes/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+}
+
+.section-dek {
+  margin-top: 16px;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  line-height: 1.6;
+}
+
+/* ===================================================================
+   HEADER / NAV
+   =================================================================== */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.site-brand {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.site-brand:hover { color: var(--accent-bronze); }
+
+.nav-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--text-primary); background: var(--bg-surface-1); }
+.nav-link.active { color: var(--accent-bronze); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 160px 0 80px;
+  text-align: center;
+}
+
+.article-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  font-weight: 400;
+  max-width: var(--measure);
+  margin: 0 auto 24px;
+}
+
+.article-dek {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.article-content {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 0 120px;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1.25;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 64px 0 24px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.article-content h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: var(--text-primary);
+  font-weight: 400;
+  margin: 48px 0 16px;
+}
+
+.article-content p { margin: 16px 0; }
+
+.article-content a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+.article-content a:hover { border-color: var(--accent-bronze); }
+
+.article-content strong { color: var(--text-primary); font-weight: 600; }
+
+.article-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-content pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  overflow-x: auto;
+  margin: 24px 0;
+  line-height: 1.6;
+}
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.article-content ul, .article-content ol { margin: 16px 0; padding-left: 24px; }
+.article-content li { margin: 8px 0; }
+
+.article-content blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 20px;
+  margin: 24px 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.figure {
+  margin: 32px 0;
+  text-align: center;
+}
+.figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-md);
+}
+.figure figcaption {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  background: var(--bg-foundation);
+  border-top: 1px solid var(--border-subtle);
+  padding: 80px 48px 40px;
+  margin-top: 80px;
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 64px;
+}
+
+.footer-brand .site-brand { display: inline-block; margin-bottom: 16px; }
+.footer-tagline {
+  color: var(--text-tertiary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.footer-nav h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+.footer-nav ul { list-style: none; }
+.footer-nav li { margin: 10px 0; }
+.footer-nav a { color: var(--text-secondary); }
+.footer-nav a:hover { color: var(--accent-bronze); }
+
+.footer-contact h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+.footer-contact p { color: var(--text-tertiary); margin: 10px 0; font-size: 0.9375rem; }
+.footer-contact a { color: var(--text-secondary); }
+.footer-contact a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 768px) {
+  .page-container, .page-narrow, .header-inner { padding: 0 24px; }
+  .site-footer { padding: 60px 24px 32px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .article-header { padding: 120px 0 60px; }
+  .article-content { padding-bottom: 80px; }
+  .nav-primary { display: none; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header">
+<div class="header-inner">
+<a href="/" class="site-brand">The Agent Lab</a>
+<nav class="nav-primary">
+<a href="/blog/" class="nav-link active">Blog</a>
+<a href="/services/" class="nav-link">Services</a>
+<a href="/kits/" class="nav-link">Kits</a>
+</nav>
+</div>
+</header>
+
+<main id="main" class="page-narrow">
+<article>
+<header class="article-header">
+<div class="article-meta">
+<time datetime="2026-09-19">September 19, 2026</time>
+<span>Ashrey</span>
+</div>
+<h1 class="article-title">Claude Fable 5.1 and Mythos 5.1: 75% Cheaper Cache Reads, Forced Tool Use Removed, Watermarked Outputs</h1>
+<p class="article-dek">Anthropic shipped Fable 5.1 and Mythos 5.1 on September 1 with three breaking API changes, 75% cheaper cache reads, and mandatory EU AI Act watermarks. Here's what developers building on the API need to change.</p>
+</header>
+
+<div class="article-content">
+<p>On September 1, Anthropic released <code>claude-fable-5-1</code> and <code>claude-mythos-5-1</code> — the first model pair under the new Fable/Mythos naming scheme. Base token pricing stays at $10 per million input and $50 per million output. But three breaking API changes, a 75% cut to cache-read costs, and mandatory statistical watermarks on all text output mean existing integrations need attention.</p>
+
+<p>Fable 5.1 is generally available on the Claude API, Amazon Bedrock, Google Cloud Vertex AI, and Microsoft Foundry. Mythos 5.1 remains invite-only through Project Glasswing for vetted cybersecurity defenders and life-sciences researchers. Retirement for Fable 5 is "not sooner than September 1, 2027."</p>
+
+<h2>The Three Breaking Changes</h2>
+
+<p>If you already call Fable 5, three changes return errors where they previously succeeded:</p>
+
+<ul>
+<li><strong>Forced tool use is gone.</strong> Setting <code>tool_choice</code> to <code>{"type": "any"}</code> or a named tool now returns a 400 error. The model decides when to call tools.</li>
+<li><strong>Earlier models cannot read Fable 5.1 thinking blocks.</strong> A router that falls back from Fable 5.1 to an older model mid-conversation drops those blocks. Dropped blocks are not billed.</li>
+<li><strong>Editing earlier turns invalidates thinking blocks.</strong> Changing the system prompt, tools, or any message before a Fable 5.1 thinking block can return a 400 or silently drop the block if you opt in. Treat history as append-only.</li>
+</ul>
+
+<p>The forced-tool-use removal is the most immediate migration. Code that pins <code>tool_choice: { "type": "any" }</code> or <code>{ "type": "tool", "name": "..." }</code> to guarantee a tool call will now error. The documented fix: stop forcing tools. Let the model decide. If you need steering, use the new per-message effort control or turn-scoped system messages (both beta).</p>
+
+<h2>Cache Reads: $0.25/M Instead of $1.00/M</h2>
+
+<p>The headline economics change: prompt cache reads dropped from $1.00 to $0.25 per million tokens — a 75% reduction. This makes long-context, multi-turn workflows dramatically cheaper when the same prefix is reused.</p>
+
+<p>For a 200K-token cached prompt read 50 times, the cache-read bill falls from $50 to $12.50. Base input/output pricing is unchanged, so the savings only apply to the <code>cache_read</code> line item.</p>
+
+<p>This matters most for agents that reuse large system prompts, few-shot examples, or codebase context across many turns. The new rate is 0.025× the standard input rate instead of the usual 0.1×.</p>
+
+<h2>Mandatory Watermarks: EU AI Act Compliance</h2>
+
+<p>Every text response from Fable 5.1 and Mythos 5.1 now carries Anthropic's statistical watermark — a numerical signal detectable by a private API (in preview for eligible parties). This is not optional. It applies on every platform where the model runs: the Claude API, Bedrock, Vertex, Foundry, and claude.ai.</p>
+
+<p>Images and video generated through the code execution tool carry signed C2PA Content Credentials when retrieved through the Files API.</p>
+
+<p>The watermark does not change the meaning, quality, or readability of the output. But it means any text produced by these models is cryptographically attributable. If you're building a product that resells or redistributes model output, factor this into your compliance review.</p>
+
+<h2>Five Additive Beta Features</h2>
+
+<p>Beyond the breaking changes, five new beta capabilities shipped:</p>
+
+<ul>
+<li><strong>Per-message effort control</strong> — Set <code>thinking: { "type": "enabled", "budget_tokens": N, "effort": "high|medium|low" }</code> per message to control compute mid-conversation without busting the prompt cache.</li>
+<li><strong>Turn-scoped system messages</strong> — A system message that applies only to the next turn. Use <code>{ "role": "system", "content": "...", "cache_control": { "type": "ephemeral" } }</code> to inject context for one exchange without rewriting the whole system prompt.</li>
+<li><strong>Visible progress updates</strong> — <code>thinking: { "display": "updates" }</code> surfaces the model's reasoning as readable text between tool calls instead of hiding it.</li>
+<li><strong>Lower cache-read price</strong> — Already covered above.</li>
+<li><strong>Content provenance</strong> — The watermark and C2PA credentials on generated media.</li>
+</ul>
+
+<p>These are additive — they don't break existing code — but they change how you can steer the model. The effort control and turn-scoped system messages are the practical replacements for the removed forced-tool-use pattern.</p>
+
+<h2>Migration Checklist</h2>
+
+<ol>
+<li><strong>Grep for <code>tool_choice</code>.</strong> Any <code>type: "any"</code> or named-tool choice will 400. Remove or replace with effort control.</li>
+<li><strong>Audit history editing.</strong> If your code rewrites the conversation (edits prior messages, swaps system prompts, changes tool sets mid-thread), Fable 5.1 thinking blocks will invalidate. Treat history as append-only.</li>
+<li><strong>Check router fallbacks.</strong> A fallback from Fable 5.1 to an older model drops thinking blocks. If your router does this, expect lost context or 400s.</li>
+<li><strong>Update cost models.</strong> Cache reads are now $0.25/M. Recalculate any workload that leans on prompt caching.</li>
+<li><strong>Review watermark obligations.</strong> If you redistribute output, the watermark travels with it. The detection API is in private preview; contact Anthropic if you need access.</li>
+</ol>
+
+<h2>What Fable 5.1 Improves</h2>
+
+<p>The model scores 52.6% on Terminal-Bench-Science (up from 24.7% for Fable 5), with gains in long-horizon coding, research, and computer use. Anthropic also claims roughly 60% fewer cybersecurity false positives — Fable 5.1 can discover vulnerabilities but declines exploit generation, routing those requests to Opus.</p>
+
+<p>Mythos 5.1 loosens the cyber/biology filters for vetted users. Both models share the same base capabilities; the difference is the safeguard tier.</p>
+
+<h2>What to Watch</h2>
+
+<ul>
+<li><strong>Mythos access.</strong> Project Glasswing is invite-only. No public waitlist timeline.</li>
+<li><strong>Watermark detection API.</strong> Private preview only. General availability date unannounced.</li>
+<li><strong>Eval stability on new betas.</strong> Effort control, turn-scoped system messages, and visible updates are beta. Results vary between runs; the <code>--runs</code> flag in plugin evals mitigates variance but increases cost.</li>
+<li><strong>Opus routing for exploit requests.</strong> Fable 5.1 redirects exploit-generation to Opus. If your workflow expects a refusal, you may get an Opus response instead.</li>
+</ul>
+
+<h2>Practical Next Steps</h2>
+
+<ol>
+<li>Run your test suite against <code>claude-fable-5-1</code>. Expect 400s on forced tool use and any history-rewriting patterns.</li>
+<li>Replace <code>tool_choice: { "type": "any" }</code> with per-message effort control (<code>thinking: { "effort": "high" }</code>) or turn-scoped system messages.</li>
+<li>Recache your prompt templates to benefit from the 75% cache-read discount.</li>
+<li>If you distribute model output, add a watermark detection step to your pipeline once the API is generally available.</li>
+</ol>
+
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+</div>
+</article>
+</main>
+
+<footer class="site-footer">
+<div class="footer-grid">
+<div class="footer-brand">
+<a href="/" class="site-brand">The Agent Lab</a>
+<p class="footer-tagline">Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+</div>
+<nav class="footer-nav">
+<h4>Navigate</h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/services/">Services</a></li>
+<li><a href="/kits/">Kits</a></li>
+</ul>
+</nav>
+<div class="footer-contact">
+<h4>Contact</h4>
+<p><a href="mailto:ashrey@theagentlab.site">ashrey@theagentlab.site</a></p>
+<p><a href="https://github.com/M-Ashrey">GitHub</a> · <a href="https://linkedin.com/in/mohamed-ashrey">LinkedIn</a> · <a href="https://youtube.com/@TheAgentLab">YouTube</a></p>
+</div>
+</div>
+<div class="footer-bottom">
+<span>&copy; 2026 The Agent Lab. All rights reserved.</span>
+<span><a href="/privacy/" style="color:inherit">Privacy</a> · <a href="/terms/" style="color:inherit">Terms</a></span>
+</div>
+</footer>
+</body>
+</html>

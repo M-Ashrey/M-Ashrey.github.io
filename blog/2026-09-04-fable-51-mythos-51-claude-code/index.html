@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Anthropic's Fable 5.1 and Mythos 5.1: What Changed for Developers Building on Claude and MCP | The Agent Lab</title>
+<meta name="description" content="Anthropic released Fable 5.1 and Mythos 5.1 on September 1 with 75% cheaper cache reads, plus Claude Code added managed MCP servers and unattended headless permissions. What matters for developers shipping on this stack.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-04-fable-51-mythos-51-claude-code/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic's Fable 5.1 and Mythos 5.1: What Changed for Developers Building on Claude and MCP">
+<meta property="og:description" content="Anthropic released Fable 5.1 and Mythos 5.1 on September 1 with 75% cheaper cache reads, plus Claude Code added managed MCP servers and unattended headless permissions. What matters for developers shipping on this stack.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-04-fable-51-mythos-51-claude-code/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-04-fable-51-mythos-51-claude-code/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab: Anthropic's Fable 5.1 and Mythos 5.1 release">
+<meta property="article:published_time" content="2026-09-04T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="Claude">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Model Pricing">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anthropic's Fable 5.1 and Mythos 5.1: What Changed for Developers Building on Claude and MCP">
+<meta name="twitter:description" content="Anthropic released Fable 5.1 and Mythos 5.1 on September 1 with 75% cheaper cache reads, plus Claude Code added managed MCP servers and unattended headless permissions. What matters for developers shipping on this stack.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-04-fable-51-mythos-51-claude-code/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Anthropic's Fable 5.1 and Mythos 5.1: What Changed for Developers Building on Claude and MCP",
+  "description": "Anthropic released Fable 5.1 and Mythos 5.1 on September 1 with 75% cheaper cache reads, plus Claude Code added managed MCP servers and unattended headless permissions. What matters for developers shipping on this stack.",
+  "image": "https://theagentlab.site/blog/2026-09-04-fable-51-mythos-51-claude-code/og.png",
+  "datePublished": "2026-09-04T00:00:00+02:00",
+  "dateModified": "2026-09-04T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-04-fable-51-mythos-51-claude-code/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.nav-wordmark svg { width: 32px; height: 32px; flex: none; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-links a:hover { color: var(--text-primary); background: var(--bg-surface-1); }
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.nav-cta:hover { background: #d4a567; box-shadow: var(--shadow-sm); }
+.nav-cta:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-head {
+  padding: 120px 0 40px;
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+
+.article-meta time { color: var(--accent-bronze-dim); }
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  max-width: 32ch;
+}
+
+.article-dek {
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 32px;
+}
+
+.article-byline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.article-byline .author { color: var(--accent-bronze); font-weight: 500; }
+
+.article-body {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 48px 120px;
+}
+
+.article-body p {
+  margin-bottom: 1.5rem;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 3rem 0 1rem;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 2.5rem 0 0.75rem;
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border-accent);
+  transition: text-decoration-color 0.15s, color 0.15s;
+}
+.article-body a:hover { text-decoration-color: var(--accent-bronze); color: #d4a567; }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-surface-2);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.article-body pre code { background: none; padding: 0; border: none; font-size: inherit; }
+
+.article-body ul, .article-body ol { margin: 1.5rem 0; padding-left: 1.5rem; }
+.article-body li { margin-bottom: 0.5rem; }
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  background: var(--bg-surface-1);
+  padding: 1rem 1.5rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2.5rem 0;
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin: 1.5rem 0;
+}
+
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 14px;
+}
+.article-body th, .article-body td {
+  border: 1px solid var(--border-default);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+.article-body th {
+  background: var(--bg-surface-1);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+}
+.article-body td { color: var(--text-secondary); }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 80px 48px 40px;
+  background: var(--bg-foundation);
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 60px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 24px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 12px; }
+.footer-col a { color: var(--text-secondary); transition: color 0.15s; }
+.footer-col a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-ghost);
+}
+
+.footer-bottom a { color: var(--text-tertiary); transition: color 0.15s; }
+.footer-bottom a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 1080px) {
+  .page-container, .page-narrow { padding: 0 22px; }
+  .nav-bar { padding: 0 22px; }
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .article-head { padding: 72px 0 32px; }
+  .article-body { padding: 0 22px 72px; }
+  .site-footer { padding: 60px 22px 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 720px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ===================================================================
+   CTA BANNER (article footer)
+   =================================================================== */
+.article-cta {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+.article-cta p {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+}
+.article-cta a { color: var(--accent-bronze); }
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="https://theagentlab.site/" class="nav-wordmark" aria-label="The Agent Lab home">
+    <svg viewBox="0 0 46 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M32.73 0h-6.945L38.45 32h6.945L32.73 0ZM12.665 0 0 32h7.082l2.59-6.72h13.25l2.59 6.72h7.082L19.929 0h-7.264Zm-.702 19.337 4.334-11.246 4.334 11.246h-8.668Z" fill="currentColor"/></svg>
+    The Agent Lab
+  </a>
+  <div class="nav-links">
+    <a href="https://theagentlab.site/blog/">Blog</a>
+    <a href="https://theagentlab.site/services/">Services</a>
+    <a href="https://theagentlab.site/kits/">Kits</a>
+  </div>
+  <a href="https://theagentlab.site/services/" class="nav-cta">Work with us</a>
+</nav>
+
+<main id="main-content" class="page-narrow">
+  <header class="article-head">
+    <div class="article-meta">
+      <time datetime="2026-09-04">September 4, 2026</time>
+      <span>Claude</span>
+      <span>MCP</span>
+      <span>AI Agents</span>
+    </div>
+    <h1 class="article-title">Anthropic's Fable 5.1 and Mythos 5.1: What Changed for Developers Building on Claude and MCP</h1>
+    <p class="article-dek">Anthropic released Fable 5.1 and Mythos 5.1 on September 1 with 75% cheaper cache reads, plus Claude Code added managed MCP servers and unattended headless permissions. What matters for developers shipping on this stack.</p>
+    <div class="article-byline">
+      <span class="author">Ashrey</span>
+      <span>| The Agent Lab</span>
+    </div>
+  </header>
+
+  <article class="article-body">
+    <p>Anthropic released two models and a stack of Claude Code updates in the first week of September. Here's what matters if you're shipping on this stack.</p>
+
+    <h2>The Models: Fable 5.1 and Mythos 5.1</h2>
+
+    <p>On <strong>September 1</strong>, Anthropic launched <strong>Claude Fable 5.1</strong> (generally available) and <strong>Claude Mythos 5.1</strong> (restricted access under Project Glasswing). They share the same underlying weights. The differences are access and use-case gating.</p>
+
+    <h3>What's new in Fable 5.1</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Change</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cache read pricing</strong></td>
+          <td>75% cheaper — <code>$0.25 / MTok</code> → <code>$0.0625 / MTok</code></td>
+        </tr>
+        <tr>
+          <td><strong>Headline pricing</strong></td>
+          <td>Unchanged at <code>$10 / $50</code> (input / output per MTok)</td>
+        </tr>
+        <tr>
+          <td><strong>Context window</strong></td>
+          <td>1 million tokens</td>
+        </tr>
+        <tr>
+          <td><strong>Terminal-Bench-Science</strong></td>
+          <td>52.6% (up from Fable 5's ~47%)</td>
+        </tr>
+        <tr>
+          <td><strong>Text watermarking</strong></td>
+          <td>Outputs carry Anthropic's watermark</td>
+        </tr>
+        <tr>
+          <td><strong>C2PA credentials</strong></td>
+          <td>Code execution artifacts include content credentials via Files API</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Mythos 5.1 is the same model but limited to verified cybersecurity and life-sciences programs. If you're not in Glasswing, you're on Fable 5.1.</p>
+
+    <h3>Why the cache price drop matters</h3>
+
+    <p>Cache reads are the lever for agent workloads. A typical agent run re-reads the same context (CLAUDE.md, specs, prior turns) across many turns. At 75% off, a 200K-token context that cost <code>$0.05</code> to re-read now costs <code>$0.0125</code>. Over 50 turns a day, that's <code>$0.625</code> vs <code>$2.50</code> — real money at scale.</p>
+
+    <p>The headline pricing didn't move, so <em>new</em> context still costs the same. But agent loops are mostly re-reads. This is a deliberate nudge toward persistent, long-horizon agents.</p>
+
+    <h3>What "restricted" means for Mythos</h3>
+
+    <p>Mythos 5.1 requires an approved use case. Anthropic's announcement cites "verified cybersecurity and life-sciences programs." This isn't a waitlist you can join — it's a contractual gate. For most builders, Fable 5.1 is the model you get.</p>
+
+    <h2>Claude Code: September 2 Updates</h2>
+
+    <p>The same week, Claude Code shipped a batch of changes that matter more for production agent infrastructure than the model bump.</p>
+
+    <h3>Managed MCP servers (<code>managedMcpServers</code>)</h3>
+
+    <p>Organizations can now push HTTP/SSE MCP servers to every user via a managed setting. The entry shape matches <code>.mcp.json</code>, but entries that name a local <code>command</code> are skipped — only remote servers propagate.</p>
+
+    <pre><code>// Org-level config (managed)
+{
+  "managedMcpServers": {
+    "internal-docs": {
+      "url": "https://mcp.internal.company.com/docs",
+      "headers": { "Authorization": "Bearer ${ENV_TOKEN}" }
+    }
+  }
+}</code></pre>
+
+    <p>This solves the "every developer configures their own MCP servers" problem. One admin push, everyone gets the same servers. Local command-based servers (the common dev pattern) are intentionally excluded — this is for hosted, shared infrastructure.</p>
+
+    <h3>Unattended headless: <code>--permission-prompts none</code></h3>
+
+    <p>New flag: <code>--permission-prompts none</code>. On headless hosts (CI, servers, background workers), anything that would trigger a permission prompt is <strong>denied automatically</strong> instead of hanging.</p>
+
+    <p>Before this, you had two bad options:
+    - <code>--dangerously-skip-permissions</code> — allows everything, zero guardrails
+    - Default — hangs on first prompt, breaks unattended runs</p>
+
+    <p>Now there's a middle ground: run unattended, but fail fast on anything needing approval. Pair with an explicit <code>--allowedTools</code> allowlist for production pipelines.</p>
+
+    <h3>Other notable changes</h3>
+
+    <ul>
+      <li><strong>GitLab MR recognition</strong> — merge requests now appear in tool summaries and footer badges (parity with GitHub PRs)</li>
+      <li><strong>JSON plugin validation</strong> — plugin manifests validated on load, catches typos before runtime</li>
+      <li><strong>Faster startup</strong> — CLI starts before sandbox loads; Linux binary dropped to ~75 MB</li>
+      <li><strong>Workflow views</strong> — improved task and subagent visibility in the UI</li>
+      <li><strong>Broad fixes</strong> — concurrency, resume, permissions, remote sessions, stability</li>
+    </ul>
+
+    <h2>What This Means for Your Stack</h2>
+
+    <h3>1. Agent economics shifted</h3>
+
+    <p>The 75% cache read discount makes long-horizon agents <em>significantly</em> cheaper to run. If you've been hesitating on persistent agents because of context re-read costs, recalculate. A 50-turn agent with 200K context went from ~$2.50/day in cache reads to ~$0.63/day. At scale, that changes ROI thresholds.</p>
+
+    <h3>2. Managed MCP servers = org-wide tooling</h3>
+
+    <p>If you run an internal MCP gateway (documentation, internal APIs, database access), you can now push it to every developer's Claude Code without them editing <code>.mcp.json</code>. This is the first real "org policy" primitive for MCP. Expect more.</p>
+
+    <h3>3. Headless agents just got a safe mode</h3>
+
+    <p><code>--permission-prompts none</code> + explicit <code>--allowedTools</code> is the pattern for CI/CD agents, scheduled runners, and background workers. No more <code>--dangerously-skip-permissions</code> as the only way to unblock unattended runs.</p>
+
+    <h3>4. Fable 5.1 is the new default for agent workloads</h3>
+
+    <p>Fable 5.1 became the default Fable model in September. If you pin <code>claude-fable-5</code> in your code, you're now on 5.1. The watermarking and C2PA credentials are automatic — plan for them if you ship generated artifacts to regulated environments.</p>
+
+    <h3>5. Mythos 5.1 exists but you probably can't use it</h3>
+
+    <p>Unless you're in a verified Glasswing program, Mythos 5.1 is not available. Don't architect around it.</p>
+
+    <h2>Practical Takeaways</h2>
+
+    <p><strong>If you run agent pipelines:</strong> Update to Claude Code 2.1.259+, switch headless runners to <code>--permission-prompts none --allowedTools "Read,Write,Bash,Grep,Glob"</code>, and audit your cache usage — you're likely overpaying on re-reads.</p>
+
+    <p><strong>If you manage a team:</strong> Configure <code>managedMcpServers</code> in your org settings. Push your internal MCP gateway once. Stop documenting <code>.mcp.json</code> setup in onboarding.</p>
+
+    <p><strong>If you build on MCP:</strong> The 2026-07-28 stateless spec + managed servers + cheaper cache reads = the infrastructure layer is stabilizing. The next spec roadmap items (agentic messaging, agent identity) are the ones to watch.</p>
+
+    <p><strong>If you track model capabilities:</strong> Fable 5.1's 52.6% on Terminal-Bench-Science is a real improvement for coding agents. The 1M context window means you can fit entire codebases in context for single-pass analysis — but remember, <em>new</em> tokens still cost $10/MTok. Cache is where the savings are.</p>
+
+    <h2>Sources</h2>
+
+    <ul>
+      <li>Anthropic, "<a href="https://www.anthropic.com/news/enterprise-frontier-safeguards" target="_blank" rel="noopener">Enterprise Frontier Safeguards</a>" (Sep 1, 2026)</li>
+      <li>Anthropic Platform Docs, "<a href="https://platform.claude.com/docs/en/models/fable-5-1/overview" target="_blank" rel="noopener">Claude Fable 5.1</a>" and "<a href="https://platform.claude.com/docs/en/models/mythos-5-1/overview" target="_blank" rel="noopener">Claude Mythos 5.1</a>"</li>
+      <li>MarkTechPost, "<a href="https://www.marktechpost.com/2026/09/01/anthropic-releases-claude-fable-5-1-and-claude-mythos-5-1-52-6-on-terminal-bench-science-and-75-cheaper-cache-reads/" target="_blank" rel="noopener">Anthropic Releases Claude Fable 5.1 and Mythos 5.1</a>" (Sep 1, 2026)</li>
+      <li>VentureBeat, "<a href="https://venturebeat.com/technology/anthropics-claude-fable-5-1-and-mythos-5-1-arrive-with-a-75-cost-reduction-for-fable-cache-reads" target="_blank" rel="noopener">Anthropic's Claude Fable 5.1 and Mythos 5.1 arrive with a 75% cost reduction</a>" (Sep 1, 2026)</li>
+      <li>Releasebot, "<a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank" rel="noopener">Claude Code Updates - September 2026</a>" (Sep 2, 2026)</li>
+      <li>Claude Code Changelog, "<a href="https://code.claude.com/docs/en/changelog" target="_blank" rel="noopener">September 2, 2026</a>"</li>
+    </ul>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Read</h4>
+      <ul>
+        <li><a href="https://theagentlab.site/blog/">Blog</a></li>
+        <li><a href="https://theagentlab.site/kits/">Kits</a></li>
+        <li><a href="https://theagentlab.site/mcp-doctor/">mcp-doctor</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Work</h4>
+      <ul>
+        <li><a href="https://theagentlab.site/services/">Services</a></li>
+        <li><a href="https://theagentlab.site/services/#mcp">MCP Implementation</a></li>
+        <li><a href="https://theagentlab.site/services/#agents">Agent Architecture</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/mohamed-ashrey/">LinkedIn</a></li>
+        <li><a href="https://github.com/m-ashrey">GitHub</a></li>
+        <li><a href="https://www.youtube.com/@TheAgentLab">YouTube</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="https://theagentlab.site/privacy/">Privacy</a></li>
+        <li><a href="https://theagentlab.site/terms/">Terms</a></li>
+        <li><a href="https://theagentlab.site/refunds/">Refunds</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab</span>
+    <span><a href="https://theagentlab.site/">theagentlab.site</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Now Reads AGENTS.md: The Cross-Tool Standard Finally Lands | The Agent Lab</title>
+<meta name="description" content="Claude Code 2.1.277 added native AGENTS.md support on September 18, 2026. Here's what it means for developers who work across Codex, Cursor, Copilot, and Claude — and why the fallback-only behavior matters.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-29-claude-code-agents-md-support/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code Now Reads AGENTS.md: The Cross-Tool Standard Finally Lands">
+<meta property="og:description" content="Claude Code 2.1.277 added native AGENTS.md support on September 18, 2026. Here's what it means for developers who work across Codex, Cursor, Copilot, and Claude — and why the fallback-only behavior matters.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-29-claude-code-agents-md-support/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-29-claude-code-agents-md-support/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab — Claude Code AGENTS.md support">
+<meta property="article:published_time" content="2026-09-29">
+<meta property="article:author" content="Ashrey">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="AGENTS.md">
+<meta property="article:tag" content="AI Coding Agents">
+<meta property="article:tag" content="Cross-Tool Standards">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Code Now Reads AGENTS.md: The Cross-Tool Standard Finally Lands">
+<meta name="twitter:description" content="Claude Code 2.1.277 added native AGENTS.md support on September 18, 2026. Here's what it means for developers who work across Codex, Cursor, Copilot, and Claude — and why the fallback-only behavior matters.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-29-claude-code-agents-md-support/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Claude Code Now Reads AGENTS.md: The Cross-Tool Standard Finally Lands",
+  "description": "Claude Code 2.1.277 added native AGENTS.md support on September 18, 2026. Here's what it means for developers who work across Codex, Cursor, Copilot, and Claude — and why the fallback-only behavior matters.",
+  "image": "https://theagentlab.site/blog/2026-09-29-claude-code-agents-md-support/og.png",
+  "datePublished": "2026-09-29",
+  "dateModified": "2026-09-29",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-29-claude-code-agents-md-support/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-links a:hover { color: var(--text-primary); background: var(--bg-surface-1); }
+.nav-links a.active { color: var(--accent-bronze); background: rgba(191, 149, 83, 0.08); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 64px 0 32px;
+  text-align: center;
+}
+
+.article-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.article-meta time { color: var(--text-tertiary); }
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.article-dek {
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+.article-body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 0 96px;
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 48px 0 16px;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 32px 0 12px;
+}
+
+.article-body p {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  max-width: var(--measure);
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.article-body a:hover { border-color: var(--accent-bronze); }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent-bronze);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  overflow-x: auto;
+  margin: 24px 0;
+  max-width: 100%;
+}
+
+.article-body pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.article-body ul, .article-body ol {
+  margin: 16px 0 16px 24px;
+  color: var(--text-secondary);
+}
+
+.article-body li { margin-bottom: 8px; line-height: 1.7; }
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 16px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+  max-width: var(--measure);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin: 24px 0;
+}
+
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 14px;
+}
+
+.article-body th, .article-body td {
+  border: 1px solid var(--border-default);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.article-body th {
+  background: var(--bg-surface-1);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.article-body td { color: var(--text-secondary); }
+
+.article-body .callout {
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-left: 3px solid var(--accent-bronze);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin: 24px 0;
+  max-width: var(--measure);
+}
+
+.article-body .callout strong { color: var(--text-primary); }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 48px 0;
+  background: var(--bg-foundation);
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: start;
+}
+
+.footer-brand .nav-wordmark { font-size: 24px; }
+.footer-brand p {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--text-tertiary);
+  max-width: 300px;
+}
+
+.footer-links { display: flex; gap: 32px; }
+.footer-column { display: flex; flex-direction: column; gap: 12px; }
+.footer-column label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+}
+.footer-column a { font-size: 14px; color: var(--text-tertiary); transition: color 0.15s; }
+.footer-column a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 48px auto 0;
+  padding: 0 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-ghost);
+  font-family: var(--font-mono);
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 900px) {
+  .nav-bar, .page-container, .page-narrow, .footer-grid, .footer-bottom {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .footer-grid { grid-template-columns: 1fr; }
+  .article-header { padding: 48px 0 24px; }
+  .article-title { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="https://theagentlab.site/" class="nav-wordmark" aria-label="The Agent Lab home">
+    The <span>Agent</span> Lab
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://theagentlab.site/blog/">Blog</a></li>
+    <li><a href="https://theagentlab.site/services/">Services</a></li>
+    <li><a href="https://theagentlab.site/kits/">Kits</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+  <header class="article-header">
+    <div class="article-meta">
+      <span>Article</span>
+      <time datetime="2026-09-29">September 29, 2026</time>
+      <span>Ashrey</span>
+    </div>
+    <h1 class="article-title">Claude Code Now Reads AGENTS.md: The Cross-Tool Standard Finally Lands</h1>
+    <p class="article-dek">Claude Code 2.1.277 added native AGENTS.md support on September 18, 2026. Here's what it means for developers who work across Codex, Cursor, Copilot, and Claude — and why the fallback-only behavior matters.</p>
+  </header>
+
+  <article class="article-body">
+    <p>On September 18, 2026, Claude Code version 2.1.277 shipped a feature the agent ecosystem has been waiting for: native support for <code>AGENTS.md</code>. The change was announced by Anthropic's Thariq on X — if a project folder has no <code>CLAUDE.md</code>, Claude Code now checks for and uses <code>AGENTS.md</code> instead. You can toggle the behavior in <code>/config</code> under "Project instructions."</p>
+
+    <p>This matters because <code>AGENTS.md</code> has emerged as the closest thing to a universal configuration format for AI coding agents. OpenAI's Codex, Google's Jules and Gemini CLI, Cursor, Aider, Devin, Windsurf, Amp, Zed, Warp, GitHub Copilot's coding agent, Factory, and over a dozen other tools all read it. Until now, Claude Code was the notable holdout.</p>
+
+    <h2>What Changed</h2>
+
+    <p>The implementation is deliberately conservative. Claude Code treats <code>AGENTS.md</code> as a <strong>fallback</strong>, not a merge target. The precedence order is:</p>
+
+    <ol>
+      <li><code>CLAUDE.md</code> (or <code>CLAUDE.local.md</code>) in the working directory or any ancestor</li>
+      <li><code>AGENTS.md</code> in the working directory or any ancestor — <em>only if no CLAUDE.md exists</em></li>
+    </ol>
+
+    <p>This means you cannot layer <code>AGENTS.md</code> underneath a <code>CLAUDE.md</code> to share base conventions while keeping Claude-specific overrides. The moment a <code>CLAUDE.md</code> exists anywhere in the ancestor chain, <code>AGENTS.md</code> is ignored entirely.</p>
+
+    <p>You can override this in <code>/config → Project instructions</code> to load both, but the default is fallback-only. It's also not yet available on Bedrock, Vertex, or Foundry deployments — Anthropic's changelog notes this without a timeline.</p>
+
+    <h2>Why the Fallback Design Matters</h2>
+
+    <p>The fallback approach avoids a real problem: <code>CLAUDE.md</code> supports features <code>AGENTS.md</code> doesn't, notably <code>@import</code> statements for modular instruction files and tool-specific directives. If Claude Code merged both files, you'd get subtle conflicts — imported sections from <code>CLAUDE.md</code> would apply, but <code>AGENTS.md</code> has no equivalent mechanism. The fallback keeps the mental model simple: one instruction source wins.</p>
+
+    <p>For teams standardizing on <code>AGENTS.md</code> across tools, the practical workflow is:</p>
+
+    <ul>
+      <li>Keep <code>AGENTS.md</code> at the repo root as the canonical cross-tool contract</li>
+      <li>Add a <code>CLAUDE.md</code> only when you need Claude-specific behavior (imports, hooks, custom slash commands)</li>
+      <li>When <code>CLAUDE.md</code> exists, it <strong>replaces</strong> <code>AGENTS.md</code> for Claude Code — so either put everything in <code>CLAUDE.md</code> or use the <code>/config</code> toggle to load both</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Practical tip:</strong> If you adopt AGENTS.md as your primary format, consider a minimal CLAUDE.md that only contains @import statements pulling in shared modules, plus any Claude-only settings. That way the bulk of your conventions stay in the portable file.
+    </div>
+
+    <h2>What AGENTS.md Actually Standardizes</h2>
+
+    <p>The <code>AGENTS.md</code> spec (hosted at <a href="https://github.com/agentsmd/agents.md" target="_blank" rel="noopener">github.com/agentsmd/agents.md</a>) is intentionally minimal. It defines a plain Markdown file at the repository root with sections for:</p>
+
+    <ul>
+      <li><strong>Build & test commands</strong> — how to compile, lint, type-check, run tests</li>
+      <li><strong>Code conventions</strong> — style, naming, architectural patterns</li>
+      <li><strong>Boundaries</strong> — directories or files agents should not modify</li>
+      <li><strong>Project context</strong> — enough orientation that a fresh session can be productive immediately</li>
+    </ul>
+
+    <p>It does not standardize advanced features like model routing, tool permissions, or session persistence. Those remain tool-specific. The value is in the <em>baseline</em> — a new agent (or a new team member) can read one file and know how to build, test, and navigate the codebase without asking.</p>
+
+    <h2>Migration Checklist for Existing Projects</h2>
+
+    <p>If you already maintain a <code>CLAUDE.md</code> and want to adopt <code>AGENTS.md</code> for cross-tool compatibility:</p>
+
+    <ol>
+      <li><strong>Extract the portable subset</strong> — build commands, test commands, coding conventions, directory boundaries — into a new <code>AGENTS.md</code> at the repo root.</li>
+      <li><strong>Slim down CLAUDE.md</strong> — keep only @imports, hook configurations, slash command definitions, and Claude-specific permissions.</li>
+      <li><strong>Add a pointer in CLAUDE.md</strong> — a comment at the top noting "Shared conventions in AGENTS.md" helps future maintainers.</li>
+      <li><strong>Test the fallback</strong> — temporarily rename CLAUDE.md, verify Claude Code picks up AGENTS.md, then restore.</li>
+      <li><strong>Commit both</strong> — version control the config files so the whole team benefits.</li>
+    </ol>
+
+    <h2>What This Signals</h2>
+
+    <p>Anthropic adopting <code>AGENTS.md</code> — even as a fallback — is a signal that the cross-tool convention has reached critical mass. When Codex, Cursor, Copilot, Gemini, and now Claude Code all read the same file, the instruction file stops being a proprietary lock-in mechanism and starts being a genuine interoperability layer.</p>
+
+    <p>For developers who switch between tools (Claude Code for complex refactors, Codex for quick tasks, Cursor for IDE integration), this reduces the configuration tax. You write the build commands and conventions once. Each tool layers its own extensions on top.</p>
+
+    <p>The fallback design also means adoption is non-breaking. Existing <code>CLAUDE.md</code> files keep working exactly as before. Teams can migrate at their own pace, or not at all.</p>
+
+    <h2>What's Still Missing</h2>
+
+    <ul>
+      <li>No merge/overlay mode by default — you must opt in via <code>/config</code></li>
+      <li>No support on Bedrock, Vertex AI, or Foundry yet</li>
+      <li>No standard for tool-specific extensions within AGENTS.md (though <a href="https://github.com/iging/agent-spec" target="_blank" rel="noopener">agent-spec</a> is exploring this)</li>
+      <li>No built-in validator or linter for AGENTS.md structure</li>
+    </ul>
+
+    <p>None of these are blockers. The core use case — one portable instruction file read by every major agent — now works in Claude Code.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="https://theagentlab.site/" class="nav-wordmark" aria-label="The Agent Lab home">
+        The <span>Agent</span> Lab
+      </a>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <div class="footer-column">
+        <label>Explore</label>
+        <a href="https://theagentlab.site/blog/">Blog</a>
+        <a href="https://theagentlab.site/services/">Services</a>
+        <a href="https://theagentlab.site/kits/">Kits</a>
+      </div>
+      <div class="footer-column">
+        <label>Connect</label>
+        <a href="https://github.com/m-ashrey">GitHub</a>
+        <a href="https://linkedin.com/in/mohamed-ashrey">LinkedIn</a>
+        <a href="https://youtube.com/@TheAgentLab">YouTube</a>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab</span>
+    <span>Built with Claude Code</span>
+  </div>
+</footer>
+</body>
+</html>

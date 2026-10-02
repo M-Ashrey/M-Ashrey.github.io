@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Anthropic's September 2026 Threat Report: Agent Frameworks Are the Attack Surface | The Agent Lab</title>
+<meta name="description" content="Anthropic's latest threat intelligence report reveals AI-orchestrated attacks running on agent frameworks, with stolen API keys as the primary loot. What developers building on Claude and MCP need to know.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-11-anthropic-threat-report-agent-framework/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic's September 2026 Threat Report: Agent Frameworks Are the Attack Surface">
+<meta property="og:description" content="Anthropic's latest threat intelligence report reveals AI-orchestrated attacks running on agent frameworks, with stolen API keys as the primary loot. What developers building on Claude and MCP need to know.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-11-anthropic-threat-report-agent-framework/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-11-anthropic-threat-report-agent-framework/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Anthropic threat intelligence report September 2026 - agent frameworks under attack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anthropic's September 2026 Threat Report: Agent Frameworks Are the Attack Surface">
+<meta name="twitter:description" content="Anthropic's latest threat intelligence report reveals AI-orchestrated attacks running on agent frameworks, with stolen API keys as the primary loot. What developers building on Claude and MCP need to know.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-11-anthropic-threat-report-agent-framework/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Anthropic's September 2026 Threat Report: Agent Frameworks Are the Attack Surface",
+  "description": "Anthropic's latest threat intelligence report reveals AI-orchestrated attacks running on agent frameworks, with stolen API keys as the primary loot. What developers building on Claude and MCP need to know.",
+  "image": "https://theagentlab.site/blog/2026-09-11-anthropic-threat-report-agent-framework/og.png",
+  "url": "https://theagentlab.site/blog/2026-09-11-anthropic-threat-report-agent-framework/",
+  "datePublished": "2026-09-11",
+  "dateModified": "2026-09-11",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-11-anthropic-threat-report-agent-framework/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg-void);
+  background: var(--accent-bronze);
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+.nav-cta:hover { background: var(--accent-copper); transform: translateY(-1px); }
+.nav-cta:active { transform: translateY(0); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-head {
+  padding: 80px 0 40px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+.article-title em { font-style: italic; font-weight: 400; }
+
+.article-meta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+
+.dek {
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.article-body {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 0 80px;
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 60px 0 24px;
+  padding-top: 24px;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 40px 0 16px;
+}
+
+.article-body p {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+.article-body a:hover { color: var(--accent-copper); }
+
+.article-body ul, .article-body ol {
+  margin: 16px 0 24px 24px;
+  line-height: 1.8;
+}
+.article-body li { margin-bottom: 8px; }
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze-dim);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--accent-bronze);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+.article-body pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+}
+
+/* ===================================================================
+   CTA FOOTER
+   =================================================================== */
+.article-cta {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+}
+.article-cta p {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+footer {
+  padding: 60px 48px 40px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-foundation);
+}
+
+.footer-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-brand .nav-wordmark { margin-bottom: 16px; display: inline-block; }
+.footer-brand p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-tertiary);
+  max-width: 280px;
+}
+
+.footer-nav h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 20px;
+}
+.footer-nav ul { list-style: none; }
+.footer-nav li { margin-bottom: 12px; }
+.footer-nav a { color: var(--text-secondary); transition: color 0.2s; }
+.footer-nav a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 48px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+@media (max-width: 1080px) {
+  .page-container, .page-narrow { padding: 0 22px; }
+  .nav-bar { padding: 0 22px; }
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .article-head { padding: 64px 0 40px; }
+  .hero-headline { font-size: 37px; line-height: 1.1; }
+  .article-title { font-size: 34px; line-height: 1.14; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  footer { padding: 48px 22px 32px; }
+}
+
+@media (max-width: 720px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav-bar">
+  <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
+    <li><a href="/kits/">Kits</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
+</nav>
+
+<main id="main">
+<div class="page-narrow">
+
+  <header class="article-head">
+    <span class="eyebrow">Security · Claude · MCP · AI agents</span>
+    <h1 class="article-title">Anthropic's September 2026 Threat Report: Agent Frameworks Are the Attack Surface</h1>
+    <p class="article-meta">By Ashrey · September 11, 2026</p>
+    <p class="dek">Anthropic's fourth threat intelligence report documents eight months of disrupted misuse across seven harm categories. The pattern is clear: attackers are building on agent frameworks, and API keys are the loot.</p>
+  </header>
+
+  <article class="article-body">
+    <p>On September 10, Anthropic published <a href="https://www.anthropic.com/threat-intelligence-report-september-2026" target="_blank" rel="noopener">Detecting and countering misuse of AI: September 2026</a> — its fourth threat intelligence report, covering operations disrupted between December 2025 and August 2026. At roughly 36,000 words across seven harm categories, it is the most detailed public accounting yet of how frontier models are being weaponized in the wild.</p>
+
+    <p>For developers shipping on Claude, MCP, and the open agent ecosystem, three findings stand out.</p>
+
+    <h2>Attacks run on agent frameworks</h2>
+
+    <p>The report's cyber operations section makes a point that should reshape how you think about MCP server security: <strong>the majority of operations described were enabled by AI via direct execution or orchestration</strong>. Attackers are not writing custom tooling from scratch. They are composing existing agent frameworks — the same primitives you use to build legitimate agents — into attack chains that run autonomously.</p>
+
+    <p>This is not theoretical. The report documents a hacktivist campaign that used stolen API keys to sustain multi-victim operations across months. The operator built agentic workflows that handled reconnaissance, exploitation, and data exfiltration with minimal human oversight. The framework did the coordination; the human provided intent and credentials.</p>
+
+    <p>If you are exposing MCP servers to the internet — or building agents that accept untrusted tool calls — you are deploying the same attack surface the report describes.</p>
+
+    <h2>API keys are the primary loot</h2>
+
+    <p>Across multiple case studies, the initial compromise vector was not a model vulnerability or a prompt injection. It was a leaked API key.</p>
+
+    <p>One financially motivated actor used keys scraped from public repositories to run cryptomining and proxy services at Anthropic's expense. A state-aligned espionage operator used compromised credentials to run reconnaissance against Ukrainian and European government targets. In both cases, the model was not the target — the API key was the key.</p>
+
+    <p>The report notes that Anthropic detected and disrupted activity spanning more than 20 organizations in the state actor's planning and live operations. The scale is possible because once you have a valid key, the agent framework handles the rest: tool orchestration, context management, parallel execution.</p>
+
+    <p>This reinforces what <a href="/blog/2026-08-19-ai-agents-supply-chain-phishing-fakegit/" target="_blank" rel="noopener">the FakeGit campaign</a> demonstrated: attackers publish convincing MCP servers and agent skills, wait for developers to add them, then harvest the credentials those agents use. The supply chain and the credential chain are the same problem.</p>
+
+    <h2>Distillation at scale: 151 million exchanges</h2>
+
+    <p>The report's illicit distillation chapter documents a single operation that extracted <strong>151 million prompt–completion pairs</strong> from Claude models. The actor used a distributed network of accounts, automated request patterns, and careful rate-limit evasion to build a training dataset rivaling public corpora.</p>
+
+    <p>This matters for two reasons. First, it confirms that model distillation is an industrial-scale operation, not a hobbyist curiosity. Second, the defenses that worked — anomaly detection on request patterns, behavioral clustering of accounts, the safeguards on Fable and Mythos models — are the same defenses you need on any production agent deployment.</p>
+
+    <p>Notably, the report states that no malicious activity was found on Claude Fable or Mythos, which have "a series of safeguards in place that greatly reduce their ability to perform harmful cyber tasks." The models with fewer guardrails (Haiku, Sonnet, Opus) bore the brunt of misuse.</p>
+
+    <h2>What this means for your stack</h2>
+
+    <p>The report does not mention MCP by name. It doesn't need to. The attack patterns it describes — agentic orchestration, credential theft, supply-chain poisoning, distillation via API abuse — map directly to the risks in the MCP ecosystem.</p>
+
+    <ul>
+      <li><strong>Rotate keys aggressively.</strong> Treat every API key as a time-limited credential. Automate rotation. Audit what keys exist in your CI, your team's machines, your deployed agents.</li>
+      <li><strong>Scope keys to the minimum viable permission.</strong> An agent that only needs filesystem access should not hold a key with web search or code execution privileges.</li>
+      <li><strong>Monitor for anomalous agent behavior.</strong> Sudden spikes in tool calls, novel tool combinations, or requests from new IP ranges should trigger alerts — not just billing warnings.</li>
+      <li><strong>Verify MCP servers before adding them.</strong> The FakeGit campaign proved attackers publish functional-but-malicious servers. Check the repository history, the maintainer's identity, and whether the server has been independently audited.</li>
+      <li><strong>Use the safeguarded models for untrusted workloads.</strong> If you are running agents on user-provided prompts or unvetted tool calls, prefer models with stronger built-in guardrails (Fable, Mythos) over raw Opus or Sonnet access.</li>
+    </ul>
+
+    <h2>The uncomfortable takeaway</h2>
+
+    <p>Anthropic's report is honest about a reality the agent ecosystem has been slow to accept: <strong>the same primitives that make agents powerful — autonomous tool use, persistent context, composable skills — make them dangerous when credentials leak</strong>.</p>
+
+    <p>The report's conclusion is measured: "AI has erased conventional thinking about the resources required for sophisticated operations." A single operator with a stolen key and an agent framework can now sustain campaigns that previously required a team.</p>
+
+    <p>For builders, this is not a reason to stop building. It is a reason to treat credential hygiene, supply-chain verification, and runtime monitoring as first-class engineering concerns — not afterthoughts.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+
+</div>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav class="footer-nav">
+      <h4>Build</h4>
+      <ul>
+        <li><a href="/services/">The Engine</a></li>
+        <li><a href="/kits/">Kits</a></li>
+        <li><a href="/ai/">Who We Build For</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-nav">
+      <h4>Read</h4>
+      <ul>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/blog/2026-09-10-claude-commerce-agents-blueprint/">Claude Commerce Agents Blueprint</a></li>
+        <li><a href="/blog/2026-09-09-deadbugz-mcp-supply-chain-attack/">Deadbugz MCP Supply Chain Attack</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-nav">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://github.com/M-Ashrey">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/mohamed-ashrey/">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/@TheAgentLab">YouTube</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab</span>
+    <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a> · <a href="/refunds/">Refunds</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

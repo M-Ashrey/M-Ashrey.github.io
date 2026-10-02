@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Engineering Is the New SDLC: What Opus 5 and the Playbook Actually Changed | The Agent Lab</title>
+<meta name="description" content="Anthropic deleted 80% of Claude Code's system prompt for Opus 5. The AI-Native SDLC Playbook makes CLAUDE.md the central artifact. Together they signal the same shift: context engineering replaces prompt engineering. Here's what that means for developers shipping on Claude today.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-08-29-context-engineering-claude-code-sdlc/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Context Engineering Is the New SDLC: What Opus 5 and the Playbook Actually Changed">
+<meta property="og:description" content="Anthropic deleted 80% of Claude Code's system prompt for Opus 5. The AI-Native SDLC Playbook makes CLAUDE.md the central artifact. Together they signal the same shift: context engineering replaces prompt engineering.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-08-29-context-engineering-claude-code-sdlc/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-08-29-context-engineering-claude-code-sdlc/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Context Engineering - The Agent Lab">
+<meta property="article:published_time" content="2026-08-29T00:00:00+02:00">
+<meta property="article:author" content="Ashrey">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="Context Engineering">
+<meta property="article:tag" content="Anthropic">
+<meta property="article:tag" content="SDLC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Context Engineering Is the New SDLC: What Opus 5 and the Playbook Actually Changed">
+<meta name="twitter:description" content="Anthropic deleted 80% of Claude Code's system prompt for Opus 5. The AI-Native SDLC Playbook makes CLAUDE.md the central artifact. Together they signal the same shift: context engineering replaces prompt engineering.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-08-29-context-engineering-claude-code-sdlc/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Context Engineering Is the New SDLC: What Opus 5 and the Playbook Actually Changed",
+  "description": "Anthropic deleted 80% of Claude Code's system prompt for Opus 5. The AI-Native SDLC Playbook makes CLAUDE.md the central artifact. Together they signal the same shift: context engineering replaces prompt engineering.",
+  "image": "https://theagentlab.site/blog/2026-08-29-context-engineering-claude-code-sdlc/og.png",
+  "url": "https://theagentlab.site/blog/2026-08-29-context-engineering-claude-code-sdlc/",
+  "datePublished": "2026-08-29T00:00:00+02:00",
+  "dateModified": "2026-08-29T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon-512.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-08-29-context-engineering-claude-code-sdlc/"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* ===================================================================
+   NAV
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--text-primary);
+}
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.nav-cta:hover { background: var(--accent-copper); box-shadow: var(--shadow-md); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-head {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 50px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  max-width: 24ch;
+}
+.article-title em { font-style: italic; color: var(--accent-bronze); }
+
+.dek {
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: clamp(16px, 2vw, 19px);
+  max-width: var(--measure);
+  line-height: 1.6;
+}
+
+.article-byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.article-byline time { white-space: nowrap; }
+
+.article-body {
+  max-width: var(--measure);
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-body p {
+  margin: 0 0 1.5rem;
+}
+
+.article-body p.lede {
+  font-size: 19px;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 3rem 0 1rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 2.5rem 0 1rem;
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+.article-body a:hover { color: var(--accent-copper); }
+
+.article-body ul, .article-body ol {
+  margin: 1.5rem 0 1.5rem 1.5rem;
+}
+.article-body li { margin-bottom: 0.5rem; }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--bg-inset);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.article-body pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 3rem 0;
+}
+
+.article-body .figure {
+  margin: 2rem 0;
+}
+.article-body .figure img {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+}
+.article-body .figure figcaption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* ===================================================================
+   FOOTER CTA
+   =================================================================== */
+.article-cta {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #222;
+}
+.article-cta p {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+}
+.article-cta a {
+  color: var(--accent-bronze);
+  text-decoration: underline;
+}
+
+/* ===================================================================
+   SITE FOOTER
+   =================================================================== */
+.site-footer {
+  padding: 80px 0 40px;
+  border-top: 1px solid var(--border-subtle);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+.footer-brand {
+  max-width: 280px;
+}
+.footer-wordmark {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.footer-wordmark span { color: var(--accent-bronze); }
+.footer-tagline {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+.footer-links h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 24px;
+}
+.footer-links ul { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a { color: var(--text-secondary); transition: color 0.15s ease; }
+.footer-links a:hover { color: var(--accent-bronze); }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+.footer-bottom a { color: var(--text-tertiary); transition: color 0.15s ease; }
+.footer-bottom a:hover { color: var(--accent-bronze); }
+
+@media (max-width: 900px) {
+  .page-container, .page-narrow { padding: 0 24px; }
+  .nav-bar { padding: 0 24px; }
+  .nav-links { display: none; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav-bar">
+  <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
+    <li><a href="/kits/">Kits</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
+</nav>
+
+<main id="main">
+<div class="page-narrow">
+
+  <header class="article-head">
+    <span class="eyebrow">Claude Code · Context Engineering · SDLC</span>
+    <h1 class="article-title">Context Engineering Is the New SDLC: What Opus 5 and the Playbook Actually Changed</h1>
+    <p class="dek">Anthropic deleted 80% of Claude Code's system prompt for Opus 5. The AI-Native SDLC Playbook makes CLAUDE.md the central artifact. Together they signal the same shift: context engineering replaces prompt engineering.</p>
+    <div class="article-byline">
+      <span>By Ashrey</span>
+      <time datetime="2026-08-29">August 29, 2026</time>
+    </div>
+  </header>
+
+  <article class="article-body">
+    <p class="lede">Two signals landed weeks apart. They say the same thing: the way you get reliable output from Claude Code isn't better prompts. It's structured context the agent can read, trust, and act on.</p>
+
+    <p>First, the Opus 5 release. Anthropic cut the Claude Code system prompt from roughly 2,000 lines to roughly 400. They didn't just trim fluff. They removed the entire tool-use preamble, the multi-agent coordination instructions, and the workflow prescriptions. What's left is minimal: model identity, safety floor, and the instruction to read CLAUDE.md for everything else.</p>
+
+    <p>Second, the AI-Native SDLC Playbook published August 21. Its first artifact is <code>plan.md</code>. Its second is <code>CLAUDE.md</code>. The playbook shows a real <code>CLAUDE.md</code> from Anthropic's own codebase — 200+ lines of build commands, test patterns, architectural conventions, and explicit boundaries. The message is unambiguous: the project's operating manual lives in the repo, not in the model.</p>
+
+    <h2>What Changed and Why It Matters</h2>
+
+    <p>The old model: stuff instructions into the system prompt. Hope the model remembers. Pray it doesn't hallucinate a tool call. The new model: put the instructions in a file the agent reads at runtime. Version it. Review it in PRs. Update it when the architecture shifts.</p>
+
+    <p>This is context engineering. It moves the control surface from the prompt (opaque, unversioned, model-specific) to the repository (transparent, versioned, model-agnostic). The prompt becomes a thin shim: "read CLAUDE.md and follow it." The file becomes the source of truth.</p>
+
+    <h3>The 80% Cut Wasn't Arbitrary</h3>
+
+    <p>Anthropic's blog post on the AI-Native SDLC notes that the old system prompt tried to encode workflow: "when you see X, do Y." That approach doesn't scale. Every repo has different conventions. Every team has different risk tolerance. A universal prompt can only express the intersection of all workflows — which is nearly nothing useful.</p>
+
+    <p>By deleting the workflow layer, Anthropic forced the workflow into the repo. <code>CLAUDE.md</code> is now the workflow. Skills (the <code>.claude/skills/</code> directory) are the reusable capabilities. The verifier agent is the gate. The production gate hook is the enforcement.</p>
+
+    <h3>Skills Replace Prompt Libraries</h3>
+
+    <p>The playbook introduces <code>.claude/skills/</code> as a first-class concept. A skill is a versioned, self-contained capability: security review, database migration, dependency audit, changelog generation. Each skill has a <code>SKILL.md</code> that describes its interface, its preconditions, and its outputs.</p>
+
+    <p>This replaces the prompt library pattern. Instead of copying a prompt into a chat, you invoke a skill. The skill can call MCP tools. It can run commands. It can read files. It produces structured output the verifier can evaluate.</p>
+
+    <h2>What to Do Today</h2>
+
+    <p>Three concrete steps that work with the Claude Code you have right now:</p>
+
+    <ol>
+      <li><strong>Write <code>CLAUDE.md</code> for every repo.</strong> Start with build commands, test commands, and the "do not touch" list. Add architectural conventions as you hit them. It takes 30 minutes and pays off the first time you context-switch back to the project.</li>
+      <li><strong>Extract one skill.</strong> Take a repetitive task you delegate to Claude — security review, migration script generation, changelog writing — and formalize it as <code>.claude/skills/<name>/SKILL.md</code>. Version it. Share it across projects.</li>
+      <li><strong>Add a verifier step to CI.</strong> Even a lightweight one: a separate Claude call that checks the diff against the PR description and flags hallucinated changes. The playbook's <code>agent-evals.yml</code> is a template.</li>
+    </ol>
+
+    <h2>What This Means for MCP Builders</h2>
+
+    <p>The playbook is the clearest signal yet that Anthropic sees MCP as the connective tissue of AI-native SDLC. Skills are MCP servers. The verifier agent calls MCP tools. The production gate invokes MCP for secret scanning, dependency checks, and policy enforcement.</p>
+
+    <p>If you're building MCP servers today, the playbook tells you what interfaces will be in demand: security review tools, test generation, deployment validation, observability queries. The "skill" abstraction is the product interface for MCP in this workflow.</p>
+
+    <h2>The Honest Take</h2>
+
+    <p>The playbook is a reference implementation, not a mandate. Anthropic's own teams use variations of this — not the exact files. The value is in the pattern: explicit plans, agent-readable context, reusable skills, adversarial review, measurable gates.</p>
+
+    <p>Start with <code>CLAUDE.md</code> and one skill. Measure whether the verifier catches real issues. Expand from evidence, not aspiration. The playbook gives you the vocabulary to explain to your team why this isn't just "using AI" — it's a different engineering discipline.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+
+</div>
+</main>
+
+<footer class="site-footer">
+<div class="page-container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-wordmark">The Agent <span>Lab</span></div>
+      <p class="footer-tagline">Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav class="footer-links">
+      <h4>Build</h4>
+      <ul>
+        <li><a href="/services/">The Engine</a></li>
+        <li><a href="/kits/">Kits</a></li>
+        <li><a href="/blog/">Blog</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-links">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://github.com/M-Ashrey" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/mohamed-ashrey/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab</span>
+    <nav style="display:flex;gap:24px;">
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+      <a href="/refunds/">Refunds</a>
+    </nav>
+  </div>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP Skills Conformance Lands: What SEP-2640 Means for Server Authors | The Agent Lab</title>
+<meta name="description" content="The Skills Over MCP extension (SEP-2640) merged conformance scenarios on September 11, 2026. Here's what server authors need to know about the new skill discovery contract, the five new test scenarios, and how to validate implementations against the official suite.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-22-mcp-skills-conformance-sep-2640/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP Skills Conformance Lands: What SEP-2640 Means for Server Authors">
+<meta property="og:description" content="The Skills Over MCP extension (SEP-2640) merged conformance scenarios on September 11, 2026. Here's what server authors need to know about the new skill discovery contract, the five new test scenarios, and how to validate implementations against the official suite.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-22-mcp-skills-conformance-sep-2640/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-22-mcp-skills-conformance-sep-2640/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MCP Skills conformance scenarios - SEP-2640 implementation guide">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCP Skills Conformance Lands: What SEP-2640 Means for Server Authors">
+<meta name="twitter:description" content="The Skills Over MCP extension (SEP-2640) merged conformance scenarios on September 11, 2026. Here's what server authors need to know.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-22-mcp-skills-conformance-sep-2640/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MCP Skills Conformance Lands: What SEP-2640 Means for Server Authors",
+  "description": "The Skills Over MCP extension (SEP-2640) merged conformance scenarios on September 11, 2026. Here's what server authors need to know about the new skill discovery contract, the five new test scenarios, and how to validate implementations against the official suite.",
+  "image": "https://theagentlab.site/blog/2026-09-22-mcp-skills-conformance-sep-2640/og.png",
+  "datePublished": "2026-09-22",
+  "dateModified": "2026-09-22",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-22-mcp-skills-conformance-sep-2640/"
+  }
+}
+</script>
+
+<style id="brand-core">
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-void: #09090b; --bg-foundation: #0f1014; --bg-surface-1: #16171c; --bg-surface-2: #1c1d24; --bg-surface-3: #24252e; --bg-inset: #0c0c10;
+  --border-subtle: rgba(255,255,255,0.04); --border-default: rgba(255,255,255,0.07); --border-strong: rgba(255,255,255,0.12); --border-accent: rgba(191,149,83,0.30);
+  --text-primary: #e8e4de; --text-secondary: #9f9a92; --text-tertiary: #928d84; --text-ghost: #3d3a36;
+  --accent-bronze: #bf9553; --accent-bronze-dim: #8a6c3e; --accent-copper: #c47a4a; --accent-slate: #5a7c8a; --accent-sage: #6b8a5a; --accent-clay: #8a5a5a;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2); --shadow-sm: 0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1); --shadow-lg: 0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl: 0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif; --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+  --radius-sm: 3px; --radius-md: 5px; --radius-lg: 8px;
+  --z-void: -1; --z-canvas: 0; --z-surface: 10; --z-nav: 1000;
+  --measure: 68ch;
+}
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-body); background: var(--bg-void); color: var(--text-secondary); line-height: 1.6; overflow-x: hidden; padding-top: 64px; }
+body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10000; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); background-size: 256px 256px; }
+a { color: inherit; text-decoration: none; } ::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+.skip-link { position: absolute; left: 16px; top: -80px; z-index: 10001; font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bronze); color: var(--bg-void); padding: 12px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); transition: top 0.2s ease; } .skip-link:focus { top: 80px; }
+.page-narrow { max-width: 900px; margin: 0 auto; padding: 0 48px; }
+.section { padding: 120px 0; position: relative; } .section + .section { border-top: 1px solid var(--border-subtle); }
+.section-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-bronze); margin-bottom: 12px; display: block; }
+h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; color: var(--text-primary); font-weight: 400; letter-spacing: -0.02em; max-width: var(--measure); }
+.article-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 16px; font-family: var(--font-mono); font-size: 13px; color: var(--text-tertiary); }
+.article-meta a { color: var(--accent-bronze); border-bottom: 1px solid transparent; transition: border-color 0.15s; } .article-meta a:hover { border-color: var(--accent-bronze); }
+.article-lead { margin-top: 32px; font-size: 1.15rem; line-height: 1.7; color: var(--text-secondary); max-width: var(--measure); }
+.article-body { margin-top: 48px; max-width: var(--measure); }
+.article-body h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; color: var(--text-primary); font-weight: 400; margin-top: 48px; margin-bottom: 16px; letter-spacing: -0.01em; }
+.article-body h3 { font-family: var(--font-display); font-size: clamp(1.2rem, 2.5vw, 1.5rem); line-height: 1.3; color: var(--text-primary); font-weight: 400; margin-top: 36px; margin-bottom: 12px; }
+.article-body p { margin-bottom: 16px; color: var(--text-secondary); }
+.article-body a { color: var(--accent-bronze); border-bottom: 1px solid var(--border-accent); transition: border-color 0.15s, color 0.15s; } .article-body a:hover { color: var(--text-primary); border-color: var(--accent-bronze); }
+.article-body code { font-family: var(--font-mono); font-size: 0.9em; background: var(--bg-inset); padding: 2px 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); }
+.article-body pre { background: var(--bg-inset); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 20px; overflow-x: auto; margin: 24px 0; }
+.article-body pre code { background: none; padding: 0; border: none; font-size: 13px; line-height: 1.6; }
+.article-body ul, .article-body ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+.article-body li { margin-bottom: 8px; }
+.article-body blockquote { border-left: 3px solid var(--accent-bronze); padding-left: 20px; margin: 24px 0; color: var(--text-tertiary); font-style: italic; }
+.article-body hr { border: none; border-top: 1px solid var(--border-subtle); margin: 48px 0; }
+.article-body img { max-width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--border-default); margin: 24px 0; }
+.article-body .callout { background: var(--bg-surface-1); border: 1px solid var(--border-default); border-left: 3px solid var(--accent-bronze); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+.article-body .callout p { margin: 0; color: var(--text-secondary); }
+.article-body .callout strong { color: var(--text-primary); }
+.article-footer { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border-subtle); }
+.article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.article-tags a { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: var(--radius-sm); transition: border-color 0.15s, color 0.15s; } .article-tags a:hover { border-color: var(--accent-bronze); color: var(--accent-bronze); }
+.cta-support { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #222; font-size: 0.95rem; color: #888; }
+.cta-support a { color: var(--accent-bronze); border-bottom: 1px solid var(--border-accent); } .cta-support a:hover { color: var(--text-primary); border-color: var(--accent-bronze); }
+.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav); background: rgba(9,9,11,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle); }
+.header-inner { max-width: 1400px; margin: 0 auto; padding: 16px 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); letter-spacing: -0.01em; }
+.nav { display: flex; align-items: center; gap: 32px; }
+.nav a { font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); transition: color 0.15s; } .nav a:hover { color: var(--accent-bronze); }
+.site-footer { background: var(--bg-foundation); border-top: 1px solid var(--border-subtle); padding: 64px 48px 32px; margin-top: 120px; }
+.footer-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
+.footer-brand { max-width: 320px; } .footer-brand .brand { display: block; margin-bottom: 16px; }
+.footer-brand p { color: var(--text-tertiary); font-size: 0.9rem; line-height: 1.7; }
+.footer-links h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-bronze); margin-bottom: 16px; }
+.footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { color: var(--text-tertiary); transition: color 0.15s; } .footer-links a:hover { color: var(--accent-bronze); }
+.footer-bottom { max-width: 1400px; margin: 48px auto 0; padding-top: 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 11px; color: var(--text-ghost); flex-wrap: wrap; gap: 16px; }
+@media (max-width: 768px) { .page-narrow { padding: 0 24px; } .header-inner { padding: 16px 24px; } .site-footer { padding: 48px 24px 24px; } .footer-inner { grid-template-columns: 1fr; gap: 32px; } .footer-brand { max-width: none; } }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="site-header">
+<div class="header-inner">
+<a href="/" class="brand">THE AGENT LAB</a>
+<nav class="nav">
+<a href="/">Home</a>
+<a href="/blog/">Blog</a>
+<a href="/services/">Services</a>
+<a href="/kits/">Kits</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<article>
+<div class="page-narrow">
+<header class="article-header">
+<p class="section-label">Article</p>
+<h1>MCP Skills Conformance Lands: What SEP-2640 Means for Server Authors</h1>
+<div class="article-meta">
+<time datetime="2026-09-22">September 22, 2026</time>
+<span>By Ashrey</span>
+</div>
+<p class="article-lead">The Skills Over MCP extension (SEP-2640) merged its official conformance scenarios on September 11, 2026. For the first time, server authors have a machine-verifiable contract for skill discovery — moving the ecosystem from informal conventions to a testable specification.</p>
+</header>
+<div class="article-body">
+<h2>The Short Version</h2>
+<p>SEP-2640 defines how MCP servers expose <em>skills</em> — reusable, discoverable capability bundles — through standard MCP primitives (Resources, not a parallel protocol). On September 11, the <a href="https://github.com/modelcontextprotocol/conformance" target="_blank" rel="noopener">MCP conformance repository</a> merged five server scenarios that any implementation must pass to claim compliance. The scenarios cover index integrity, manifest completeness, directory structure, resource binding, and security boundaries.</p>
+
+<h2>Why This Matters</h2>
+<p>Until now, "skills" in MCP were a folk convention. Servers advertised capabilities through custom tools (<code>list_skills</code>, <code>load_skill</code>) with no shared schema, no discovery protocol, and no way for a client to verify what a server actually provides. SEP-2640 changes that by standardizing on Resources:</p>
+<ul>
+<li><strong>skill://index.json</strong> — a canonical index listing every skill with type, name, digest, and skill:// URI</li>
+<li><strong>skill://{type}/{name}/SKILL.md</strong> — a markdown resource with frontmatter (name, description, version, author) that the server binds at runtime</li>
+<li><strong>Digests</strong> — SHA-256 hashes in <code>sha256:{64hex}</code> format so clients can verify integrity</li>
+<li><strong>Limits</strong> — 512 entries max, 16 MiB total index size, preventing unbounded growth</li>
+</ul>
+<p>The conformance suite turns these requirements into executable tests. A server either passes or it doesn't — no ambiguity.</p>
+
+<h2>The Five Server Scenarios</h2>
+<p>The merged PR (<a href="https://github.com/modelcontextprotocol/conformance/pull/330" target="_blank" rel="noopener">conformance#330</a>) adds these scenarios under <code>src/scenarios/server/skills/</code>:</p>
+
+<h3>1. SkillsIndexScenario (<code>sep-2640-skills-index</code>)</h3>
+<p>Validates the index resource:</p>
+<ul>
+<li><code>skill://index.json</code> exists and is readable</li>
+<li>Every <code>skills[].type</code> is a value from the SEP enum</li>
+<li>Every entry has a non-empty <code>name</code></li>
+<li>A present <code>digest</code> matches <code>sha256:{64hex}</code> format</li>
+<li>Entry URLs use the <code>skill://</code> scheme</li>
+</ul>
+
+<h3>2. SkillsManifestScenario (<code>sep-2640-skills-manifest</code>)</h3>
+<p>Validates each skill's manifest resource:</p>
+<ul>
+<li>The resource is markdown-typed</li>
+<li>Frontmatter <code>name</code> and <code>description</code> surface on the resource metadata</li>
+<li>The final path segment equals the frontmatter <code>name</code></li>
+<li>Skill <code>_meta</code> keys use the reverse-domain prefix (e.g., <code>io.modelcontextprotocol/...</code>)</li>
+</ul>
+
+<h3>3. SkillsDirectoryScenario (<code>sep-2640-skills-directory</code>)</h3>
+<p>Validates the directory layout:</p>
+<ul>
+<li>Capabilities are read from the server's declared skills directory</li>
+<li>Each skill directory contains exactly one <code>SKILL.md</code></li>
+<li>No orphan files; no nested skill directories</li>
+</ul>
+
+<h3>4. SkillsResourceBindingScenario (<code>sep-2640-skills-resource-binding</code>)</h3>
+<p>Validates that the Python SDK's <code>ResourceBinding</code> and <code>MethodBinding</code> primitives correctly serve skill resources through the standard MCP <code>resources/read</code> flow — no custom tooling required.</p>
+
+<h3>5. SkillsSecurityBoundaryScenario (<code>sep-2640-skills-security</code>)</h3>
+<p>Validates the security model Tobin (Anthropic) flagged in February 2025: dynamically served skills must not bypass authorization. The scenario confirms that skill resources respect the same permission boundaries as other MCP resources — no side channels.</p>
+
+<h2>What Server Authors Need to Do</h2>
+<p>If you maintain an MCP server that exposes skills (or plan to), the compliance path is straightforward:</p>
+
+<ol>
+<li><strong>Run the conformance suite</strong> against your server. The suite is in <a href="https://github.com/modelcontextprotocol/conformance" target="_blank" rel="noopener">modelcontextprotocol/conformance</a> — pin to commit <code>7169291ec0b68eb370fddcd9947313ab0d5e4156</code> for the SEP-2640 scenarios.</li>
+<li><strong>Structure your skills directory</strong> as <code>skills/{type}/{name}/SKILL.md</code> with frontmatter matching the SEP schema.</li>
+<li><strong>Expose <code>skill://index.json</code></strong> through a Resource provider that computes digests at serve time (or pre-computes and caches).</li>
+<li><strong>Use the SDK primitives</strong> — <code>FunctionResource</code>, <code>ResourceBinding</code>, <code>MethodBinding</code> from the MCP Python SDK 2.x. The Stars MCP server (<a href="https://github.com/svg153/github-stars-contrib-mcp-server" target="_blank" rel="noopener">svg153/github-stars-contrib-mcp-server</a>) demonstrated this passes conformance without a parallel FastMCP layer.</li>
+<li><strong>Gate skill resources behind the same auth</strong> as your other resources. The security scenario will fail if skills leak around authorization.</li>
+</ol>
+
+<h2>What Clients Should Expect</h2>
+<p>For client authors, SEP-2640 means you can now:</p>
+<ul>
+<li>Discover skills via <code>resources/list</code> with a <code>skill://</code> URI filter</li>
+<li>Read a skill's manifest via <code>resources/read</code> — no custom RPC</li>
+<li>Verify integrity with the provided SHA-256 digest before executing</li>
+<li>Present a unified skill browser across any compliant server</li>
+</ul>
+<p>The <code>ext-skills</code> repository (<a href="https://github.com/modelcontextprotocol/experimental-ext-skills" target="_blank" rel="noopener">modelcontextprotocol/experimental-ext-skills</a>) hosts the stable specification page and reference implementation. Note the repo is explicitly labeled experimental; SEP-2640 itself is the canonical proposal.</p>
+
+<h2>Ecosystem Signal</h2>
+<p>The conformance merge is a coordination milestone. Multiple implementations (Python SDK, Scala/JVM via <a href="https://github.com/TJC-LP/fast-mcp-scala/pull/123" target="_blank" rel="noopener">fast-mcp-scala</a>, and the Stars pilot) have now validated against the same test vectors. That convergence is what turns a specification into a standard.</p>
+<p>For teams building on MCP, the takeaway is practical: if your server claims to support skills, run the conformance suite in CI. If it passes, you interoperate. If it doesn't, the failures tell you exactly which contract clause you're violating.</p>
+</div>
+
+<footer class="article-footer">
+<div class="article-tags">
+<a href="/blog/tags/mcp/">MCP</a>
+<a href="/blog/tags/sep-2640/">SEP-2640</a>
+<a href="/blog/tags/skills/">Skills</a>
+<a href="/blog/tags/conformance/">Conformance</a>
+<a href="/blog/tags/protocol/">Protocol</a>
+</div>
+<p class="cta-support">If this was useful, you can <a href="https://ko-fi.com/ashrey122" target="_blank" rel="noopener">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/" target="_blank" rel="noopener">my services</a>.</p>
+</footer>
+</div>
+</article>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<div class="footer-brand">
+<a href="/" class="brand">THE AGENT LAB</a>
+<p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+</div>
+<div class="footer-links">
+<h4>Explore</h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/services/">Services</a></li>
+<li><a href="/kits/">Kits</a></li>
+<li><a href="https://github.com/m-ashrey/mcp-doctor" target="_blank" rel="noopener">mcp-doctor</a></li>
+</ul>
+</div>
+<div class="footer-links">
+<h4>Connect</h4>
+<ul>
+<li><a href="https://www.youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a></li>
+<li><a href="https://www.linkedin.com/in/mohamed-ashrey/" target="_blank" rel="noopener">LinkedIn</a></li>
+<li><a href="https://github.com/m-ashrey" target="_blank" rel="noopener">GitHub</a></li>
+<li><a href="https://ko-fi.com/ashrey122" target="_blank" rel="noopener">Ko-fi</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<span>&copy; 2026 The Agent Lab</span>
+<span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+</div>
+</footer>
+</body>
+</html>

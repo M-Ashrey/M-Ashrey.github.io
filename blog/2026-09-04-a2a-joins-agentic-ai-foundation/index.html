@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google's A2A Protocol Joins the Agentic AI Foundation — What It Means for Multi-Agent Systems | The Agent Lab</title>
+<meta name="description" content="Google's Agent2Agent (A2A) protocol moved under the Agentic AI Foundation in August 2026, joining MCP, goose, and AGENTS.md. Here's what the convergence of agent-to-agent and agent-to-tool protocols means for developers building multi-agent systems.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-09-04-a2a-joins-agentic-ai-foundation/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google's A2A Protocol Joins the Agentic AI Foundation — What It Means for Multi-Agent Systems">
+<meta property="og:description" content="A2A and MCP now share a governance home. Here's what the convergence means for developers building multi-agent systems.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-09-04-a2a-joins-agentic-ai-foundation/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-09-04-a2a-joins-agentic-ai-foundation/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab — Google A2A joins Agentic AI Foundation alongside MCP">
+<meta property="article:published_time" content="2026-09-04T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="A2A">
+<meta property="article:tag" content="Agent2Agent">
+<meta property="article:tag" content="Model Context Protocol">
+<meta property="article:tag" content="Agentic AI Foundation">
+<meta property="article:tag" content="Linux Foundation">
+<meta property="article:tag" content="Google">
+<meta property="article:tag" content="AI Agents">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Google's A2A Protocol Joins the Agentic AI Foundation — What It Means for Multi-Agent Systems">
+<meta name="twitter:description" content="A2A and MCP now share a governance home. Here's what the convergence means for developers building multi-agent systems.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-09-04-a2a-joins-agentic-ai-foundation/og.png">
+<meta name="twitter:site" content="@TheAgentLab">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Google's A2A Protocol Joins the Agentic AI Foundation — What It Means for Multi-Agent Systems",
+  "description": "A2A and MCP now share a governance home. Here's what the convergence means for developers building multi-agent systems.",
+  "image": "https://theagentlab.site/blog/2026-09-04-a2a-joins-agentic-ai-foundation/og.png",
+  "url": "https://theagentlab.site/blog/2026-09-04-a2a-joins-agentic-ai-foundation/",
+  "datePublished": "2026-09-04T00:00:00+02:00",
+  "dateModified": "2026-09-04T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-09-04-a2a-joins-agentic-ai-foundation/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.nav-cta:hover { background: var(--accent-copper); box-shadow: var(--shadow-md); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-head {
+  padding: 80px 0 40px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 48px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  max-width: 24ch;
+}
+
+.article-title em { font-style: italic; }
+
+.dek {
+  font-size: 18px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+}
+
+.byline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.byline-author { font-weight: 500; color: var(--text-secondary); }
+.byline-date { color: var(--text-tertiary); }
+
+.article-body {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 2px;
+}
+
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 48px 0 16px;
+}
+
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 36px 0 12px;
+}
+
+.article-body p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.article-body a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid var(--border-accent);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.article-body a:hover { color: var(--accent-copper); border-color: var(--accent-copper); }
+
+.article-body ul, .article-body ol {
+  margin: 20px 0 20px 24px;
+  line-height: 1.8;
+}
+
+.article-body li { margin-bottom: 8px; color: var(--text-secondary); }
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--bg-surface-1);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-bronze);
+}
+
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+
+.article-body pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.article-body blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 24px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 48px 0;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 80px;
+  padding: 60px 0 40px;
+}
+
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.footer-wordmark {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.footer-wordmark span { color: var(--accent-bronze); }
+
+.footer-line {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  max-width: 320px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.footer-social a:hover { border-color: var(--accent-bronze); color: var(--accent-bronze); }
+
+.footer-nav {
+  display: flex;
+  gap: 64px;
+}
+
+.footer-col { min-width: 140px; }
+.footer-col .h {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+  display: block;
+}
+.footer-col a {
+  display: block;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  transition: color 0.15s ease;
+}
+.footer-col a:hover { color: var(--accent-bronze); }
+
+.footer-base {
+  max-width: 1400px;
+  margin: 48px auto 0;
+  padding: 24px 48px 0;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+.footer-copy a { color: var(--text-ghost); }
+.footer-copy a:hover { color: var(--accent-bronze); }
+
+/* ===================================================================
+   CTA BLOCK
+   =================================================================== */
+.cta-block {
+  margin: 2.5rem 0 1.5rem;
+  padding: 1.5rem;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+.cta-block p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #888;
+}
+.cta-block a { color: var(--accent-bronze); border-bottom: 1px solid var(--border-accent); }
+.cta-block a:hover { color: var(--accent-copper); border-color: var(--accent-copper); }
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 1080px) {
+  .page-container, .page-narrow { padding: 0 22px; }
+  .nav-bar { padding: 0 22px; }
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .article-head { padding: 64px 0 40px; }
+  .footer-inner, .footer-base { padding-left: 22px; padding-right: 22px; }
+  .footer-nav { gap: 32px; }
+}
+
+@media (max-width: 720px) {
+  .hero-headline { font-size: 37px; line-height: 1.1; }
+  .article-title { font-size: 34px; line-height: 1.14; }
+  .footer-nav { flex-direction: column; gap: 24px; }
+  .footer-base { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav-bar">
+  <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
+    <li><a href="/kits/">Kits</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
+</nav>
+
+<main id="main">
+<div class="page-container">
+
+  <header class="article-head">
+    <span class="eyebrow">A2A · MCP · AI Agents</span>
+    <h1 class="article-title">Google's A2A Protocol Joins the Agentic AI Foundation — What It Means for <em>Multi-Agent</em> Systems</h1>
+    <p class="dek">Google's Agent2Agent protocol moved under the Agentic AI Foundation in August 2026, placing agent-to-agent communication alongside agent-to-tool protocols under shared governance. Here's what the convergence means for developers building multi-agent systems.</p>
+    <div class="byline">
+      <span class="byline-author">Ashrey</span>
+      <span class="byline-date">September 4, 2026</span>
+    </div>
+  </header>
+
+  <div class="article-body">
+
+    <p>On August 17, 2026, Google transferred the Agent2Agent (A2A) protocol to the Agentic AI Foundation (AAIF), the Linux Foundation body that already hosts the Model Context Protocol (MCP), Block's goose runtime, and OpenAI's AGENTS.md convention. The move was reported by Axios and confirmed by the AAIF project page.</p>
+
+    <p>In one year, the AAIF has become the neutral home for the three foundational protocols of the agentic stack: MCP for agent-to-tool connectivity, A2A for agent-to-agent communication, and AGENTS.md for agent-to-repository guidance. This convergence is not cosmetic — it changes how developers should think about building multi-agent systems.</p>
+
+    <h2>What A2A Actually Does</h2>
+
+    <p>A2A is an open protocol for AI agents to discover, communicate with, and securely hand off tasks to other agents across different platforms and frameworks. Where MCP standardizes how a single agent invokes tools and reads resources, A2A standardizes how multiple agents coordinate with each other.</p>
+
+    <p>The protocol defines:</p>
+    <ul>
+      <li><strong>Agent Cards</strong> — machine-readable manifests (JSON) that describe an agent's capabilities, skills, authentication requirements, and endpoint information. Think of it as a service discovery document for agents.</li>
+      <li><strong>Task lifecycle</strong> — a standardized state machine for multi-agent work: <code>submitted</code> → <code>working</code> → <code>input-required</code> → <code>completed</code> (or <code>failed</code>/<code>canceled</code>). This gives observability into distributed agent workflows.</li>
+      <li><strong>Artifact exchange</strong> — structured payloads (text, files, data) passed between agents with content-type negotiation and streaming support.</li>
+      <li><strong>Push notifications</strong> — webhook-based callbacks so agents can receive updates without polling.</li>
+      <li><strong>Authentication & authorization</strong> — built on OAuth 2.0 and OIDC, with support for mutual TLS for enterprise deployments.</li>
+    </ul>
+
+    <p>Google open-sourced A2A in April 2025 with initial support from over 50 technology partners. The protocol was designed to be framework-agnostic — an agent built on LangGraph can hand off to an agent running on AutoGen, CrewAI, or a custom runtime, provided both speak A2A.</p>
+
+    <h2>Why the Governance Shift Matters</h2>
+
+    <p>Until August 2026, A2A was a Google-led project. Google's transfer to the AAIF moves it into the same vendor-neutral governance structure that now stewards MCP. The practical implications are significant:</p>
+
+    <h3>1. Single governance body for the agentic protocol stack</h3>
+    <p>Developers no longer need to track separate governance processes, IP policies, and contribution agreements for the two core interoperability protocols. The AAIF's Technical Steering Committee now oversees both. This reduces fragmentation risk — the scenario where MCP evolves in one direction while A2A evolves in another, creating integration friction.</p>
+
+    <h3>2. Cross-protocol roadmap alignment</h3>
+    <p>The AAIF has signaled that MCP and A2A roadmaps will be coordinated. The MCP 2026-07-28 revision introduced stateless HTTP transport, server identity, and official extensions. A2A's next milestone is expected to align its transport layer with MCP's HTTP binding, making it trivial to run both protocols on the same infrastructure. For teams deploying agent fleets, this means one ingress, one auth layer, one observability stack.</p>
+
+    <h3>3. Enterprise adoption signal</h3>
+    <p>Neutral governance is the prerequisite for regulated industries. The Linux Foundation's track record with Kubernetes, Node.js, and PyTorch shows that vendor-neutral homes accelerate enterprise adoption. With both MCP and A2A under the AAIF, enterprises evaluating agentic infrastructure now have a single compliance checkpoint instead of two.</p>
+
+    <h3>4. Trademark and IP clarity</h3>
+    <p>The AAIF holds trademarks for both protocols. This prevents the "embrace and extend" dynamic where a single vendor could fork the protocol and claim the name. The governance model mirrors MCP's: maintainers prioritize community input and transparent decision-making.</p>
+
+    <h2>MCP vs A2A — The Boundary Is the Architecture</h2>
+
+    <p>A common question: when do you use MCP, and when do you use A2A? The distinction maps to the architecture pattern:</p>
+
+    <table style="width:100%; border-collapse:collapse; margin:24px 0; font-size:14px;">
+      <thead>
+        <tr style="background:var(--bg-surface-1); border-bottom:1px solid var(--border-default);">
+          <th style="padding:12px; text-align:left; color:var(--text-primary);">Dimension</th>
+          <th style="padding:12px; text-align:left; color:var(--text-primary);">MCP (Agent → Tool)</th>
+          <th style="padding:12px; text-align:left; color:var(--text-primary);">A2A (Agent ↔ Agent)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border-subtle);">
+          <td style="padding:12px; color:var(--text-secondary);">Primary actor</td>
+          <td style="padding:12px; color:var(--text-secondary);">Single agent invoking capabilities</td>
+          <td style="padding:12px; color:var(--text-secondary);">Multiple agents coordinating</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle);">
+          <td style="padding:12px; color:var(--text-secondary);">Discovery</td>
+          <td style="padding:12px; color:var(--text-secondary);">Tool listing via <code>tools/list</code></td>
+          <td style="padding:12px; color:var(--text-secondary);">Agent Card via <code>/.well-known/agent.json</code></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle);">
+          <td style="padding:12px; color:var(--text-secondary);">Invocation model</td>
+          <td style="padding:12px; color:var(--text-secondary);">Request/response (tools), subscription (resources)</td>
+          <td style="padding:12px; color:var(--text-secondary);">Task lifecycle with async handoff</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle);">
+          <td style="padding:12px; color:var(--text-secondary);">State</td>
+          <td style="padding:12px; color:var(--text-secondary);">Stateless (post 2026-07-28)</td>
+          <td style="padding:12px; color:var(--text-secondary);">Task-scoped state machine</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle);">
+          <td style="padding:12px; color:var(--text-secondary);">Auth</td>
+          <td style="padding:12px; color:var(--text-secondary);">OAuth 2.1 / Bearer tokens</td>
+          <td style="padding:12px; color:var(--text-secondary);">OAuth 2.0 / OIDC / mTLS</td>
+        </tr>
+        <tr>
+          <td style="padding:12px; color:var(--text-secondary);">Typical use</td>
+          <td style="padding:12px; color:var(--text-secondary);">Code execution, file access, API calls, DB queries</td>
+          <td style="padding:12px; color:var(--text-secondary);">Planning delegation, specialist handoff, human-in-loop escalation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>In practice, a production agent system uses both. A lead agent receives a user request, uses MCP to fetch context from a knowledge base, then uses A2A to delegate a sub-task to a specialist coding agent. That specialist uses MCP to write files and run tests. The protocols compose.</p>
+
+    <h2>What This Means for Your Stack</h2>
+
+    <h3>If you're building on MCP today</h3>
+    <p>Nothing breaks. The MCP governance model is unchanged. But you should watch the AAIF's cross-protocol working group — the first joint RFCs (likely around shared authentication primitives and unified error taxonomies) will land in Q4 2026. If you're running an MCP gateway, plan for A2A-aware routing.</p>
+
+    <h3>If you're evaluating multi-agent frameworks</h3>
+    <p>Frameworks that implement both protocols natively (or provide first-class adapters) will have a durability advantage. Look for: Agent Card generation from framework primitives, A2A task lifecycle hooks, and MCP server embedding within agent runtimes. The AAIF's project lifecycle policy (Growth → Impact → Emeritus) now applies to both protocols, giving you a signal for maturity.</p>
+
+    <h3>If you're deploying in regulated environments</h3>
+    <p>The AAIF's vendor-neutral home is the compliance artifact your security team needs. Both protocols now share the same IP policy, trademark stewardship, and governance transparency. You can point auditors to one foundation, not two vendor-led projects.</p>
+
+    <h3>If you're building agent-to-agent products</h3>
+    <p>A2A's move to AAIF de-risks building on it. Google's initial stewardship created a perception (fair or not) that A2A was "Google's protocol." The transfer signals long-term neutrality. Expect more framework integrations and enterprise-grade implementations in the next two quarters.</p>
+
+    <h2>The Missing Piece: Authorization</h2>
+
+    <p>Both MCP and A2A delegate authorization to the transport layer (OAuth, mTLS). Neither defines a fine-grained, protocol-native authorization model for <em>what an agent is allowed to do</em> — only <em>who can connect</em>. The AAIF has chartered an Authorization Working Group (announced alongside the A2A transfer) to address this. The goal: a shared authorization vocabulary so that an MCP tool call and an A2A task delegation can be governed by the same policy engine.</p>
+
+    <p>This is the next convergence point. If you're building agent infrastructure today, design your auth layer to be protocol-agnostic — the policy decision point should not care whether the request came via MCP or A2A.</p>
+
+    <h2>What to Watch</h2>
+
+    <ul>
+      <li><strong>AAIF Technical Steering Committee minutes</strong> — published monthly. The first joint MCP/A2A roadmap session is scheduled for October 2026.</li>
+      <li><strong>A2A spec v1.1</strong> — expected to align transport with MCP's HTTP binding and add structured error codes compatible with MCP's error taxonomy.</li>
+      <li><strong>AgentGateway project</strong> — the AAIF-hosted proxy that speaks both MCP and A2A. Early adopters are using it as a single ingress for agent fleets.</li>
+      <li><strong>MCP Dev Summit Tokyo (Sept 10-11)</strong> and <strong>AGNTCon + MCPCon Europe (Sept 17-18)</strong> — both will feature A2A sessions for the first time.</li>
+    </ul>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+
+  </div>
+
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner page-container">
+    <div class="footer-brand">
+      <div class="footer-wordmark">The Agent <span>Lab</span></div>
+      <p class="footer-line">An AI development lab building live quoting engines for home service contractors. Run by Ashrey, Co-Founder.</p>
+      <div class="footer-social">
+        <a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.1 7.5c-.2-.9-.9-1.6-1.8-1.8C17.5 5.3 12 5.3 12 5.3s-5.5 0-7.3.4c-.9.2-1.6.9-1.8 1.8C2.5 9.3 2.5 12 2.5 12s0 2.7.4 4.5c.2.9.9 1.6 1.8 1.8 1.8.4 7.3.4 7.3.4s5.5 0 7.3-.4c.9-.2 1.6-.9 1.8-1.8.4-1.8.4-4.5.4-4.5s0-2.7-.4-4.5zM10.2 15.3V8.7l5.4 3.3-5.4 3.3z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/mohamed-ashrey/" aria-label="LinkedIn" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.3 20.5H3V9.2h3.3v11.3zM4.6 7.8c-1.1 0-1.9-.9-1.9-1.9 0-1.1.9-1.9 1.9-1.9s1.9.9 1.9 1.9c0 1.1-.8 1.9-1.9 1.9zM21 20.5h-3.3v-5.9c0-1.5-.6-2.4-1.9-2.4-1 0-1.7.7-1.9 1.4-.1.3-.1.6-.1.9v6h-3.3s0-9.8 0-11.3h3.3v1.6c.4-.7 1.3-1.7 3.1-1.7 2.3 0 4 1.5 4 4.7v6.7z"/></svg>
+        </a>
+      </div>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <div class="footer-col">
+        <span class="h">The Engine</span>
+        <a href="/services/">What it does</a>
+        <a href="/ai/">Who we build for</a>
+        <a href="/#partners">Agency partners</a>
+      </div>
+      <div class="footer-col">
+        <span class="h">The Lab</span>
+        <a href="/kits/">Kits</a>
+        <a href="/blog/">Blog</a>
+        <a href="/#founding">Founding access</a>
+      </div>
+      <div class="footer-col">
+        <span class="h">Open Source</span>
+        <a href="https://github.com/M-Ashrey">GitHub</a>
+        <a href="https://dev.to/m_ashrey122">dev.to</a>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-base page-container">
+    <span class="footer-copy">&copy; 2026 The Agent Lab</span>
+    <span class="footer-copy"><a href="/terms/">Terms</a> &middot; <a href="/refunds/">Refunds</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="mailto:m.ashrey122@gmail.com">Contact</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

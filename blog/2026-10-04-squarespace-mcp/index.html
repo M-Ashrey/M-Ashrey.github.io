@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Squarespace Joins the MCP Ecosystem: A No-Auth Server for Domain Management | The Agent Lab</title>
+<meta name="description" content="Squarespace released an official MCP server at mcp.squarespace.com. No API key, no OAuth, no account required. Two domain tools and three prompts let any MCP client search, generate, and check domains in real time.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-10-04-squarespace-mcp/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Squarespace Joins the MCP Ecosystem: A No-Auth Server for Domain Management">
+<meta property="og:description" content="Squarespace released an official MCP server at mcp.squarespace.com. No API key, no OAuth, no account required. Two domain tools and three prompts let any MCP client search, generate, and check domains in real time.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-10-04-squarespace-mcp/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/assets/og/2026-10-04-squarespace-mcp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Squarespace MCP server announcement">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Squarespace Joins the MCP Ecosystem: A No-Auth Server for Domain Management">
+<meta name="twitter:description" content="Squarespace released an official MCP server at mcp.squarespace.com. No API key, no OAuth, no account required.">
+<meta name="twitter:image" content="https://theagentlab.site/assets/og/2026-10-04-squarespace-mcp.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Squarespace Joins the MCP Ecosystem: A No-Auth Server for Domain Management",
+  "description": "Squarespace released an official MCP server at mcp.squarespace.com. No API key, no OAuth, no account required. Two domain tools and three prompts let any MCP client search, generate, and check domains in real time.",
+  "url": "https://theagentlab.site/blog/2026-10-04-squarespace-mcp/",
+  "datePublished": "2026-10-04",
+  "dateModified": "2026-10-04",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-10-04-squarespace-mcp/"
+  }
+}
+</script>
+
+<style id="brand-core">
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  max-width: var(--measure);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-top: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p {
+  margin-bottom: 1.25rem;
+  max-width: var(--measure);
+}
+
+strong { color: var(--text-primary); }
+code { font-family: var(--font-mono); font-size: 0.9em; background: var(--bg-inset); padding: 0.15em 0.4em; border-radius: var(--radius-sm); color: var(--accent-bronze); }
+pre { background: var(--bg-inset); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 1rem 1.25rem; overflow-x: auto; margin: 1.5rem 0; max-width: 100%; }
+pre code { background: none; padding: 0; font-size: 0.875rem; line-height: 1.7; color: var(--text-secondary); }
+
+ul, ol { margin: 1rem 0 1.5rem 1.5rem; max-width: var(--measure); }
+li { margin-bottom: 0.5rem; }
+li p { margin-bottom: 0.5rem; }
+
+blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+  max-width: var(--measure);
+}
+
+hr { border: none; border-top: 1px solid var(--border-subtle); margin: 3rem 0; }
+
+.article-header {
+  padding: 80px 0 40px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.article-meta time { font-variant-numeric: tabular-nums; }
+.article-meta .author { color: var(--accent-bronze); font-weight: 600; }
+
+.article-content {
+  padding: 60px 0 100px;
+}
+
+.article-footer {
+  padding-top: 40px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 60px;
+}
+
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-nav);
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.site-header .page-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.site-logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.site-nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.site-nav a {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  transition: color 0.15s ease;
+}
+.site-nav a:hover { color: var(--accent-bronze); }
+
+.site-footer {
+  padding: 80px 0 40px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 60px;
+  margin-bottom: 60px;
+}
+
+.footer-brand p { color: var(--text-tertiary); font-size: 0.95rem; margin-top: 16px; max-width: 300px; }
+.footer-brand .logo { font-family: var(--font-display); font-size: 1.5rem; color: var(--text-primary); }
+
+.footer-column h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-bronze); margin-bottom: 20px; }
+.footer-column ul { list-style: none; margin: 0; padding: 0; }
+.footer-column li { margin-bottom: 12px; }
+.footer-column a { color: var(--text-tertiary); font-size: 0.95rem; transition: color 0.15s ease; }
+.footer-column a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  padding-top: 40px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: var(--text-ghost);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .site-nav { display: none; }
+  .page-container, .page-narrow { padding: 0 24px; }
+  body { padding-top: 56px; }
+  .site-header .page-container { height: 56px; }
+}
+
+img { max-width: 100%; height: auto; display: block; }
+figure { margin: 2.5rem 0; }
+figcaption { font-family: var(--font-mono); font-size: 11px; color: var(--text-ghost); text-align: center; margin-top: 12px; letter-spacing: 0.05em; }
+
+.table-wrapper { overflow-x: auto; margin: 2rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border-default); }
+th { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-bronze); }
+td { color: var(--text-secondary); }
+tr:last-child td { border-bottom: none; }
+
+.kv { display: grid; grid-template-columns: 180px 1fr; gap: 8px 24px; margin: 1.5rem 0; max-width: var(--measure); }
+.kv dt { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-tertiary); }
+.kv dd { color: var(--text-secondary); }
+
+.callout {
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-left: 3px solid var(--accent-bronze);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  max-width: var(--measure);
+}
+.callout strong { display: block; margin-bottom: 0.5rem; color: var(--accent-bronze); font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+.post-card { display: none; }
+.posts-grid { display: none; }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="site-header" role="banner">
+<div class="page-container">
+<a href="/" class="site-logo" aria-label="The Agent Lab home">The Agent Lab</a>
+<nav class="site-nav" aria-label="Main navigation">
+<a href="/blog/">Blog</a>
+<a href="/services/">Services</a>
+<a href="/kits/">Kits</a>
+<a href="https://ko-fi.com/ashrey122" target="_blank" rel="noopener">Support</a>
+</nav>
+</div>
+</header>
+
+<main id="main" role="main">
+<article class="page-narrow">
+<header class="article-header">
+<div class="article-meta">
+<time datetime="2026-10-04">October 4, 2026</time>
+<span class="author">Ashrey</span>
+</div>
+<h1>Squarespace Joins the MCP Ecosystem: A No-Auth Server for Domain Management</h1>
+</header>
+
+<div class="article-content">
+<p>Squarespace published an official Model Context Protocol server on October 3, 2026. The server lives at <code>https://mcp.squarespace.com/mcp</code> and requires no authentication — no API key, no OAuth flow, no Squarespace account. Any MCP-compatible client (Claude, ChatGPT, Gemini, Claude Code, Cursor) can connect and start calling tools immediately.</p>
+
+<p>This is a notable shift in how SaaS platforms are approaching MCP. Apple's App Store Connect MCP server (covered <a href="/blog/2026-10-02-apple-developer-mcp-app-store-connect/">here</a>) requires authenticated access. Squarespace took the opposite approach: an open, read-only server that anyone can use without signing up.</p>
+
+<h2>What the Server Provides</h2>
+
+<p>The server exposes two tools and three prompts, all focused on domains:</p>
+
+<dl class="kv">
+<dt>domains_generate_names</dt>
+<dd>Generate brandable domain ideas from a plain-language description. Input: a business, product, campaign, or project description. Output: creative, on-brand suggestions — not keyword permutations. Works from intent ("a ceramics studio in Portland focused on classes") as well as from an established brand name.</dd>
+
+<dt>domains_search</dt>
+<dd>Check real-time availability and pricing for a specific domain or keyword across supported TLDs. Every available result includes current pricing and a direct checkout link.</dd>
+
+<dt>Prompt: find_domain</dt>
+<dd>Guided flow to discover available domains from a concept.</dd>
+<dt>Prompt: check_domain</dt>
+<dd>Quick availability check for a specific name.</dd>
+<dt>Prompt: purchase_domain</dt>
+<dd>Structured workflow that hands off to a Squarespace checkout link.</dd>
+</dl>
+
+<p><strong>Key constraint:</strong> The tools are read-only. No tool registers a domain or charges a payment method. Purchases happen only when a user follows a checkout link to <code>squarespace.com</code> and completes the standard checkout flow there.</p>
+
+<h2>Why This Matters for MCP</h2>
+
+<p>Three things stand out:</p>
+
+<h3>1. Zero-friction onboarding</h3>
+<p>MCP adoption has been slowed by the credential dance — API keys, OAuth apps, service accounts, token rotation. Squarespace removed all of it. The server URL is the only configuration. This lowers the barrier for developers trying MCP for the first time and for end users who just want to ask their assistant to check a domain.</p>
+
+<h3>2. A consumer SaaS use case</h3>
+<p>Most production MCP servers so far target developers (GitHub, Linear, Cloudflare, database access, file systems). Squarespace targets a mainstream consumer workflow: naming and registering a domain. The prompt layer (<code>find_domain</code>, <code>check_domain</code>, <code>purchase_domain</code>) is designed for natural-language interaction, not API integration. This signals MCP moving beyond the developer-tool niche.</p>
+
+<h3>3. Read-only as a trust model</h3>
+<p>The server explicitly declares that tools are read-only and purchases require a human in the loop on Squarespace's site. This is a practical answer to the "agent authorization" question: instead of building fine-grained permissions into the protocol, the server limits itself to safe operations and defers sensitive actions to the platform's existing checkout flow. Expect more servers to adopt this pattern.</p>
+
+<h2>How to Connect</h2>
+
+<p>Add this to your MCP client configuration:</p>
+
+<pre><code>{
+  "mcpServers": {
+    "squarespace": {
+      "url": "https://mcp.squarespace.com/mcp"
+    }
+  }
+}
+</code></pre>
+
+<p>No headers, no environment variables, no <code>command</code>/<code>args</code> — it's a remote HTTP server using the MCP 2026-07-28 stateless spec. Works with the v2 MCP SDK in Claude Code 2.1.271+, the Claude desktop app, and any client that supports remote MCP servers.</p>
+
+<p>Squarespace documents the setup for each client at <a href="https://developers.squarespace.com/mcp/connect-a-client" target="_blank" rel="noopener">developers.squarespace.com/mcp/connect-a-client</a>.</p>
+
+<h2>What's Missing (and What Might Come Next)</h2>
+
+<p>Today the server only covers domains. Squarespace's platform also includes websites, commerce, email campaigns, scheduling, and analytics. If the domain server sees adoption, expect those surfaces to follow — possibly as separate MCP servers (one per product line) or as an expanded tool set.</p>
+
+<p>There's also no webhook or subscription support yet. The 2026-07-28 spec added <code>resources/subscribe</code> and <code>notifications/message</code>, which would let an agent get real-time updates when a domain status changes. That's a natural next step for a domain tool.</p>
+
+<h2>The Bigger Picture</h2>
+
+<p>Squarespace joins Apple (App Store Connect), Cloudflare (Workers, KV, D1, R2), Stripe (payments), and a growing list of platforms shipping official MCP servers. The pattern is clear: platforms that expose APIs are adding MCP as a first-class interface alongside REST and GraphQL.</p>
+
+<p>For developers building on MCP, this means the tool catalog is expanding horizontally — not just more dev tools, but commerce, content, identity, and now domains. The protocol's value compounds with each server that ships, because every new server makes every MCP client more useful without any client-side changes.</p>
+
+<p>The no-auth, read-only model Squarespace chose may become the default for consumer-facing SaaS. It's the lowest-friction path to adoption, and it sidesteps the hardest authorization questions until the ecosystem has better primitives for them.</p>
+</div>
+
+<footer class="article-footer">
+<hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+<p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122" style="color:#bf9553">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/" style="color:#bf9553">my services</a>.</p>
+</footer>
+</article>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+<div class="page-container">
+<div class="footer-grid">
+<div class="footer-brand">
+<div class="logo">The Agent Lab</div>
+<p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+</div>
+<div class="footer-column">
+<h4>Writing</h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/kits/">Kits</a></li>
+</ul>
+</div>
+<div class="footer-column">
+<h4>Work</h4>
+<ul>
+<li><a href="/services/">Services</a></li>
+<li><a href="https://github.com/m-ashrey" target="_blank" rel="noopener">GitHub</a></li>
+</ul>
+</div>
+<div class="footer-column">
+<h4>Contact</h4>
+<ul>
+<li><a href="https://ko-fi.com/ashrey122" target="_blank" rel="noopener">Ko-fi</a></li>
+<li><a href="https://www.linkedin.com/in/mohamed-ashrey/" target="_blank" rel="noopener">LinkedIn</a></li>
+<li><a href="https://www.youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<span>&copy; 2026 The Agent Lab. All rights reserved.</span>
+<span><a href="/privacy/" style="color:inherit">Privacy</a> | <a href="/terms/" style="color:inherit">Terms</a></span>
+</div>
+</div>
+</footer>
+</body>
+</html>

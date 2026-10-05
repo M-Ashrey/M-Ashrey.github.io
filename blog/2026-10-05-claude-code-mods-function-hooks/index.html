@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 2.1.287: Mods, Function Hooks, and a Side Agent That Watches Your Back | The Agent Lab</title>
+<meta name="description" content="Anthropic shipped Claude Code 2.1.287 on October 1, 2026. The headline is Claude Mods — in-process TypeScript plugins that can rewrite tool calls, deny actions, cache fetches, and draw in the terminal. Plus a built-in 'You should know' mod where a side agent flags what you or Claude might miss.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-10-05-claude-code-mods-function-hooks/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code 2.1.287: Mods, Function Hooks, and a Side Agent That Watches Your Back">
+<meta property="og:description" content="Anthropic shipped Claude Code 2.1.287 on October 1, 2026. The headline is Claude Mods — in-process TypeScript plugins that can rewrite tool calls, deny actions, cache fetches, and draw in the terminal. Plus a built-in 'You should know' mod where a side agent flags what you or Claude might miss.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-10-05-claude-code-mods-function-hooks/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-10-05-claude-code-mods-function-hooks/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Claude Code Mods function hooks architecture diagram">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Code 2.1.287: Mods, Function Hooks, and a Side Agent That Watches Your Back">
+<meta name="twitter:description" content="Anthropic shipped Claude Code 2.1.287 on October 1, 2026. The headline is Claude Mods — in-process TypeScript plugins that can rewrite tool calls, deny actions, cache fetches, and draw in the terminal.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-10-05-claude-code-mods-function-hooks/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Claude Code 2.1.287: Mods, Function Hooks, and a Side Agent That Watches Your Back",
+  "description": "Anthropic shipped Claude Code 2.1.287 on October 1, 2026. The headline is Claude Mods — in-process TypeScript plugins that can rewrite tool calls, deny actions, cache fetches, and draw in the terminal. Plus a built-in 'You should know' mod where a side agent flags what you or Claude might miss.",
+  "image": "https://theagentlab.site/blog/2026-10-05-claude-code-mods-function-hooks/og.png",
+  "datePublished": "2026-10-05",
+  "dateModified": "2026-10-05",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-10-05-claude-code-mods-function-hooks/"
+  }
+}
+</script>
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.nav-wordmark span { color: var(--accent-bronze); }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.25s ease;
+}
+.nav-links a:hover { color: var(--accent-bronze); }
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.nav-cta:hover { background: var(--bg-surface-2); border-color: var(--accent-bronze); }
+
+.article-head {
+  padding: 100px 0 56px;
+  text-align: center;
+}
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-bronze);
+  margin-bottom: 16px;
+}
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5vw, 56px);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: var(--measure);
+  margin-left: auto;
+  margin-right: auto;
+}
+.article-title em { font-style: italic; }
+.article-title strong { font-weight: 550; }
+.dek {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+.byline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.byline time { color: var(--text-secondary); }
+
+.article-body {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 0 80px;
+}
+.article-body h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 56px 0 20px;
+}
+.article-body h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--text-primary);
+  margin: 40px 0 16px;
+}
+.article-body p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+}
+.article-body p:last-child { margin-bottom: 0; }
+.article-body strong { color: var(--text-primary); font-weight: 550; }
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+}
+.article-body pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  overflow-x: auto;
+  margin: 24px 0;
+}
+.article-body pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+.article-body ul, .article-body ol {
+  margin: 18px 0 18px 24px;
+  line-height: 1.75;
+}
+.article-body li { margin-bottom: 8px; }
+.article-body li::marker { color: var(--accent-bronze-dim); }
+.article-body a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.article-body a:hover { border-color: var(--accent-bronze); }
+.article-body blockquote {
+  border-left: 2px solid var(--accent-bronze);
+  padding-left: 20px;
+  margin: 24px 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 40px 0;
+}
+
+.callout {
+  margin: 36px 0;
+  padding: 32px 34px;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--accent-bronze);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow: var(--shadow-lg);
+}
+.callout .lab {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+}
+.callout p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+.callout p:last-child { margin-bottom: 0; }
+.callout p.q { font-family: var(--font-display); font-size: 21px; line-height: 1.35; color: var(--text-primary); }
+
+.limits {
+  margin: 36px 0;
+  padding: 30px 32px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.limits .lab { color: var(--accent-copper); }
+.limits p { font-size: 14.5px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+.limits p:last-child { margin-bottom: 0; }
+.limits strong { color: var(--text-primary); font-weight: 550; }
+
+.table-container { overflow-x: auto; margin: 24px 0; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th, .data-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.data-table th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  background: var(--bg-surface-1);
+}
+.data-table td { color: var(--text-secondary); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table code { background: var(--bg-inset); }
+
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-foundation);
+  margin-top: 80px;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 48px;
+  flex-wrap: wrap;
+  padding-top: 64px;
+  padding-bottom: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 48px;
+  padding-right: 48px;
+}
+.footer-wordmark {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.footer-wordmark span { color: var(--accent-bronze); }
+.footer-line {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text-tertiary);
+  margin-top: 14px;
+  max-width: 38ch;
+}
+.footer-nav { display: flex; gap: 56px; flex-wrap: wrap; }
+.footer-col { display: flex; flex-direction: column; gap: 12px; }
+.footer-col .h {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-ghost);
+  margin-bottom: 4px;
+}
+.footer-col a { font-size: 13.5px; color: var(--text-tertiary); transition: color 0.25s ease; }
+.footer-col a:hover { color: var(--accent-bronze); }
+.footer-base {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-top: 26px;
+  padding-bottom: 48px;
+  border-top: 1px solid var(--border-subtle);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 48px;
+  padding-right: 48px;
+}
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-ghost);
+}
+.footer-copy a { color: var(--text-ghost); transition: color 0.25s ease; }
+.footer-copy a:hover { color: var(--accent-bronze); }
+.footer-social { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  background: var(--bg-surface-1);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.footer-social a:hover {
+  color: var(--accent-bronze);
+  border-color: var(--border-accent);
+  background: var(--bg-surface-2);
+}
+.footer-social svg { width: 17px; height: 17px; display: block; }
+
+@media (max-width: 1080px) {
+  .page-container, .page-narrow { padding: 0 22px; }
+  .nav-bar { padding: 0 22px; }
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .article-head { padding: 64px 0 40px; }
+  .footer-inner, .footer-base { padding-left: 22px; padding-right: 22px; }
+}
+
+@media (max-width: 720px) {
+  .hero-headline { font-size: 37px; line-height: 1.1; }
+  .article-title { font-size: 34px; line-height: 1.14; }
+  .footer-nav { gap: 32px; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav-bar">
+  <a class="nav-wordmark" href="/">The Agent <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="/services/">The Engine</a></li>
+    <li><a href="/ai/">Who We Build For</a></li>
+    <li><a href="/kits/">Kits</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+  <a href="/#founding" class="nav-cta">Review The Math</a>
+</nav>
+
+<main id="main">
+<div class="page-narrow">
+
+  <header class="article-head">
+    <span class="eyebrow">Claude Code · Mods · Function Hooks</span>
+    <h1 class="article-title">Claude Code 2.1.287: Mods, Function Hooks, and a Side Agent That Watches Your Back</h1>
+    <p class="dek">Anthropic shipped Claude Code 2.1.287 on October 1, 2026. The headline is Claude Mods — in-process TypeScript plugins that can rewrite tool calls, deny actions, cache fetches, and draw in the terminal. Plus a built-in "You should know" mod where a side agent flags what you or Claude might miss.</p>
+    <div class="byline">
+      <span>Ashrey</span>
+      <time datetime="2026-10-05">October 5, 2026</time>
+    </div>
+  </header>
+
+  <article class="article-body">
+    <p>Anthropic released Claude Code 2.1.287 on October 1, 2026. The changelog lists 106 documented changes. The one that changes what the tool <em>is</em> sits at the top: <strong>Claude Mods</strong> — a new plugin layer that runs in-process, written in TypeScript, with hooks into every engine event.</p>
+
+    <p>Until now, extending Claude Code meant shell hooks (run a command, pipe JSON, wait for stdout) or MCP servers (external processes speaking the Model Context Protocol). Both have real limits. A shell hook sees a tool call <em>before</em> it runs but cannot rewrite the input or replace the result. An MCP server can offer new tools but lives outside the agent's process, adding latency and a trust boundary.</p>
+
+    <p>Mods remove both constraints. They run in the same process as the agent. A single hook on <code>*</code> sees every event — tool calls, prompt submissions, UI renders, even other plugins' internal calls on the engine interface <code>$</code>. From one vantage point you can audit, rewrite, deny, cache, or draw.</p>
+
+    <h2>What a Mod Actually Is</h2>
+
+    <p>A Mod is a TypeScript module that exports a class implementing the <code>Mod</code> interface. The engine calls lifecycle methods: <code>onStart</code>, <code>onToolCall</code>, <code>onPrompt</code>, <code>onRender</code>, <code>onEnd</code>. Each receives a typed context object and can return a modified value, a denial, or nothing (pass through).</p>
+
+    <p>The engine interface <code>$</code> is the same surface plugins already use — <code>$.tool</code>, <code>$.ui</code>, <code>$.config</code>, <code>$.session</code>. The difference is timing. A shell hook runs <em>around</em> a tool call. A Mod runs <em>inside</em> it.</p>
+
+    <pre><code>// minimal mod structure
+import { Mod, ModContext } from '@anthropic-ai/claude-code/mods';
+
+export class RedactSecretsMod implements Mod {
+  name = 'redact-secrets';
+  version = '1.0.0';
+
+  async onToolCall(ctx: ModContext) {
+    if (ctx.tool.name === 'Bash' && ctx.tool.input.command?.includes('ghp_')) {
+      return { ...ctx.tool, input: { ...ctx.tool.input, command: '[REDACTED]' } };
+    }
+    return null; // pass through
+  }
+}</code></pre>
+
+    <p>The <code>onToolCall</code> hook can return a rewritten tool call object, a denial (<code>{ deny: true, reason: '...' }</code>), or <code>null</code> to continue normally. <code>onPrompt</code> can rewrite the user's prompt before the model sees it. <code>onRender</code> receives the UI virtual DOM and can inject elements — the <code>diff</code> mod opens a dedicated panel for <code>/diff</code> output this way.</p>
+
+    <h2>Four Reference Mods Ship in the Repo</h2>
+
+    <p>The <code>anthropics/claude-code</code> repository now contains four public mods with source:</p>
+
+    <ul>
+      <li><strong>diff</strong> — opens a side panel showing <code>/diff</code> command output with syntax highlighting</li>
+      <li><strong>agents-md</strong> — loads the project's <code>AGENTS.md</code> as permanent instructions for every session</li>
+      <li><strong>sec-default</strong> — an organizational guard that keeps approved settings separate from user-installed mods</li>
+      <li><strong>telemetry</strong> — sends usage records to internal analytics (opt-in)</li>
+    </ul>
+
+    <p>Two more are documented without public repos: a skill for writing new mods, and the side agent that became the built-in <strong>You should know</strong> mod.</p>
+
+    <h2>"You Should Know" — The Side Agent</h2>
+
+    <p>The flagship built-in mod is <code>cc-plugin-you-should-know@builtin</code>. Enable it with:</p>
+
+    <pre><code>/plugin enable cc-plugin-you-should-know@builtin</code></pre>
+
+    <p>It runs a background agent that watches long-running first-party sessions (telemetry must be on). When it spots something — a pattern, a missed optimization, a security concern, a hallucination risk — it surfaces a note above the prompt line. Not a modal, not a toast. A line of text that sits in your peripheral vision until you act or dismiss.</p>
+
+    <p>The design is deliberate. A side agent that interrupts is annoying. One that whispers is useful. The note appears in the same visual layer as the prompt, styled as a bronze-accented callout. You keep coding. The agent keeps watching.</p>
+
+    <div class="callout">
+      <span class="lab">Architecture note</span>
+      <p>This is the first time Anthropic has shipped a <em>background agent inside the CLI</em> as a supported feature. It uses the same function-hook runtime as other mods but spawns a persistent sub-session with its own context window. The side agent sees the parent session's transcript and tool results but cannot act directly — only surface flags.</p>
+    </div>
+
+    <h2>Plugin Bundles: MCP Servers + Skills + Commands + Hooks + Agents + LSPs</h2>
+
+    <p>Mods are the deep layer. The distribution layer is <strong>plugin bundles</strong>. A bundle is a GitHub repository with a defined structure:</p>
+
+    <pre><code>plugin-name/
+├── .claude-plugin/
+│   └── plugin.json        # metadata (required)
+├── .mcp.json              # MCP server config (optional)
+├── commands/              # slash commands (optional)
+├── agents/                # agent definitions (optional)
+├── skills/                # skill definitions (optional)
+├── hooks/                 # shell or function hooks (optional)
+├── lsps/                  # LSP definitions (optional)
+└── README.md</code></pre>
+
+    <p>You install a bundle once (<code>claude plugin install github:owner/repo</code>) and get everything — MCP servers pre-configured, skills loaded, commands registered, hooks active, agents available. Anthropic's official directory lives at <code>github.com/anthropics/claude-plugins-official</code>. Third parties can submit. Private marketplaces work the same way.</p>
+
+    <p>The install command now accepts <code>--config</code> flags for bundled MCP servers (<code>claude plugin install --config server.key=value</code>), so a bundled server starts configured without a separate <code>/mcp</code> step.</p>
+
+    <h2>MCP Improvements in the Same Release</h2>
+
+    <p>2.1.287 is not only Mods. The MCP layer got substantive fixes:</p>
+
+    <ul>
+      <li>Fixed a repeat MCP sign-in request that could replace a pending sign-in link and break it</li>
+      <li>Fixed <code>/usage</code> not crediting an MCP server for tool calls made while the server was still connecting</li>
+      <li>Fixed plugins enabled on <code>claude.ai</code> occasionally going missing from Claude Code after a transient server error</li>
+      <li>MCP servers on the 2025-11-25 protocol can now raise URL prompts; <code>bareElicitationCapability</code> works as a connect workaround</li>
+      <li>Agents view adds an <code>n:<text></code> filter</li>
+    </ul>
+
+    <p>Windows and accessibility fixes are also significant: screen reader support improved, terminal session handling stabilized, and the <code>--plugin-url</code> download no longer corrupts the session's cached plugin archive on reload.</p>
+
+    <h2>What This Means for Developers</h2>
+
+    <p>Three practical takeaways:</p>
+
+    <ol>
+      <li><strong>Organizational policy can now be code, not docs.</strong> <code>sec-default</strong> shows the pattern: a mod that enforces approved settings regardless of what a user installs. Your security team writes a mod; every developer's CLI loads it. No more "did you remember to configure X?"</li>
+      <li><strong>Secret redaction, audit logs, and destructive-command guards are now one function.</strong> A hook on <code>*</code> sees everything. Redact tokens before the model reads them. Log every tool call to your SIEM. Deny <code>rm -rf</code> with a custom message. All in-process, zero latency.</li>
+      <li><strong>Plugin bundles solve the "tribal knowledge" problem.</strong> Anthropic named this in May 2026: the team's best setup lives in one person's <code>~/.claude</code>. A bundle commits it to Git, versions it, and makes it one-command installable for every new hire.</li>
+    </ol>
+
+    <h2>Limits and Open Questions</h2>
+
+    <div class="limits">
+      <span class="lab">Limitations</span>
+      <p><strong>First-party only for the side agent.</strong> The built-in "You should know" mod requires a first-party session with telemetry enabled. Private fleets, telemetry-off configurations, and third-party API endpoints (Bedrock, Vertex, custom gateways) will not get the default enable path.</p>
+      <p><strong>In-process power is in-process risk.</strong> A buggy mod can crash the CLI, corrupt the session, or leak memory. The mod runtime isolates via the TypeScript type system, not a process boundary. Anthropic recommends testing mods in a throwaway session first.</p>
+      <p><strong>No marketplace curation yet.</strong> The official directory accepts submissions with quality and security review, but third-party marketplaces are unvetted. Treat a <code>github:owner/repo</code> install like you would an <code>npm install</code> — read the code.</p>
+    </div>
+
+    <h2>How to Start</h2>
+
+    <p>Update to 2.1.287:</p>
+
+    <pre><code>npm update -g @anthropic-ai/claude-code
+# or
+claude update</code></pre>
+
+    <p>Explore the reference mods in <code>anthropics/claude-code/tree/main/mods</code>. Write your first mod using the <code>@anthropic-ai/claude-code/mods</code> types (bundled with the CLI). Enable the side agent:</p>
+
+    <pre><code>/plugin enable cc-plugin-you-should-know@builtin</code></pre>
+
+    <p>Submit a bundle to the official directory if you build something reusable. The submission form is linked from the <code>claude-plugins-official</code> repo.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/">my services</a>.</p>
+  </article>
+
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-wordmark">The Agent <span>Lab</span></div>
+      <p class="footer-line">Notes on Claude, MCP, and AI agents. Current, cited, no hype.</p>
+    </div>
+    <nav class="footer-nav">
+      <div class="footer-col">
+        <div class="h">Product</div>
+        <a href="/services/">The Engine</a>
+        <a href="/ai/">Who We Build For</a>
+        <a href="/kits/">Kits</a>
+      </div>
+      <div class="footer-col">
+        <div class="h">Writing</div>
+        <a href="/blog/">Blog</a>
+        <a href="/blog/#mcp">MCP Deep Dives</a>
+        <a href="/blog/#claude-code">Claude Code</a>
+      </div>
+      <div class="footer-col">
+        <div class="h">Connect</div>
+        <a href="https://github.com/M-Ashrey">GitHub</a>
+        <a href="https://www.linkedin.com/in/mohamed-ashrey/">LinkedIn</a>
+        <a href="https://www.youtube.com/@TheAgentLab">YouTube</a>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-base">
+    <p class="footer-copy">&copy; 2026 The Agent Lab. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="https://github.com/M-Ashrey" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .267.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+      <a href="https://www.linkedin.com/in/mohamed-ashrey/" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a href="https://www.youtube.com/@TheAgentLab" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12 9.545 15.568z"/></svg></a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

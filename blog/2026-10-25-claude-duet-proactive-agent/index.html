@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="eaoEk29bFo2yS4KpM-wSEaHepc-OAFuaIiZL5572-LE" />
+<title>Anthropic Launches Claude Duet: A Proactive Agent That Works While You Sleep | The Agent Lab</title>
+<meta name="description" content="Anthropic opened a research preview of Claude Duet on October 21, 2026 — a proactive AI agent running on Opus 5.5 that monitors connected apps, prepares daily briefs, and keeps working after you close the app. Here's what developers building on MCP and the agent stack need to know.">
+<meta name="author" content="Ashrey">
+<link rel="canonical" href="https://theagentlab.site/blog/2026-10-25-claude-duet-proactive-agent/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic Launches Claude Duet: A Proactive Agent That Works While You Sleep">
+<meta property="og:description" content="Anthropic opened a research preview of Claude Duet on October 21, 2026 — a proactive AI agent running on Opus 5.5 that monitors connected apps, prepares daily briefs, and keeps working after you close the app.">
+<meta property="og:url" content="https://theagentlab.site/blog/2026-10-25-claude-duet-proactive-agent/">
+<meta property="og:site_name" content="The Agent Lab">
+<meta property="og:image" content="https://theagentlab.site/blog/2026-10-25-claude-duet-proactive-agent/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Agent Lab — Anthropic Launches Claude Duet: A Proactive Agent That Works While You Sleep">
+<meta property="article:published_time" content="2026-10-25T00:00:00+02:00">
+<meta property="article:author" content="https://theagentlab.site/">
+<meta property="article:section" content="AI Agents">
+<meta property="article:tag" content="MCP">
+<meta property="article:tag" content="Claude">
+<meta property="article:tag" content="AI Agents">
+<meta property="article:tag" content="Anthropic">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anthropic Launches Claude Duet: A Proactive Agent That Works While You Sleep">
+<meta name="twitter:description" content="Anthropic opened a research preview of Claude Duet on October 21, 2026 — a proactive AI agent running on Opus 5.5 that monitors connected apps, prepares daily briefs, and keeps working after you close the app.">
+<meta name="twitter:image" content="https://theagentlab.site/blog/2026-10-25-claude-duet-proactive-agent/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Anthropic Launches Claude Duet: A Proactive Agent That Works While You Sleep",
+  "description": "Anthropic opened a research preview of Claude Duet on October 21, 2026 — a proactive AI agent running on Opus 5.5 that monitors connected apps, prepares daily briefs, and keeps working after you close the app.",
+  "image": "https://theagentlab.site/blog/2026-10-25-claude-duet-proactive-agent/og.png",
+  "url": "https://theagentlab.site/blog/2026-10-25-claude-duet-proactive-agent/",
+  "datePublished": "2026-10-25T00:00:00+02:00",
+  "dateModified": "2026-10-25T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Ashrey",
+    "url": "https://theagentlab.site/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Agent Lab",
+    "url": "https://theagentlab.site/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://theagentlab.site/assets/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://theagentlab.site/blog/2026-10-25-claude-duet-proactive-agent/"
+  }
+}
+</script>
+
+<style id="brand-core">
+/* ===================================================================
+   THE AGENT LAB - brand.css
+   Design system: "Institutional Gravity"
+   Visual doctrine: "Physicality is quality"
+
+   This file is the single source of truth for every public surface.
+   Tokens mirror BRAND_GUIDELINES.md exactly. Do not declare a colour,
+   a shadow or a font stack anywhere else. Every page inlines this file
+   verbatim inside <style id="brand-core"> via assets/brand_inline.py,
+   because the brand checker reads style blocks and inline attributes
+   only. A linked stylesheet would make the checker blind and every page
+   would report a false green.
+   =================================================================== */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- SURFACE SYSTEM --- */
+  --bg-void:        #09090b;
+  --bg-foundation:  #0f1014;
+  --bg-surface-1:   #16171c;
+  --bg-surface-2:   #1c1d24;
+  --bg-surface-3:   #24252e;
+  --bg-inset:       #0c0c10;
+
+  /* --- BORDER SYSTEM --- */
+  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-accent:  rgba(191, 149, 83, 0.30);
+
+  /* --- TEXT SYSTEM --- */
+  --text-primary:   #e8e4de;
+  --text-secondary: #9f9a92;
+  --text-tertiary:  #928d84;
+  --text-ghost:     #3d3a36;
+
+  /* --- ACCENT SYSTEM --- */
+  --accent-bronze:      #bf9553;
+  --accent-bronze-dim:  #8a6c3e;
+  --accent-copper:      #c47a4a;
+  --accent-slate:       #5a7c8a;
+  --accent-sage:        #6b8a5a;
+  --accent-clay:        #8a5a5a;
+
+  /* --- SHADOW SYSTEM (physical mass) --- */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+  --shadow-sm:    0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-md:    0 4px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2), 0 16px 48px rgba(0,0,0,0.1);
+  --shadow-lg:    0 8px 16px rgba(0,0,0,0.35), 0 16px 48px rgba(0,0,0,0.25), 0 32px 80px rgba(0,0,0,0.15);
+  --shadow-xl:    0 12px 24px rgba(0,0,0,0.4), 0 24px 64px rgba(0,0,0,0.3), 0 48px 120px rgba(0,0,0,0.15);
+  --shadow-monolith: 0 20px 40px rgba(0,0,0,0.5), 0 40px 80px rgba(0,0,0,0.3), 0 60px 140px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03);
+
+  /* --- TYPOGRAPHY --- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* --- RADII --- */
+  --radius-sm:  3px;
+  --radius-md:  5px;
+  --radius-lg:  8px;
+
+  /* --- Z-INDEX ARCHITECTURE --- */
+  --z-void:    -1;
+  --z-canvas:  0;
+  --z-surface: 10;
+  --z-nav:     1000;
+
+  /* --- MEASURE --- */
+  --measure: 68ch;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-top: 64px;
+}
+
+/* Noise texture. Void spaces are never perfectly clean. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--border-accent); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--accent-bronze); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 10001;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-bronze);
+  color: var(--bg-void);
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 80px; }
+
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.page-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.section + .section { border-top: 1px solid var(--border-subtle); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 48px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-bronze-dim);
+  opacity: 0.5;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  max-width: 22ch;
+}
+
+.section-sub {
+  font-size: 16px;
+  font-weight: 380;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 48px;
+}
+
+/* ===================================================================
+   NAVIGATION (identical on every surface)
+   =================================================================== */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+
+.nav-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-void);
+  opacity: 0.88;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.nav-wordmark span { color: var(--accent-bronze); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.nav-links a {
+  position: relative;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-bronze);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.25s ease;
+}
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--accent-bronze);
+  border: 1px solid var(--accent-bronze);
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.nav-cta:hover { background: var(--accent-bronze); color: var(--bg-void); }
+
+/* ===================================================================
+   ARTICLE
+   =================================================================== */
+.article-header {
+  padding: 160px 0 80px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 48px;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+
+.article-tag {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-default);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+}
+
+.article-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  max-width: 30ch;
+}
+
+.article-dek {
+  font-size: 20px;
+  font-weight: 380;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: var(--measure);
+  margin-bottom: 32px;
+}
+
+.article-byline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.article-byline .author-name {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.article-content {
+  max-width: var(--measure);
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.article-content p {
+  margin-bottom: 1.5em;
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin: 2.5em 0 0.75em;
+  padding-top: 1em;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 2em 0 0.5em;
+}
+
+.article-content a {
+  color: var(--accent-bronze);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.article-content a:hover { border-color: var(--accent-bronze); }
+
+.article-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-surface-2);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  color: var(--accent-copper);
+}
+
+.article-content pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  overflow-x: auto;
+  margin: 1.5em 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.article-content pre code { background: none; padding: 0; color: inherit; }
+
+.article-content blockquote {
+  border-left: 3px solid var(--accent-bronze);
+  padding-left: 24px;
+  margin: 1.5em 0;
+  font-style: italic;
+  color: var(--text-tertiary);
+}
+
+.article-content ul, .article-content ol {
+  margin: 1.5em 0;
+  padding-left: 1.5em;
+}
+.article-content li { margin-bottom: 0.5em; }
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2.5em 0;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.site-footer {
+  padding: 80px 0 48px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 120px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-brand .wordmark {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.footer-brand .wordmark span { color: var(--accent-bronze); }
+
+.footer-brand p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-tertiary);
+  max-width: 280px;
+}
+
+.footer-nav h4 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bronze-dim);
+  margin-bottom: 16px;
+}
+
+.footer-nav ul { list-style: none; }
+.footer-nav li { margin-bottom: 12px; }
+.footer-nav a { color: var(--text-secondary); transition: color 0.2s ease; }
+.footer-nav a:hover { color: var(--accent-bronze); }
+
+.footer-bottom {
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-ghost);
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width: 768px) {
+  .page-container, .page-narrow, .nav-bar { padding: 0 24px; }
+  .nav-links { display: none; }
+  .article-header { padding: 120px 0 48px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .article-title { max-width: none; }
+  .section-title { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav-bar" role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav-wordmark" aria-label="The Agent Lab home">THE AGENT <span>LAB</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/blog/">Blog</a>
+    <a href="/services/">Services</a>
+    <a href="/kits/">Kits</a>
+  </div>
+  <a href="https://ko-fi.com/ashrey122" class="nav-cta" target="_blank" rel="noopener">Support</a>
+</nav>
+
+<main id="main" class="page-narrow">
+  <header class="article-header">
+    <div class="article-meta">
+      <span class="article-tag">AI Agents</span>
+      <time datetime="2026-10-25">October 25, 2026</time>
+    </div>
+    <h1 class="article-title">Anthropic Launches Claude Duet: A Proactive Agent That Works While You Sleep</h1>
+    <p class="article-dek">On October 21, 2026, Anthropic opened a research preview of Claude Duet — a standalone proactive AI agent running on Opus 5.5 that monitors connected applications, prepares daily briefs, identifies tasks needing attention, and continues working after you close the app. For developers building on MCP and the agent stack, this signals a shift from reactive tool-calling to persistent, background agent loops.</p>
+    <div class="article-byline">
+      <span class="author-name">Ashrey</span>
+      <span aria-hidden="true">·</span>
+      <span>Chief Architect, The Agent Lab</span>
+    </div>
+  </header>
+
+  <article class="article-content">
+    <p>Anthropic announced <strong>Claude Duet</strong> on October 21, 2026, opening a research preview waitlist for U.S. Pro and Max subscribers. The agent runs on <strong>Claude Opus 5.5</strong> — the model Anthropic describes as built for "long-running agentic coding and complex knowledge work" with a 1-million-token context window and 40% lower operating cost than its predecessor.</p>
+
+    <p>This is not a chat interface with a new coat of paint. Duet is a <strong>proactive agent</strong>: it monitors connected applications (email, calendar, GitHub, Notion, Linear, and more), prepares work in the background, surfaces daily briefs with what needs your attention, and — critically — <strong>keeps running tasks after you step away</strong>. The work does not pause when the device sleeps or the browser closes.</p>
+
+    <h2>What Duet Actually Does</h2>
+
+    <p>According to Anthropic's announcement and early preview coverage, Duet's capabilities center on three loops:</p>
+
+    <ul>
+      <li><strong>Monitoring:</strong> Duet watches connected apps for changes — new emails, calendar updates, GitHub notifications, Linear tickets, document edits. It builds a running model of your work context.</li>
+      <li><strong>Preparation:</strong> Before you sit down, Duet drafts responses, summarizes threads, prepares code changes, and assembles briefing documents. It presents these as <strong>proposals requiring approval</strong> — it does not act autonomously on high-stakes actions.</li>
+      <li><strong>Continuation:</strong> When you assign a task ("refactor the authentication module," "prepare the Q3 board deck"), Duet persists the work in a cloud session. Closing the app or putting your laptop to sleep does not interrupt it. You return to a completed or advanced task.</li>
+    </ul>
+
+    <p>Anthropic's framing is deliberate: "It comes to you with what needs your attention, completes tasks you ask of it, keeps working when you step away, and checks with you before it acts on your behalf."</p>
+
+    <h2>The Technical Substrate: Opus 5.5 and MCP</h2>
+
+    <p>Duet runs on <strong>Claude Opus 5.5</strong>, which ships with several capabilities relevant to persistent agents:</p>
+
+    <ul>
+      <li><strong>1-million-token context window</sup> — enough to hold entire codebases, long email threads, and project history simultaneously.</li>
+      <li><strong>Preserved thinking</sup> — Anthropic's anti-distillation safeguard (introduced with Fable 5.1) that keeps the model's reasoning traces intact across sessions, making long-horizon planning more coherent.</li>
+      <li><strong>300k output tokens</sup> via the <code>output-300k-2026-03-24</code> beta header on the Message Batches API — enabling genuinely large single-turn productions (full features, comprehensive reports, multi-file refactors).</li>
+      <li><strong>85% reduction in containment bypass attempts</sup> — a safety metric Anthropic highlighted in their September 2026 threat intelligence report, relevant for an agent that operates with broader tool access.</li>
+    </ul>
+
+    <p>For developers on the MCP stack, the architectural implication is clear: Duet is a <strong>reference implementation of a persistent MCP client</strong>. It maintains long-lived sessions, manages tool discovery across dozens of connected services, and handles the session lifecycle (reconnection, state sync, budget enforcement) that every production agent runtime must solve.</p>
+
+    <h2>What This Means for MCP Server Builders</h2>
+
+    <p>If you are shipping an MCP server today, Duet changes the integration surface in three ways:</p>
+
+    <h3>1. Servers must handle long-lived, stateful sessions</h3>
+    <p>Duet does not open a connection, call a tool, and disconnect. It maintains persistent connections to your server across hours or days. Your server needs stable session IDs, resumable streams, and graceful handling of client reconnection with context replay. The MCP 2026-07-28 spec's stateless HTTP core helps here — but your <em>application logic</em> must track what Duet has done, what it's doing, and what it should do next.</p>
+
+    <h3>2. Tool descriptions become agent interfaces</h3>
+    <p>Duet discovers your tools dynamically and decides when to call them. Your tool schemas, descriptions, and error messages are now <strong>agent-facing documentation</strong>. Vague descriptions like "search the database" will produce confused agent behavior. Precise, structured schemas with clear preconditions, side effects, and idempotency guarantees become a competitive advantage.</p>
+
+    <h3>3. The "human in the loop" is a first-class protocol concern</h3>
+    <p>Duet's design mandates approval gates for high-stakes actions (sending messages, spending money, signing documents, deploying code). MCP servers that expose such actions should consider returning <strong>proposal objects</strong> rather than executing immediately — letting the client (Duet, or any well-behaved agent) surface the proposal for human review. This pattern does not exist in the MCP spec today; it is an emerging convention that Duet will pressure-test.</p>
+
+    <h2>The Competitive Landscape</h2>
+
+    <p>Duet enters a category Anthropic is effectively defining: <strong>always-on personal agents</strong>. The nearest analogs:</p>
+
+    <ul>
+      <li><strong>OpenAI's Operator</strong> (research preview, browser-based, task-focused, requires active supervision)</li>
+      <li><strong>Meta's AI agents</strong> (integrated into WhatsApp/Instagram, social-first, less developer-facing)</li>
+      <li><strong>Microsoft Copilot</strong> (deep OS integration, enterprise-focused, reactive)</li>
+    </ul>
+
+    <p>Duet's differentiation is the <strong>background persistence</strong> combined with <strong>proactive monitoring</strong>. Operator waits for a task. Duet watches your inbox and calendar and <strong>proposes</strong> tasks. For developers, this means the "agent entry point" shifts from "user types a prompt" to "agent observes a state change and prepares a response."</p>
+
+    <h2>What to Watch</h2>
+
+    <p>The research preview is limited: U.S. only, Pro/Max only, waitlisted, and explicitly labeled "early." Three signals will tell us whether Duet becomes a platform primitive or a niche product:</p>
+
+    <ol>
+      <li><strong>MCP ecosystem adoption:</strong> Will major MCP servers (GitHub, Linear, Notion, Google Workspace) add Duet-specific affordances — proposal returns, webhook-style push notifications, incremental sync endpoints?</li>
+      <li><strong>Opus 5.5 API availability:</strong> Duet's capabilities depend on the model. If Opus 5.5's 300k output tokens and preserved thinking remain beta-gated or Pro/Max-exclusive, the developer story stalls.</li>
+      <li><strong>Session economics:</strong> Persistent agents consume tokens continuously. Anthropic has not published Duet's pricing model. If a day of background monitoring costs more than the human time it saves, adoption will be hobbyist-only.</li>
+    </ol>
+
+    <h2>The Takeaway for Builders</h2>
+
+    <p>Claude Duet is the clearest signal yet that <strong>the agent runtime layer is moving from "chat with tools" to "persistent background process with human oversight."</strong> The MCP protocol gives us the wire format. Opus 5.5 gives us the model capacity. Duet shows the product shape.</p>
+
+    <p>If you are building MCP servers, start designing for <strong>long-lived sessions, proposal-based tool execution, and agent-discoverable capability surfaces</strong>. If you are building agent applications, Duet's architecture — monitor, prepare, propose, persist — is a template worth studying.</p>
+
+    <p>The waitlist is open at <a href="https://claude.ai/duet" target="_blank" rel="noopener">claude.ai/duet</a> for eligible U.S. subscribers. The rest of us watch, wait, and build the infrastructure the next wave will run on.</p>
+
+    <hr style="margin:2.5rem 0 1.5rem;border:none;border-top:1px solid #222">
+    <p style="font-size:0.95rem;color:#888">If this was useful, you can <a href="https://ko-fi.com/ashrey122" style="color:#bf9553">support my open-source work on Ko-fi</a> or check out <a href="https://theagentlab.site/services/" style="color:#bf9553">my services</a>.</p>
+  </article>
+</main>
+
+<footer class="site-footer page-container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="wordmark">THE AGENT <span>LAB</span></div>
+      <p>Notes on Claude, MCP, and AI agents. Current, cited, no-hype analysis for developers building and shipping on this stack today.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Site navigation">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/kits/">Kits</a></li>
+      </ul>
+    </nav>
+    <nav class="footer-nav" aria-label="Connect">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://github.com/M-Ashrey" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/mohamed-ashrey" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://youtube.com/@TheAgentLab" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://ko-fi.com/ashrey122" target="_blank" rel="noopener">Ko-fi</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 The Agent Lab. All rights reserved.</span>
+    <span><a href="/privacy/" style="color:inherit">Privacy</a> · <a href="/terms/" style="color:inherit">Terms</a></span>
+  </div>
+</footer>
+</body>
+</html>
